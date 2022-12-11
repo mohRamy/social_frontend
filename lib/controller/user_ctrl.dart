@@ -3,15 +3,20 @@ import 'package:get/get.dart';
 
 class UserCtrl extends GetxController{
   UserModel _user = UserModel(
-    id: '',
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: '',
-    type: '',
+    id: '', 
+    name: '', 
+    email: '', 
+    bio: '', 
+    followers: [], 
+    following: [], 
+    photo: '', 
+    backgroundImage: '', 
+    phone: '', 
+    password: '', 
+    address: '', 
+    type: '', 
     token: '',
-  );
+    );
 
   UserModel get user => _user;
 

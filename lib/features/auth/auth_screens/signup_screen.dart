@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart'; 
 import 'package:get/get.dart';
 
@@ -8,18 +10,37 @@ import 'package:social_app/features/auth/auth_ctrl/auth_ctrl.dart';
 import 'package:social_app/features/auth/auth_widgets/painter_custom.dart';
 import 'package:social_app/features/auth/auth_widgets/text_custom.dart';
 
+import '../../../core/picker/picker.dart';
 import '../../../core/utils/components/components.dart';
+import '../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../core/widgets/custom_loader.dart';
 
-class SignUpScreen extends GetView<AuthCtrl> {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+   AuthCtrl authCtrl = Get.find<AuthCtrl>();
+    File? photo;
+
+    void pickImageGallery() async {
+    photo = await pickImageFromGallery(context);
+    Get.back();
+    setState(() {});
+  }
+
+  void pickImageCamera() async {
+    photo = await pickImageFromCamera(context);
+    Get.back();
+    setState(() {});
+  }
     void _registration(AuthCtrl authCtrl) {
-      String email = controller.emailUC.text.trim();
-      String password = controller.passwordUC.text.trim();
-      String name = controller.nameUC.text.trim();
+      String email = authCtrl.emailUC.text.trim();
+      String password = authCtrl.passwordUC.text.trim();
+      String name = authCtrl.nameUC.text.trim();
 
       if (email.isEmpty) {
         Components.showCustomSnackBar(
@@ -51,10 +72,12 @@ class SignUpScreen extends GetView<AuthCtrl> {
           name: name,
           email: email,
           password: password,
+          photo: photo,
         );
       }
     }
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgBlackColor,
       body: GetBuilder<AuthCtrl>(
@@ -63,6 +86,7 @@ class SignUpScreen extends GetView<AuthCtrl> {
                 child: Stack(
                   children: [
                     const HeaderAuth(),
+                    
                     const Positioned(
                       top: 60,
                       left: 20,
@@ -85,9 +109,36 @@ class SignUpScreen extends GetView<AuthCtrl> {
                     ),
                     const BottomRegister(),
                     Positioned(
+                      top: 180,
+                      left: 0.0,
+                      right: 0.0,
+                      child: GestureDetector(
+              onTap: bottomSheet(
+                context,
+                pickImageCamera,
+                pickImageGallery,
+              ),
+              child: photo != null
+                  ? CircleAvatar(
+                      radius: Dimensions.radius30 + 10,
+                      backgroundColor: Colors.white60,
+                      backgroundImage: FileImage(photo!),
+                    )
+                  : CircleAvatar(
+                      radius: Dimensions.radius30 + 10,
+                      backgroundColor: Colors.white60,
+                      child: Icon(
+                        Icons.camera_alt_rounded,
+                        color: Colors.black45,
+                        size: Dimensions.iconSize24,
+                      ),
+                    ),
+            ),
+                      ),
+                    Positioned(
                       top: 250,
                       child: _TextFieldCustom(
-                        controller: controller.nameUC,
+                        controller: authCtrl.nameUC,
                         label: 'Full Name',
                         isPass: false,
                       ),
@@ -95,7 +146,7 @@ class SignUpScreen extends GetView<AuthCtrl> {
                     Positioned(
                       top: 320,
                       child: _TextFieldCustom(
-                        controller: controller.emailUC,
+                        controller: authCtrl.emailUC,
                         label: 'Email',
                         isPass: false,
                       ),
@@ -103,7 +154,7 @@ class SignUpScreen extends GetView<AuthCtrl> {
                     Positioned(
                       top: 390,
                       child: _TextFieldCustom(
-                        controller: controller.passwordUC,
+                        controller: authCtrl.passwordUC,
                         label: 'Password',
                         isPass: true,
                       ),

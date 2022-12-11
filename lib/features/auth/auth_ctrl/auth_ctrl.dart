@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,6 +53,7 @@ class AuthCtrl extends GetxController implements GetxService {
     required String name,
     required String email,
     required String password,
+    required File? photo,
   }) async {
     try {
       _isLoading = true;
@@ -60,6 +62,7 @@ class AuthCtrl extends GetxController implements GetxService {
         name: name,
         email: email,
         password: password,
+        photo: photo,
       );
 
       httpErrorHandle(

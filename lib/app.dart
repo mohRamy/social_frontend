@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:social_app/config/routes/app_pages.dart';
 import 'package:social_app/features/auth/auth_screens/signin_screen.dart';
 
+import 'features/auth/auth_ctrl/auth_ctrl.dart';
 import 'features/auth/auth_repo/auth_repo.dart';
 
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    if (Get.find<AuthRepo>().userLoggedIn()) {
+      Get.find<AuthCtrl>().getUserData();
+    }
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
