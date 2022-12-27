@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/utils/app_strings.dart';
-import '../../../../data/api/api_client.dart';
-import '../../../../data/models/user_model.dart';
+import '../../../data/api/api_client.dart';
+import '../../../data/models/user_model.dart';
 
 class AuthRepo {
   final ApiClient apiClient;

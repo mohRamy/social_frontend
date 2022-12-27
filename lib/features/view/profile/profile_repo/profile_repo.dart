@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../../controller/user_ctrl.dart';
 
 import '../../../../core/utils/app_strings.dart';
-import '../../../../data/api/api_client.dart';
+import '../../../data/api/api_client.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepo {

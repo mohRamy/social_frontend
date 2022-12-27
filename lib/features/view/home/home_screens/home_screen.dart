@@ -9,7 +9,7 @@ import '../../../../core/utils/dimensions.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../home_ctrl/home_ctrl.dart';
-import '../../../../data/models/post_model.dart';
+import '../../../data/models/post_model.dart';
 
 import '../../../../core/widgets/widgets.dart';
 import '../home_widgets/display_text_image_video.dart';
@@ -200,7 +200,7 @@ class _ListHistories extends StatelessWidget {
   }
 }
 
-class _ListViewPosts extends StatelessWidget {
+class _ListViewPosts extends StatefulWidget {
   final int index;
 
   const _ListViewPosts({
@@ -209,11 +209,17 @@ class _ListViewPosts extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_ListViewPosts> createState() => _ListViewPostsState();
+}
+
+class _ListViewPostsState extends State<_ListViewPosts> {
+  bool isLike = false;
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
-      PostModel postModel = homeCtrl.posts[index];
-      List<Posts> posts = homeCtrl.posts[index].posts!;
-
+      PostModel post = homeCtrl.posts[widget.index];
+      List<Posts> posts = homeCtrl.posts[widget.index].posts!;
       String timeAgoCustom(DateTime d) {
         Duration diff = DateTime.now().difference(d);
         if (diff.inDays > 365) {
@@ -256,21 +262,20 @@ class _ListViewPosts extends StatelessWidget {
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(postModel.userPhoto!),
+                              backgroundImage: NetworkImage(post.userPhoto!),
                             ),
                             const SizedBox(width: 10.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextCustom(
-                                  text: postModel.userName!,
+                                  text: post.userName!,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 TextCustom(
                                   text: timeAgoCustom(
                                     DateTime.fromMillisecondsSinceEpoch(
-                                      postModel.time!,
+                                      post.time!,
                                     ),
                                   ),
                                   fontSize: 13,
@@ -294,7 +299,7 @@ class _ListViewPosts extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextCustom(
-                  text: postModel.description!,
+                  text: post.description!,
                   fontSize: 15,
                 ),
               ),
@@ -353,22 +358,34 @@ class _ListViewPosts extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          const InkWell(
-                                            // onTap: () => postBloc.add( OnLikeOrUnLikePost(posts.postUid, posts.personUid) ),
-                                            child: Icon(
-                                                Icons.favorite_outline_rounded,
-                                                color: Colors.white),
-                                          ),
-                                          const SizedBox(width: 8.0),
-                                          InkWell(
-                                              onTap: () {},
-                                              child: const TextCustom(
+                                      GetBuilder<HomeCtrl>(
+                                        builder: (homeCtrl) {
+                                          return Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    isLike != isLike;
+                                                  });
+                                                  homeCtrl.postLike(post.id!);
+                                                },
+                                                child: Icon(
+                                                  Icons.favorite_outline_rounded,
+                                                  color: isLike ? Colors.red : Colors.white,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8.0),
+                                              InkWell(
+                                                onTap: () {},
+                                                child: const TextCustom(
                                                   text: "Like",
                                                   fontSize: 16,
-                                                  color: Colors.white))
-                                        ],
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
                                       ),
                                       const SizedBox(width: 20.0),
                                       TextButton(

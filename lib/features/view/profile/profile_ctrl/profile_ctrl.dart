@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../../../data/models/post_model.dart';
+import '../../../data/models/post_model.dart';
 
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/utils/constants/error_handling.dart';

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../../../../data/models/user_model.dart';
+import '../../../data/models/user_model.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../core/utils/dimensions.dart';

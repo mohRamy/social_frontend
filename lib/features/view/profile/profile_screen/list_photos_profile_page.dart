@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import '../../../../core/utils/dimensions.dart';
-import '../../../../data/models/post_model.dart';
+import '../../../data/models/post_model.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 

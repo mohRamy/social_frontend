@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../../data/api/api_client.dart';
+import '../../../data/api/api_client.dart';
 
 
 class PostRepo {

@@ -13,6 +13,7 @@ class AppString {
   static const String POST_UPDATE_URL = "$BASE_URL/post/update-post";
   static const String POST_DELETE_URL = "$BASE_URL/post/delete-post";
   static const String POST_GET_URL = "$BASE_URL/post/";
+  static const String POST_LIKE_URL = "$BASE_URL/post/like";
   static const String PROFILE_FOLLOW_URL = "$BASE_URL/api/user/follow";
   static const String MYPOST_GET_URL = "$BASE_URL/api/user/get-mypost";
   static const String PROFILE_BGIMAGE_URL = "$BASE_URL/api/user/modify-bgimage";

@@ -6,12 +6,14 @@ class CommentModel {
   final String id;
   final UserModel userData;
   final String comment;
-  final int likes;
+  final List<UserModel> likes;
+  final int time;
   CommentModel({
     required this.id,
     required this.userData,
     required this.comment,
     required this.likes,
+    required this.time,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,7 +21,8 @@ class CommentModel {
       'id': id,
       'userData': userData.toMap(),
       'comment': comment,
-      'like': likes,
+      'likes': likes.map((x) => x.toMap()).toList(),
+      'time': time,
     };
   }
 
@@ -28,7 +31,8 @@ class CommentModel {
       id: map['_id'] ?? '',
       userData: UserModel.fromMap(map['userData']),
       comment: map['comment'] ?? '',
-      likes: map['like']?.toInt() ?? 0,
+      likes: List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
+      time: map['time']?.toInt() ?? 0,
     );
   }
 
@@ -40,13 +44,15 @@ class CommentModel {
     String? id,
     UserModel? userData,
     String? comment,
-    int? like,
+    List<UserModel>? likes,
+    int? time,
   }) {
     return CommentModel(
       id: id ?? this.id,
       userData: userData ?? this.userData,
       comment: comment ?? this.comment,
-      likes: like ?? this.likes,
+      likes: likes ?? this.likes,
+      time: time ?? this.time,
     );
   }
 }

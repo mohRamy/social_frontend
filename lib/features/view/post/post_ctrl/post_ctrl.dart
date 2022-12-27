@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../post_repo/post_repo.dart';
 import 'package:http/http.dart' as http;
-import '../../../../data/models/post_model.dart';
-import '../../../../data/models/user_model.dart';
+import '../../../data/models/post_model.dart';
+import '../../../data/models/user_model.dart';
 
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/utils/constants/error_handling.dart';

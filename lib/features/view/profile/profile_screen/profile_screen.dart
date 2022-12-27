@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
-import '../../../../data/models/user_model.dart';
+import '../../../data/models/user_model.dart';
 
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/picker/picker.dart';
@@ -11,7 +11,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/dimensions.dart';
 import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../data/models/post_model.dart';
+import '../../../data/models/post_model.dart';
 import '../profile_ctrl/profile_ctrl.dart';
 import '../profile_widgets/display_text_image_video.dart';
 

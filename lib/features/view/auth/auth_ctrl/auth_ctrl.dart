@@ -11,7 +11,7 @@ import '../../../../controller/user_ctrl.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/utils/constants/error_handling.dart';
-import '../../../../data/api/api_client.dart';
+import '../../../data/api/api_client.dart';
 import '../../../../helper/dependencies.dart' as dep;
 import '../auth_repo/auth_repo.dart';
 

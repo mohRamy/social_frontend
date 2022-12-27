@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../controller/user_ctrl.dart';
 
 
-import '../data/api/api_client.dart';
+import '../features/data/api/api_client.dart';
 import '../features/view/auth/auth_ctrl/auth_ctrl.dart';
 import '../features/view/auth/auth_repo/auth_repo.dart';
 import '../features/view/home/home_ctrl/home_ctrl.dart';

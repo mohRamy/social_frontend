@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/utils/components/components.dart';
-import '../../../../data/models/user_model.dart';
+import '../../../data/models/user_model.dart';
 
 import '../search_repo/search_repo.dart';
 
