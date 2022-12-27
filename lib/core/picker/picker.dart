@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:social_app/core/utils/components/components.dart';
+import '../utils/components/components.dart';
 
-Future<File?> pickImageFromGallery(BuildContext context) async {
+Future<File?> pickImageFromGallery() async {
   File? image;
   try {
     final pickedImage =
@@ -18,7 +17,7 @@ Future<File?> pickImageFromGallery(BuildContext context) async {
   return image;
 }
 
-Future<File?> pickImageFromCamera(BuildContext context) async {
+Future<File?> pickImageFromCamera() async {
   File? image;
   try {
     final pickedImage =
@@ -32,7 +31,7 @@ Future<File?> pickImageFromCamera(BuildContext context) async {
   return image;
 }
 
-Future<File?> pickVideoFromGallery(BuildContext context) async {
+Future<File?> pickVideoFromGallery() async {
   File? video;
   try {
     final pickedVideo =
@@ -46,7 +45,7 @@ Future<File?> pickVideoFromGallery(BuildContext context) async {
   return video;
 }
 
-Future<File?> pickVideoFromCamera(BuildContext context) async {
+Future<File?> pickVideoFromCamera() async {
   File? video;
   try {
     final pickedVideo =

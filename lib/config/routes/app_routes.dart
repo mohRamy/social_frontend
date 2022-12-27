@@ -8,6 +8,9 @@ abstract class Routes {
   static const NAV_USER_SCREEN = _Paths.NAV_USER_SCREEN;
   static const HOME = _Paths.HOME;
   static const SEARCH = _Paths.SEARCH;
+  static const PROFILE = _Paths.PROFILE;
+  static const LIST_PHOTO_PROFILE = _Paths.LIST_PHOTO_PROFILE;
+
 }
 
 abstract class _Paths {
@@ -16,6 +19,9 @@ abstract class _Paths {
   static const NAV_USER_SCREEN = '/nav-user';
   static const HOME = '/HOME';
   static const SEARCH = '/search';
+  static const PROFILE = '/profile';
+  static const LIST_PHOTO_PROFILE = '/listPhotoProfile';
+
 
 
 

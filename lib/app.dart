@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/features/auth/auth_screens/signin_screen.dart';
+import 'config/routes/app_pages.dart';
+import 'controller/user_ctrl.dart';
+import 'features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'features/view/auth/auth_repo/auth_repo.dart';
 
-import 'features/auth/auth_ctrl/auth_ctrl.dart';
-import 'features/auth/auth_repo/auth_repo.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
     if (Get.find<AuthRepo>().userLoggedIn()) {
       Get.find<AuthCtrl>().getUserData();
     }
+    
+    print(Get.find<UserCtrl>().user.email);
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

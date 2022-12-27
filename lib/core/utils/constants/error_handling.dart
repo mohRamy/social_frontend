@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../components/components.dart';
 
-void httpErrorHandle({
+void stateHandle({
   required http.Response res,
   required VoidCallback onSuccess,
 }) {

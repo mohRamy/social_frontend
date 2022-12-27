@@ -8,4 +8,4 @@ import '../utils/app_colors.dart';
 
 part 'text_custom.dart';
 part 'custom_text_field.dart';
-part 'shimmer_frave.dart';
+part 'custom_shimmer.dart';

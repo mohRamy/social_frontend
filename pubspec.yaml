@@ -55,6 +55,11 @@ dependencies:
   equatable: ^2.0.3
   shared_preferences: ^2.0.15
   cloudinary_public: ^0.20.0  
+  get_time_ago: ^1.1.6
+  intl: ^0.17.0
+  cached_video_player: ^2.0.3
+  chewie: 
+  video_player: ^2.4.7
 
 dev_dependencies:
 

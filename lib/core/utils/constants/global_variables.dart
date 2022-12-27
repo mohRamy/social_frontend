@@ -1,7 +1,7 @@
 
 import '../app_strings.dart';
 
-String uri = 'https://obscure-mesa-54807.herokuapp.com';
+// String uri = 'https://obscure-mesa-54807.herokuapp.com';
 
 class GlobalVariables{
 
