@@ -4,7 +4,7 @@ class AppString {
   static const int APP_V = 1;
 
   //api
-  static const String BASE_URL = "http://192.168.127.79:8000";
+  static const String BASE_URL = "http://192.168.98.79:8000";
   static const String SIGN_UP_URL = "$BASE_URL/api/signup";
   static const String SIGN_IN_URL = "$BASE_URL/api/signin";
   static const String TOKEN_IS_VALID_URL = "$BASE_URL/tokenIsValid";
@@ -13,7 +13,9 @@ class AppString {
   static const String POST_UPDATE_URL = "$BASE_URL/post/update-post";
   static const String POST_DELETE_URL = "$BASE_URL/post/delete-post";
   static const String POST_GET_URL = "$BASE_URL/post/";
-  static const String POST_LIKE_URL = "$BASE_URL/post/like";
+  static const String POST_ADD_LIKE_URL = "$BASE_URL/post/add-like";
+  static const String POST_ADD_COMMENT_URL = "$BASE_URL/post/add-comment";
+  static const String POST_GET_COMMENT_URL = "$BASE_URL/post/get-comment";
   static const String PROFILE_FOLLOW_URL = "$BASE_URL/api/user/follow";
   static const String MYPOST_GET_URL = "$BASE_URL/api/user/get-mypost";
   static const String PROFILE_BGIMAGE_URL = "$BASE_URL/api/user/modify-bgimage";
@@ -53,4 +55,5 @@ class AppString {
   static const String CART_HISTORY_KEY = 'cashe-cart-history';
   static const String TOKEN = '';
   static const String TYPE_KEY = 'type-key';
+  static const CACHED_POSTS = "CACHED_POSTS";
 }

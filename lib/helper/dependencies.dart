@@ -1,10 +1,13 @@
 
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:social_app/core/network/network_info.dart';
 import '../controller/user_ctrl.dart';
 
 
 import '../features/data/api/api_client.dart';
+import '../features/data/api/local_source.dart';
 import '../features/view/auth/auth_ctrl/auth_ctrl.dart';
 import '../features/view/auth/auth_repo/auth_repo.dart';
 import '../features/view/home/home_ctrl/home_ctrl.dart';
@@ -25,6 +28,13 @@ Future<void> init() async {
 
   //api client
   Get.lazyPut(() => ApiClient(sharedPreferences: Get.find()));
+
+  //netInfo
+  Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
+  Get.lazyPut(()=>InternetConnectionChecker());
+
+  // localSource
+  Get.lazyPut(()=> LocalSource(sharedPreferences: Get.find()));
   
   //repos
   Get.lazyPut(() => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
@@ -35,7 +45,7 @@ Future<void> init() async {
 
   //controllers
   Get.lazyPut(() => UserCtrl());
-  Get.lazyPut(() => HomeCtrl(homeRepo: Get.find()));
+  Get.lazyPut(() => HomeCtrl(homeRepo: Get.find(), networkInfo: Get.find(), localSource: Get.find()));
   Get.lazyPut(() => NavUserCtrl());
   Get.lazyPut(() => AuthCtrl(apiClient: Get.find(), authRepo: Get.find(), sharedPreferences: sharedPreferences));
   Get.lazyPut(() => PostCtrl(postRepo: Get.find()));

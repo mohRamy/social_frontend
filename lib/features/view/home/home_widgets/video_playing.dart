@@ -21,9 +21,11 @@ class _VideoCardState extends State<VideoPlayingPost> {
     super.initState();
     _chewieController = ChewieController(
       videoPlayerController: VideoPlayerController.network(widget.videoUrl),
-      aspectRatio: 2,
+      aspectRatio: 0.9,
       showOptions: false,
-      showControlsOnInitialize: false,
+      showControls: false,
+      looping: true,
+      autoPlay: false,
       autoInitialize: true,
       errorBuilder: (context, errorMessage) {
         return Center(
@@ -44,29 +46,21 @@ class _VideoCardState extends State<VideoPlayingPost> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: Chewie(
+    return Stack(
+      children: [
+        Chewie(
           controller: _chewieController,
         ),
-      ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.black.withOpacity(0.2), Colors.transparent],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+        )
+      ],
     );
-    // Container(
-    //   height: 150,
-    //   width: Dimensions.screenWidth * .95,
-    //   margin: const EdgeInsets.only(bottom: 10.0),
-    //   decoration: BoxDecoration(
-    //     color: Colors.blue,
-    //     borderRadius: BorderRadius.circular(10.0),
-    //   ),
-    //   child: ClipRRect(
-    //     borderRadius: BorderRadius.circular(10.0),
-    //     child: Chewie(
-    //       controller: _chewieController,
-    //     ),
-    //   ),
-    // );
   }
 }

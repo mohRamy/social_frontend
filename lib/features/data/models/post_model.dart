@@ -154,14 +154,14 @@ class PostModel {
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
-    id: map['_id']??"",
+    id: map['_id']??map['id'],
     userId: map['userId']??"",
     userName: map['userName']??"",
     userPhoto: map['userPhoto']??"",
     time: map['time']??0,
     posts : List<Posts>.from(map['posts']?.map((x) => Posts.fromJson(x))??[]),
     likes : List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
-    comments: List<CommentModel>.from(map['comments']?.map((x) => UserModel.fromMap(x))??[]),
+    comments: List<CommentModel>.from(map['comments']?.map((x) => CommentModel.fromMap(x))??[]),
     description: map['description']??"",
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/core/network/network_info.dart';
 import 'config/routes/app_pages.dart';
 import 'controller/user_ctrl.dart';
 import 'features/view/auth/auth_ctrl/auth_ctrl.dart';

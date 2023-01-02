@@ -26,27 +26,44 @@ class DisplayTextImageVideoPost extends StatelessWidget {
           )
         : type == "image"
             ? InkWell(
-              onTap: (){
-                Get.to(HeroImage(
-                        post: post,
-                      ),);
-              },
-              child: Container(
-                  // height: 150,
-                  width: Dimensions.screenWidth,
-                  // margin: const EdgeInsets.only(bottom: 10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(5.0),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                        post,
+                onTap: () {
+                  Get.to(
+                    HeroImage(
+                      post: post,
+                    ),
+                  );
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      width: Dimensions.screenWidth,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5),
+                        ),
+                        
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            post,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                      colors: [Colors.black.withOpacity(0.2), Colors.transparent],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                      ),
+                    )
+                  ],
                 ),
-            )
+              )
             : VideoPlayingPost(
                 videoUrl: post,
               );
