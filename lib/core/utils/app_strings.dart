@@ -4,18 +4,30 @@ class AppString {
   static const int APP_V = 1;
 
   //api
-  static const String BASE_URL = "http://192.168.98.79:8000";
+  static const String BASE_URL = "http://192.168.54.79:8000";
   static const String SIGN_UP_URL = "$BASE_URL/api/signup";
   static const String SIGN_IN_URL = "$BASE_URL/api/signin";
   static const String TOKEN_IS_VALID_URL = "$BASE_URL/tokenIsValid";
   static const String USER_BY_ID_URL = "$BASE_URL/user-by-id";
+  //post
+  static const String POST_GET_URL = "$BASE_URL/post/";
   static const String POST_ADD_URL = "$BASE_URL/post/add-post";
   static const String POST_UPDATE_URL = "$BASE_URL/post/update-post";
   static const String POST_DELETE_URL = "$BASE_URL/post/delete-post";
-  static const String POST_GET_URL = "$BASE_URL/post/";
-  static const String POST_ADD_LIKE_URL = "$BASE_URL/post/add-like";
-  static const String POST_ADD_COMMENT_URL = "$BASE_URL/post/add-comment";
-  static const String POST_GET_COMMENT_URL = "$BASE_URL/post/get-comment";
+  static const String POST_LIKE_ADD_URL = "$BASE_URL/post/add-like";
+  static const String POST_COMMENT_ADD_URL = "$BASE_URL/post/add-comment";
+  static const String POST_COMMENT_GET_URL = "$BASE_URL/post/get-comment";
+  static const String POST_COMMENT_LIKE_URL = "$BASE_URL/post/like-comment";
+  //story
+  static const String STORY_GET_URL = "$BASE_URL/story/";
+  static const String STORY_ADD_URL = "$BASE_URL/story/add-story";
+  static const String STORY_UPDATE_URL = "$BASE_URL/story/update-story";
+  static const String STORY_DELETE_URL = "$BASE_URL/story/delete-story";
+  static const String STORY_LIKE_ADD_URL = "$BASE_URL/story/add-like";
+  static const String STORY_COMMENT_ADD_URL = "$BASE_URL/story/add-comment";
+  static const String STORY_COMMENT_GET_URL = "$BASE_URL/story/get-comment";
+  static const String STORY_COMMENT_LIKE_URL = "$BASE_URL/story/like-comment";
+  // profile
   static const String PROFILE_FOLLOW_URL = "$BASE_URL/api/user/follow";
   static const String MYPOST_GET_URL = "$BASE_URL/api/user/get-mypost";
   static const String PROFILE_BGIMAGE_URL = "$BASE_URL/api/user/modify-bgimage";
@@ -55,5 +67,6 @@ class AppString {
   static const String CART_HISTORY_KEY = 'cashe-cart-history';
   static const String TOKEN = '';
   static const String TYPE_KEY = 'type-key';
-  static const CACHED_POSTS = "CACHED_POSTS";
+  static const CACHED_POSTS = "cached_posts";
+  static const CACHED_STORIES = "cached_stories";
 }

@@ -84,9 +84,7 @@ import 'user_model.dart';
 
 class PostModel {
   String? _id;
-  String? _userId;
-  String? _userName;
-  String? _userPhoto;
+  UserModel? _userData;
   int? _time;
   List<Posts>? _posts;
   List<UserModel>? _likes;
@@ -94,10 +92,9 @@ class PostModel {
   String? _description;
 
   PostModel(
-      {String? id,
-      String? userId,
-      String? userName,
-      String? userPhoto,
+      {
+      String? id,
+      UserModel? userData,
       int? time,
       List<Posts>? posts,
       List<UserModel>? likes,
@@ -106,14 +103,8 @@ class PostModel {
     if (id != null) {
       _id = id;
     }
-    if (userId != null) {
-      _userId = userId;
-    }
-    if (userName != null) {
-      _userName = userName;
-    }
-    if (userPhoto != null) {
-      _userPhoto = userPhoto;
+    if (userData != null) {
+      _userData = userData;
     }
     if (time != null) {
       _time = time;
@@ -135,12 +126,8 @@ class PostModel {
 
   String? get id => _id;
   set id(String? id) => _id = id;
-  String? get userId => _userId;
-  set userId(String? userId) => _userId = userId;
-  String? get userName => _userName;
-  set userName(String? userName) => _userName = userName;
-  String? get userPhoto => _userPhoto;
-  set userPhoto(String? userPhoto) => _userPhoto = userPhoto;
+  UserModel? get userData => _userData;
+  set userData(UserModel? userData) => _userData = userData;
   int? get time => _time;
   set time(int? time) => _time = time;
   List<Posts>? get posts => _posts;
@@ -155,9 +142,7 @@ class PostModel {
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
     id: map['_id']??map['id'],
-    userId: map['userId']??"",
-    userName: map['userName']??"",
-    userPhoto: map['userPhoto']??"",
+    userData: UserModel.fromMap(map['userData']),
     time: map['time']??0,
     posts : List<Posts>.from(map['posts']?.map((x) => Posts.fromJson(x))??[]),
     likes : List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
@@ -169,9 +154,7 @@ class PostModel {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id;
-    data['userId'] = _userId;
-    data['userName'] = _userName;
-    data['userPhoto'] = _userPhoto;
+    data['userData'] = _userData;
     data['time'] = _time;
     if (_posts != null) {
       data['posts'] = _posts!.map((v) => v.toJson()).toList();

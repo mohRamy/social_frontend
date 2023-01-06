@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Get.find<AuthRepo>().userLoggedIn()) {
-      Get.find<AuthCtrl>().getUserData();
+      Get.find<AuthCtrl>().fetchMyData();
     }
     
     print(Get.find<UserCtrl>().user.email);

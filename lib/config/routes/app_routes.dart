@@ -10,6 +10,8 @@ abstract class Routes {
   static const SEARCH = _Paths.SEARCH;
   static const PROFILE = _Paths.PROFILE;
   static const LIST_PHOTO_PROFILE = _Paths.LIST_PHOTO_PROFILE;
+  static const LIKES = _Paths.LIKES;
+
 
 }
 
@@ -21,6 +23,8 @@ abstract class _Paths {
   static const SEARCH = '/search';
   static const PROFILE = '/profile';
   static const LIST_PHOTO_PROFILE = '/listPhotoProfile';
+  static const LIKES = '/likes';
+
 
 
 

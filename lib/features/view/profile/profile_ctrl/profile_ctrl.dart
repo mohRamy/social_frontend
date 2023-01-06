@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,7 +71,7 @@ class ProfileCtrl extends GetxController implements GetxService {
   }
 
   void modifyBGImage(
-    String image,
+    File? image,
   ) async {
     try {
       http.Response res = await profileRepo.modifyBGImage(

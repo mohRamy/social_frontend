@@ -1,10 +1,8 @@
-
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:social_app/core/network/network_info.dart';
 import '../controller/user_ctrl.dart';
-
 
 import '../features/data/api/api_client.dart';
 import '../features/data/api/local_source.dart';
@@ -19,6 +17,9 @@ import '../features/view/profile/profile_ctrl/profile_ctrl.dart';
 import '../features/view/profile/profile_repo/profile_repo.dart';
 import '../features/view/search/search_ctrl/search_ctrl.dart';
 import '../features/view/search/search_repo/search_repo.dart';
+import '../features/view/story/data_sources/story_local_data_source.dart';
+import '../features/view/story/story_ctrl/story_ctrl.dart';
+import '../features/view/story/data_sources/story_remote_data_source.dart';
 
 Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
@@ -31,26 +32,44 @@ Future<void> init() async {
 
   //netInfo
   Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
-  Get.lazyPut(()=>InternetConnectionChecker());
+  Get.lazyPut(() => InternetConnectionChecker());
 
   // localSource
-  Get.lazyPut(()=> LocalSource(sharedPreferences: Get.find()));
-  
+  Get.lazyPut(() => PostLocalSource(sharedPreferences: Get.find()));
+  Get.lazyPut(() => StoryLocalSource(sharedPreferences: Get.find()));
+
+
   //repos
-  Get.lazyPut(() => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  Get.lazyPut(() => HomeRepo(apiClient: Get.find(),));
-  Get.lazyPut(() => PostRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  Get.lazyPut(() => SearchRepo(apiClient: Get.find(),));
-  Get.lazyPut(() => ProfileRepo(apiClient: Get.find(),));
+  Get.lazyPut(
+      () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  Get.lazyPut(() => HomeRepo(
+        apiClient: Get.find(),
+      ));
+  Get.lazyPut(() => PostRepo(apiClient: Get.find()));
+  Get.lazyPut(() => StoryRepo(apiClient: Get.find()));
+  Get.lazyPut(() => SearchRepo(apiClient: Get.find()));
+  Get.lazyPut(() => ProfileRepo(apiClient: Get.find()));
 
   //controllers
   Get.lazyPut(() => UserCtrl());
-  Get.lazyPut(() => HomeCtrl(homeRepo: Get.find(), networkInfo: Get.find(), localSource: Get.find()));
+  Get.lazyPut(
+    () => HomeCtrl(
+      homeRepo: Get.find(),
+      networkInfo: Get.find(),
+      postLocalSource: Get.find(),
+      storyLocalSource: Get.find(),
+    ),
+  );
   Get.lazyPut(() => NavUserCtrl());
-  Get.lazyPut(() => AuthCtrl(apiClient: Get.find(), authRepo: Get.find(), sharedPreferences: sharedPreferences));
+  Get.lazyPut(
+    () => AuthCtrl(
+      apiClient: Get.find(),
+      authRepo: Get.find(),
+      sharedPreferences: sharedPreferences,
+    ),
+  );
   Get.lazyPut(() => PostCtrl(postRepo: Get.find()));
+  Get.lazyPut(() => StoryCtrl(storyRepo: Get.find()));
   Get.lazyPut(() => SearchCtrl(searchRepo: Get.find()));
   Get.lazyPut(() => ProfileCtrl(profileRepo: Get.find()));
-
-
 }

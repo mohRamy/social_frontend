@@ -1,17 +1,16 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/enums/story_enum.dart';
 import '../../../../core/utils/dimensions.dart';
-import 'video_card.dart';
 
-import '../../../../core/enums/post_enum.dart';
+import '../../post/post_widgets/video_card.dart';
 
-class DisplayTextImageGIF extends StatelessWidget {
+class DisplayFileStory extends StatelessWidget {
   final File message;
-  final PostEnum type;
+  final StoryEnum type;
 
-  const DisplayTextImageGIF({
+  const DisplayFileStory({
     Key? key,
     required this.message,
     required this.type,
@@ -19,14 +18,7 @@ class DisplayTextImageGIF extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return type == PostEnum.text
-        ? Text(
-            message.path,
-            style: TextStyle(
-              fontSize: Dimensions.font16,
-            ),
-          )
-        : type == PostEnum.image
+    return type == StoryEnum.image
             ? 
                 Container(
                     height: 150,

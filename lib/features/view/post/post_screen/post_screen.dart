@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../../../../controller/user_ctrl.dart';
-import '../../../../core/enums/message_enum.dart';
+import '../../../../core/enums/post_enum.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/components/components.dart';
 import '../post_ctrl/post_ctrl.dart';
@@ -96,8 +96,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
             }))
         .toList();
 
-    
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -151,54 +149,55 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                       const SizedBox(height: 10.0),
                       Padding(
-                          padding:
-                              const EdgeInsets.only(left: 65.0, right: 10.0),
-                          child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: postCtrl.imageFileSelected.length,
-                              itemBuilder: (_, index) {
-                                return Stack(
-                                  children: [
-                                    DisplayTextImageGIF(
-                                      type: itemsKey[index],
-                                      message: itemsVal[index],
+                        padding: const EdgeInsets.only(left: 65.0, right: 10.0),
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: postCtrl.imageFileSelected.length,
+                          itemBuilder: (_, index) {
+                            return Stack(
+                              children: [
+                                DisplayTextImageGIF(
+                                  type: itemsKey[index],
+                                  message: itemsVal[index],
+                                ),
+                                // Container(
+                                //   height: 150,
+                                //   width: size.width * .95,
+                                //   margin: const EdgeInsets.only(bottom: 10.0),
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.blue,
+                                //     borderRadius: BorderRadius.circular(10.0),
+                                //     image: DecorationImage(
+                                //       fit: BoxFit.cover,
+                                //       image: FileImage(
+                                //         postCtrl.imageFileSelected[i],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                Positioned(
+                                  top: 5,
+                                  right: 5,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        postCtrl.imageFileSelected
+                                            .removeAt(index);
+                                      });
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Colors.black38,
+                                      child: Icon(Icons.close_rounded,
+                                          color: Colors.white),
                                     ),
-                                    // Container(
-                                    //   height: 150,
-                                    //   width: size.width * .95,
-                                    //   margin: const EdgeInsets.only(bottom: 10.0),
-                                    //   decoration: BoxDecoration(
-                                    //     color: Colors.blue,
-                                    //     borderRadius: BorderRadius.circular(10.0),
-                                    //     image: DecorationImage(
-                                    //       fit: BoxFit.cover,
-                                    //       image: FileImage(
-                                    //         postCtrl.imageFileSelected[i],
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    Positioned(
-                                      top: 5,
-                                      right: 5,
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            postCtrl.imageFileSelected
-                                                .removeAt(index);
-                                          });
-                                        },
-                                        child: const CircleAvatar(
-                                          backgroundColor: Colors.black38,
-                                          child: Icon(Icons.close_rounded,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }))
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -251,7 +250,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   },
                 ),
               ),
-              
               InkWell(
                 // onTap: () => modalPrivacyPost(context),
                 onTap: () {},
@@ -354,12 +352,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0))),
             onPressed: () {
-              List<File> posts = [];
-              postCtrl.imageFileSelected
-                  .map((e) => e.forEach((key, value) {
-                        posts.add(value);
-                      }))
-                  .toList();
+              // List<File> posts = [];
+              // postCtrl.imageFileSelected
+              //     .map((e) => e.forEach((key, value) {
+              //           posts.add(value);
+              //         }))
+              //     .toList();
               if (_keyForm.currentState!.validate()) {
                 if (postCtrl.imageFileSelected.isNotEmpty) {
                   postCtrl.addPost(

@@ -76,9 +76,14 @@ class AuthRepo {
         );
   }
 
-  // get user data
-  Future<http.Response> getUserData() async {
+  // fetch my data
+  Future<http.Response> fetchMyData() async {
     return await apiClient.getData('${AppString.BASE_URL}/');
+  }
+
+  // fetch user data
+  Future<http.Response> fetchUserData(String userId) async {
+    return await apiClient.getData('${AppString.USER_BY_ID_URL}?userId=$userId');
   }
 
   // save user token

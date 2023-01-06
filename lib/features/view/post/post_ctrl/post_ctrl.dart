@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/enums/message_enum.dart';
+import '../../../../core/enums/post_enum.dart';
+import '../../../data/models/comment_model.dart';
 import '../post_repo/post_repo.dart';
 import 'package:http/http.dart' as http;
 import '../../../data/models/post_model.dart';
@@ -20,8 +22,6 @@ class PostCtrl extends GetxController implements GetxService {
   late List<Map<PostEnum, File>> imageFileSelected = []; 
   late TextEditingController descriptionC;
 
-  List<PostModel> posts = [];
-  late UserModel user;
 
   @override
   void onInit() {
@@ -56,62 +56,6 @@ class PostCtrl extends GetxController implements GetxService {
           Components.showCustomSnackBar(
             title: '',
             'Added Post!',
-            color: Colors.green,
-          );
-        },
-      );
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
-    }
-    _isLoading = false;
-    update();
-  }
-
-  void updatePost({
-    required String description,
-    required String postUrl,
-  }) async {
-    try {
-      _isLoading = true;
-      update();
-      http.Response res = await postRepo.updatePost(
-        description: description,
-        postUrl: postUrl,
-      );
-
-      stateHandle(
-        res: res,
-        onSuccess: () {
-          Components.showCustomSnackBar(
-            title: '',
-            'Modified Post!',
-            color: Colors.green,
-          );
-        },
-      );
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
-    }
-    _isLoading = false;
-    update();
-  }
-
-  void deletePost({
-    required String postId,
-  }) async {
-    try {
-      _isLoading = true;
-      update();
-      http.Response res = await postRepo.deletePost(
-        postId: postId,
-      );
-
-      stateHandle(
-        res: res,
-        onSuccess: () {
-          Components.showCustomSnackBar(
-            title: '',
-            'Deleted Post!',
             color: Colors.green,
           );
         },

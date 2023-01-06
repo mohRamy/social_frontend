@@ -115,15 +115,12 @@ class AuthCtrl extends GetxController implements GetxService {
     update();
   }
 
-  void getUserData() async {
+  void fetchMyData() async {
     try {
       _isLoading = true;
       update();
-      print(sharedPreferences.getString(AppString.TOKEN));
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(AppString.TOKEN);
-
-      print("oooooooooooo$token ooooooooooooooo");
 
       if (token == null) {
         prefs.setString(AppString.TOKEN, '');
@@ -133,15 +130,29 @@ class AuthCtrl extends GetxController implements GetxService {
       bool response = jsonDecode(tokenRes.body);
 
       if (response == true) {
-        
-        http.Response userRes = await authRepo.getUserData();
-        print('iiiiiiiiiiiiiiiiiiiiiioooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-
-        print(userRes.body);
+        http.Response userRes = await authRepo.fetchMyData();
 
         UserCtrl userController = Get.find<UserCtrl>();
         userController.setUserFromJson(userRes.body);
       }
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    _isLoading = false;
+    update();
+  }
+
+  void fetchUserData(String userId) async {
+    try {
+      _isLoading = true;
+      update();
+
+      http.Response res = await authRepo.fetchUserData(userId);
+
+      stateHandle(
+        res: res,
+        onSuccess: () {},
+      );
     } catch (e) {
       Components.showCustomSnackBar(e.toString());
     }

@@ -1,5 +1,6 @@
 
 import 'package:get/get.dart';
+import 'package:social_app/features/view/home/home_screens/likes_screen.dart';
 
 import '../../features/view/auth/auth_screens/signin_screen.dart';
 import '../../features/view/auth/auth_screens/signup_screen.dart';
@@ -48,6 +49,11 @@ class AppPages {
     GetPage(
       name: _Paths.LIST_PHOTO_PROFILE,
       page: () =>  const ListPhotosProfileScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.LIKES,
+      page: () => LikesScreen(),
       transition: Transition.fadeIn,
     ),
   ];

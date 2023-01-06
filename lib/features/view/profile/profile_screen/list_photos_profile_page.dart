@@ -105,7 +105,7 @@ class _ListPhotosProfileScreenState extends State<ListPhotosProfileScreen> {
                                 children: [
                                   CircleAvatar(
                                     backgroundImage:
-                                        NetworkImage(postData.userPhoto!),
+                                        NetworkImage(postData.userData!.photo),
                                   ),
                                   const SizedBox(width: 10.0),
                                   Column(
@@ -113,7 +113,7 @@ class _ListPhotosProfileScreenState extends State<ListPhotosProfileScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextCustom(
-                                        text: postData.userName!,
+                                        text: postData.userData!.name,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
                                         fontSize: Dimensions.font20,

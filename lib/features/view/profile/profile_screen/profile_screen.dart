@@ -264,14 +264,14 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
 
   void pickImageGallery() async {
     image = await pickImageFromGallery();
-    Get.find<ProfileCtrl>().modifyBGImage(image!.path);
+    Get.find<ProfileCtrl>().modifyBGImage(image);
     Get.back();
     setState(() {});
   }
 
   void pickImageCamera() async {
     image = await pickImageFromCamera();
-    Get.find<ProfileCtrl>().modifyBGImage(image!.path);
+    Get.find<ProfileCtrl>().modifyBGImage(image);
     Get.back();
     setState(() {});
   }
@@ -280,14 +280,14 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
 
   void pickImageGalleryP() async {
     imageP = await pickImageFromGallery();
-    Get.find<ProfileCtrl>().modifyBGImage(image!.path);
+    Get.find<ProfileCtrl>().modifyBGImage(image);
     Get.back();
     setState(() {});
   }
 
   void pickImageCameraP() async {
     imageP = await pickImageFromCamera();
-    Get.find<ProfileCtrl>().modifyBGImage(image!.path);
+    Get.find<ProfileCtrl>().modifyBGImage(image);
     Get.back();
     setState(() {});
   }
@@ -310,6 +310,7 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
             child: widget.userData.backgroundImage.isNotEmpty
                 ? Image.network(
                     widget.userData.backgroundImage,
+                    fit: BoxFit.cover,
                   )
                 : image != null
                     ? Image.file(
@@ -414,6 +415,17 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
               ),
             );
           }),
+          Positioned(
+            left: 0.0,
+            child: Get.arguments != null ? IconButton(
+          splashRadius: 20,
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.black87,
+          ),
+        ) : Container(),
+          ),
           Positioned(
               right: 0,
               child: IconButton(

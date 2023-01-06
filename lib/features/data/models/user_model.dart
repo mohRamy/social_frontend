@@ -51,7 +51,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       bio: map['bio'] ?? '',
@@ -94,7 +94,7 @@ class UserModel {
       bio: bio ?? this.bio,
       followers: followers ?? this.followers,
       following: following ?? this.following,
-      photo: phone ?? this.photo,
+      photo: photo ?? this.photo,
       backgroundImage: backgroundImage ?? this.backgroundImage,
       phone: phone ?? this.phone,
       password: password ?? this.password,

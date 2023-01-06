@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:get/get.dart';
-import '../../../../controller/user_ctrl.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 
 import '../../../../core/utils/app_strings.dart';
 import '../../../data/api/api_client.dart';
@@ -34,13 +34,27 @@ class ProfileRepo {
   }
 
   Future<http.Response> modifyBGImage({
-    required String image,
+    required File? image,
   }) async {
+    String photoCloudinary =
+        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
+    if (image != null) {
+
+      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
+
+      CloudinaryResponse res = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          image.path,
+          folder: image.path,
+        ),
+      );
+      photoCloudinary = res.secureUrl;
+    }
     return await apiClient.postData(
       AppString.PROFILE_BGIMAGE_URL,
       jsonEncode(
         {
-          "image": image,
+          "image": photoCloudinary,
         },
       ),
     );

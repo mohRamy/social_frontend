@@ -5,9 +5,9 @@ import 'package:social_app/core/utils/app_strings.dart';
 
 import '../models/post_model.dart';
 
-class LocalSource {
+class PostLocalSource {
   final SharedPreferences sharedPreferences;
-  LocalSource({
+  PostLocalSource({
     required this.sharedPreferences,
   });
 

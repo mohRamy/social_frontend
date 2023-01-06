@@ -3,29 +3,35 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:social_app/core/network/network_info.dart';
 import 'package:social_app/features/data/api/local_source.dart';
-import 'package:social_app/features/data/models/comment_model.dart';
+import 'package:social_app/features/data/models/story_model.dart';
+import 'package:social_app/features/view/story/data_sources/story_local_data_source.dart';
 
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/utils/constants/error_handling.dart';
+import '../../../data/models/comment_model.dart';
 import '../../../data/models/post_model.dart';
 import '../home_repo/home_repo.dart';
 
 class HomeCtrl extends GetxController implements GetxService {
   final HomeRepo homeRepo;
   final NetworkInfo networkInfo;
-  final LocalSource localSource;
+  final PostLocalSource postLocalSource;
+  final StoryLocalSource storyLocalSource;
   HomeCtrl({
     required this.homeRepo,
     required this.networkInfo,
-    required this.localSource,
+    required this.postLocalSource,
+    required this.storyLocalSource,
   });
 
   List<PostModel> posts = [];
-  List<CommentModel> comments = [];
+  List<CommentModel> postComments = [];
+
+  List<StoryModel> stories = [];
+  
 
   late TextEditingController commentC;
 
@@ -34,6 +40,7 @@ class HomeCtrl extends GetxController implements GetxService {
 
   @override
   void onInit() {
+    fetchAllStories();
     fetchAllPosts();
     commentC = TextEditingController();
     super.onInit();
@@ -56,8 +63,6 @@ class HomeCtrl extends GetxController implements GetxService {
           res: res,
           onSuccess: () {
             posts = [];
-            print(res.body);
-            print('ooooooooooooooooooooooooooooooooooooooooooooooooo');
             for (var i = 0; i < jsonDecode(res.body).length; i++) {
               posts.add(
                 PostModel.fromMap(
@@ -65,7 +70,7 @@ class HomeCtrl extends GetxController implements GetxService {
                 ),
               );
             }
-            localSource.addToPostList(posts);
+            postLocalSource.addToPostList(posts);
           },
         );
         _isLoading = false;
@@ -77,7 +82,7 @@ class HomeCtrl extends GetxController implements GetxService {
       try {
         _isLoading = true;
         update();
-        posts = await localSource.getPostList();
+        posts = await postLocalSource.getPostList();
         _isLoading = false;
         update();
       } catch (e) {
@@ -86,21 +91,73 @@ class HomeCtrl extends GetxController implements GetxService {
     }
   }
 
+  void updatePost({
+    required String description,
+    required String postUrl,
+  }) async {
+    try {
+      _isLoading = true;
+      update();
+      http.Response res = await homeRepo.updatePost(
+        description: description,
+        postUrl: postUrl,
+      );
+
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar(
+            title: '',
+            'Modified Post!',
+            color: Colors.green,
+          );
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    _isLoading = false;
+    update();
+  }
+
+  void deletePost({
+    required String postId,
+  }) async {
+    try {
+      _isLoading = true;
+      update();
+      http.Response res = await homeRepo.deletePost(
+        postId: postId,
+      );
+
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar(
+            title: '',
+            'Deleted Post!',
+            color: Colors.green,
+          );
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    _isLoading = false;
+    update();
+  }
+
   void postLike(
     String postId,
     int isAdd,
   ) async {
     try {
-      _isLoading = true;
-      update();
       http.Response res = await homeRepo.postLike(postId, isAdd);
 
       stateHandle(
         res: res,
         onSuccess: () {},
       );
-      _isLoading = false;
-      update();
     } catch (e) {
       Components.showCustomSnackBar(e.toString());
     }
@@ -129,21 +186,21 @@ class HomeCtrl extends GetxController implements GetxService {
     }
   }
 
-  Future<void> fetchAllComment(
+  Future<void> fetchAllPostComment(
     String postId,
   ) async {
     try {
       _isLoading = true;
       update();
-      http.Response res = await homeRepo.fetchAllComment(
+      http.Response res = await homeRepo.fetchAllPostComment(
         postId,
       );
       stateHandle(
         res: res,
         onSuccess: () async {
-          comments = [];
+          postComments = [];
           for (var i = 0; i < jsonDecode(res.body).length; i++) {
-            comments.add(
+            postComments.add(
               CommentModel.fromJson(
                 jsonEncode(
                   jsonDecode(
@@ -161,4 +218,61 @@ class HomeCtrl extends GetxController implements GetxService {
       Components.showCustomSnackBar(e.toString());
     }
   }
+
+  void postCommentLike(
+    String postId,
+    String commentId,
+    int isAdd,
+  ) async {
+    try {
+      http.Response res = await homeRepo.postCommentLike(postId, commentId, isAdd);
+
+      stateHandle(
+        res: res,
+        onSuccess: () {},
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+  }
+
+  Future<void> fetchAllStories() async {
+    if (await networkInfo.isConnected) {
+      try {
+        _isLoading = true;
+        update();
+        http.Response res = await homeRepo.fetchAllStories();
+        stateHandle(
+          res: res,
+          onSuccess: () {
+            stories = [];
+            for (var i = 0; i < jsonDecode(res.body).length; i++) {
+              stories.add(
+                StoryModel.fromMap(
+                  jsonDecode(res.body)[i],
+                ),
+              );
+            }
+            storyLocalSource.addToStoryList(stories);
+          },
+        );
+        _isLoading = false;
+        update();
+      } catch (e) {
+        Components.showCustomSnackBar(e.toString());
+      }
+    } else {
+      try {
+        _isLoading = true;
+        update();
+        stories = await storyLocalSource.getStoryList();
+        _isLoading = false;
+        update();
+      } catch (e) {
+        Components.showCustomSnackBar(e.toString());
+      }
+    }
+  }
+
+  
 }

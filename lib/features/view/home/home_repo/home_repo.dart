@@ -1,13 +1,8 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-
 import '../../../../core/utils/app_strings.dart';
 import '../../../data/api/api_client.dart';
 import 'package:http/http.dart' as http;
-
-import '../../../data/models/user_model.dart';
 
 class HomeRepo {
   final ApiClient apiClient;
@@ -19,15 +14,37 @@ class HomeRepo {
     return await apiClient.getData(AppString.POST_GET_URL);
   }
 
-  Future<http.Response> postLike(String postId, int isAdd) async {
-    print('ooooooooooooooooooooooo');
+  Future<http.Response> updatePost({
+    required String description,
+    required String postUrl,
+  }) async {
     return await apiClient.postData(
-      AppString.POST_ADD_LIKE_URL,
+      AppString.POST_UPDATE_URL,
+      jsonEncode({
+        "description": description,
+        "postUrl": postUrl,
+      }),
+    );
+  }
+
+  Future<http.Response> deletePost({
+    required String postId,
+  }) async {
+    return await apiClient.postData(
+      AppString.POST_DELETE_URL,
+      jsonEncode({
+        "id": postId,
+      }),
+    );
+  }
+
+  Future<http.Response> postLike(String postId, int isAdd) async {
+    return await apiClient.postData(
+      AppString.POST_LIKE_ADD_URL,
       jsonEncode(
         {
           "postId": postId,
           "isAdd": isAdd,
-          "email": Get.find<UserCtrl>().user.email,
         },
       ),
     );
@@ -38,7 +55,7 @@ class HomeRepo {
     String comment,
   ) async {
     return await apiClient.postData(
-      AppString.POST_ADD_COMMENT_URL,
+      AppString.POST_COMMENT_ADD_URL,
       jsonEncode(
         {
           "postId": postId,
@@ -48,20 +65,28 @@ class HomeRepo {
     );
   }
 
-  Future<http.Response> fetchAllComment(
+  Future<http.Response> fetchAllPostComment(
     String postId,
   ) async {
-    return await apiClient.getData("${AppString.POST_GET_COMMENT_URL}?postId=$postId");
+    return await apiClient
+        .getData("${AppString.POST_COMMENT_GET_URL}?postId=$postId");
   }
 
-  // Future<http.Response> postDeleteLike(String postId) async {
-  //   return await apiClient.postData(
-  //     AppString.POST_DELETE_LIKE_URL,
-  //     jsonEncode(
-  //       {
-  //         "postId": postId,
-  //       },
-  //     ),
-  //   );
-  // }
+  Future<http.Response> postCommentLike(
+      String postId, String commentId, int isAdd) async {
+    return await apiClient.postData(
+      AppString.POST_COMMENT_LIKE_URL,
+      jsonEncode(
+        {
+          "postId": postId,
+          "commentId": commentId,
+          "isAdd": isAdd,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> fetchAllStories() async {
+    return await apiClient.getData(AppString.STORY_GET_URL);
+  }
 }
