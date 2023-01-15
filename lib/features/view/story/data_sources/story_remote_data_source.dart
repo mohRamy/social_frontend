@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 
@@ -46,13 +47,15 @@ class StoryRepo {
       }
     }
 
+    int random = Random().nextInt(1000);
+
     final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
     List<String> storyCloudinary = [];
     for (var i = 0; i < itemsVal.length; i++) {
       CloudinaryResponse res = await cloudinary.uploadFile(
         CloudinaryFile.fromFile(
           itemsVal[i].path,
-          folder: 'stories',
+          folder: "$random",
         ),
       );
       storyCloudinary.add(res.secureUrl);

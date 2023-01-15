@@ -83,7 +83,7 @@ class AuthRepo {
 
   // fetch user data
   Future<http.Response> fetchUserData(String userId) async {
-    return await apiClient.getData('${AppString.USER_BY_ID_URL}?userId=$userId');
+    return await apiClient.getData('${AppString.USER_BY_ID_URL}/$userId');
   }
 
   // save user token

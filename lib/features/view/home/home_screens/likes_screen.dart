@@ -75,16 +75,11 @@ class LikesScreen extends GetView<HomeCtrl> {
 
                       return InkWell(
                         onTap: () {
-                          if (userData.id != Get.find<UserCtrl>().user.id) {
+                          
                             Get.toNamed(
                               Routes.PROFILE,
-                              arguments: userData,
+                              arguments: userData.id,
                             );
-                          } else {
-                            Get.toNamed(
-                              Routes.PROFILE,
-                            );
-                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),

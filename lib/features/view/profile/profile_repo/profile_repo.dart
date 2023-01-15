@@ -72,4 +72,30 @@ class ProfileRepo {
       ),
     );
   }
+
+  Future<http.Response> deleteFollower({
+    required String followerId,
+  }) async {
+    return await apiClient.postData(
+      AppString.PROFILE_IMAGE_URL,
+      jsonEncode(
+        {
+          "followerId": followerId,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> deleteFollowing({
+    required String followingId,
+  }) async {
+    return await apiClient.postData(
+      AppString.PROFILE_IMAGE_URL,
+      jsonEncode(
+        {
+          "followingId": followingId,
+        },
+      ),
+    );
+  }
 }

@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'package:social_app/features/view/profile/profile_screen/followers_page.dart';
+import 'package:social_app/features/view/profile/profile_screen/following_page.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../data/models/user_model.dart';
 
@@ -12,6 +15,7 @@ import '../../../../core/utils/dimensions.dart';
 import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../data/models/post_model.dart';
+import '../../chat/screens/chat_screen.dart';
 import '../profile_ctrl/profile_ctrl.dart';
 import '../profile_widgets/display_text_image_video.dart';
 
@@ -21,25 +25,31 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.find<ProfileCtrl>().myPost = [];
-    var userCtrl = Get.find<UserCtrl>();
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          _CoverAndProfile(userData: Get.arguments ?? userCtrl.user),
-          const SizedBox(height: 10.0),
-          _UsernameAndDescription(userData: Get.arguments ?? userCtrl.user),
-          const SizedBox(height: 30.0),
-          const _PostAndFollowingAndFollowers(),
-          const SizedBox(height: 30.0),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child:
-                //  const _ListFotosProfile()
-                _ListSaveProfile(),
-          ),
-        ],
+      body: FutureBuilder<UserModel>(
+        future: Get.find<AuthCtrl>().fetchUserData(Get.arguments??Get.find<UserCtrl>().user.id),
+        builder: (context, snapshot) {
+          return !snapshot.hasData
+          ? const CustomShimmer()
+          : ListView(
+            children: [
+              _CoverAndProfile(userData: snapshot.data!),
+              const SizedBox(height: 10.0),
+              _UsernameAndDescription(userData: snapshot.data!),
+              const SizedBox(height: 30.0),
+              const _PostAndFollowingAndFollowers(),
+              const SizedBox(height: 30.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child:
+                    //  const _ListFotosProfile()
+                    _ListSaveProfile(),
+              ),
+            ],
+          );
+        }
       ),
     );
   }
@@ -168,6 +178,13 @@ class _PostAndFollowingAndFollowers extends StatelessWidget {
                   );
                 }),
                 InkWell(
+                  onTap: ()async{
+                    List<UserModel> usersData = [];
+                    for (var i = 0; i < userCtrl.user.followers.length; i++) {
+                      usersData.add(await Get.find<AuthCtrl>().fetchUserData(userCtrl.user.followers[i]));
+                    }
+                    Get.to(const FollowersPage(), arguments: usersData);
+                  },
                   child: Column(
                     children: [
                       TextCustom(
@@ -184,6 +201,13 @@ class _PostAndFollowingAndFollowers extends StatelessWidget {
                   ),
                 ),
                 InkWell(
+                  onTap: ()async{
+                    List<UserModel> usersData = [];
+                    for (var i = 0; i < userCtrl.user.following.length; i++) {
+                      usersData.add(await Get.find<AuthCtrl>().fetchUserData(userCtrl.user.following[i]));
+                    }
+                    Get.to(const FollowingPage(), arguments: usersData);
+                  },
                   child: Column(
                     children: [
                       TextCustom(
@@ -381,50 +405,89 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
             return Positioned(
               bottom: 0.0,
               right: Dimensions.width30,
-              child: InkWell(
-                onTap: () {
-                  if (isMy) {
-                    Get.toNamed(Routes.NAV_USER_SCREEN);
-                  } else {
-                    profileCtrl.followUser(
-                      widget.userData.id,
-                    );
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.height10,
-                    vertical: Dimensions.height10 - 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius30),
-                    border: Border.all(
-                      width: 0.4,
-                      color: isMy ? Colors.grey : Colors.transparent,
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (isMy) {
+                        Get.toNamed(Routes.NAV_USER_SCREEN);
+                      } else {
+                        profileCtrl.followUser(
+                          widget.userData.id,
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.height10,
+                        vertical: Dimensions.height10 - 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Dimensions.radius30),
+                        border: Border.all(
+                          width: 0.4,
+                          color: isMy ? Colors.grey : Colors.transparent,
+                        ),
+                        color: isMy ? Colors.transparent : Colors.black,
+                      ),
+                      child: Text(
+                        isMy ? "Modify your profile" : "Follow",
+                        style: TextStyle(
+                          color: isMy ? Colors.black : Colors.white,
+                          fontSize: Dimensions.font20 - 2,
+                        ),
+                      ),
                     ),
-                    color: isMy ? Colors.transparent : Colors.black,
                   ),
-                  child: Text(
-                    isMy ? "Modify your profile" : "Follow",
-                    style: TextStyle(
-                      color: isMy ? Colors.black : Colors.white,
-                      fontSize: Dimensions.font20 - 2,
+                  isMy?
+                  Container():
+                  InkWell(
+                    onTap: () {
+                      Get.to(
+                        ChatScreen(
+                        isGroupChat: false,
+                        name: widget.userData.name,
+                        uid: widget.userData.id,
+                        profilePic: widget.userData.photo,
+                      )
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.height10,
+                        vertical: Dimensions.height10 - 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Dimensions.radius30),
+                        border: Border.all(
+                          width: 0.4,
+                          color: isMy ? Colors.grey : Colors.transparent,
+                        ),
+                        color: isMy ? Colors.transparent : Colors.black,
+                      ),
+                      child: Text(
+                      "Message",
+                        style: TextStyle(
+                          color: isMy ? Colors.black : Colors.white,
+                          fontSize: Dimensions.font20 - 2,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             );
           }),
           Positioned(
             left: 0.0,
-            child: Get.arguments != null ? IconButton(
+            child: IconButton(
           splashRadius: 20,
           onPressed: () => Get.back(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Colors.black87,
           ),
-        ) : Container(),
+        ),
           ),
           Positioned(
               right: 0,

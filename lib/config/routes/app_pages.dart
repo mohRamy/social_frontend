@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:social_app/features/view/home/home_screens/likes_screen.dart';
+import 'package:social_app/features/view/home/home_screens/post_comments_screen.dart';
 
 import '../../features/view/auth/auth_screens/signin_screen.dart';
 import '../../features/view/auth/auth_screens/signup_screen.dart';
@@ -52,8 +53,13 @@ class AppPages {
       transition: Transition.fadeIn,
     ),
     GetPage(
-      name: _Paths.LIKES,
+      name: _Paths.POST_LIKES,
       page: () => LikesScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.POST_COMMENTS,
+      page: () => const PostCommentsScreen(),
       transition: Transition.fadeIn,
     ),
   ];

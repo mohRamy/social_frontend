@@ -2,6 +2,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:social_app/core/network/network_info.dart';
+import 'package:social_app/features/view/chat/controller/chat_ctrl.dart';
+import 'package:social_app/features/view/chat/repo/chat_repo.dart';
 import '../controller/user_ctrl.dart';
 
 import '../features/data/api/api_client.dart';
@@ -49,6 +51,7 @@ Future<void> init() async {
   Get.lazyPut(() => StoryRepo(apiClient: Get.find()));
   Get.lazyPut(() => SearchRepo(apiClient: Get.find()));
   Get.lazyPut(() => ProfileRepo(apiClient: Get.find()));
+  Get.lazyPut(() => ChatRepo(apiClient: Get.find()));
 
   //controllers
   Get.lazyPut(() => UserCtrl());
@@ -72,4 +75,5 @@ Future<void> init() async {
   Get.lazyPut(() => StoryCtrl(storyRepo: Get.find()));
   Get.lazyPut(() => SearchCtrl(searchRepo: Get.find()));
   Get.lazyPut(() => ProfileCtrl(profileRepo: Get.find()));
+  Get.lazyPut(() => ChatCtrl(chatRepo: Get.find(), networkInfo: Get.find()));
 }

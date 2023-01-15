@@ -170,7 +170,7 @@ class _StoryCommentsScreenState extends State<StoryCommentsScreen> {
                                               ? InkWell(
                                                   onTap: () {
                                                     Get.toNamed(
-                                                      Routes.LIKES,
+                                                      Routes.POST_LIKES,
                                                       arguments:
                                                           commentData.likes,
                                                     );

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
@@ -56,13 +57,15 @@ class PostRepo {
       }
     }
 
+    int random = Random().nextInt(1000);
+
     final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
     List<String> postCloudinary = [];
     for (var i = 0; i < itemsVal.length; i++) {
       CloudinaryResponse res = await cloudinary.uploadFile(
         CloudinaryFile.fromFile(
           itemsVal[i].path,
-          folder: description,
+          folder: "$random",
         ),
       );
       postCloudinary.add(res.secureUrl);

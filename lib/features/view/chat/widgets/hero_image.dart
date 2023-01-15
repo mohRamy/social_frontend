@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+import '../../../../core/utils/app_colors.dart';
 
 
-class HeroImage extends StatelessWidget {
-  final String post;
-  const HeroImage({
+class ChatHeroImage extends StatelessWidget {
+  final String message;
+  const ChatHeroImage({
     Key? key,
-    required this.post,
+    required this.message,
   }) : super(key: key);
 
   @override
@@ -15,10 +16,10 @@ class HeroImage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.bgBlackColor,
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
           icon: const Icon(
             Icons.arrow_back,
@@ -31,7 +32,7 @@ class HeroImage extends StatelessWidget {
             tag: 'jj',
             child: CachedNetworkImage(
               placeholder: (context, url) => const Text('loading...'),
-              imageUrl: post,
+              imageUrl: message,
             ),
           ),
         ),

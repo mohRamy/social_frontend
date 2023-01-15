@@ -8,31 +8,36 @@ import 'package:social_app/core/utils/dimensions.dart';
 
 import 'package:social_app/features/data/models/story_model.dart';
 import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
+import 'package:social_app/features/view/story/story_widgets/display_file_story.dart';
+import 'package:social_app/features/view/story/story_widgets/display_image_video.dart';
 import 'package:social_app/features/view/story/story_widgets/palette.dart';
 import 'package:social_app/features/view/story/story_widgets/profile_avatar.dart';
 
 import '../../../../controller/user_ctrl.dart';
-import '../../../../core/widgets/widgets.dart';
 import '../story_screens/add_story_page.dart';
 import '../story_screens/view_story_page.dart';
 
-class Storiess extends StatefulWidget {
-  const Storiess({
+class ListViewStory extends StatefulWidget {
+  const ListViewStory({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Storiess> createState() => _StoriessState();
+  State<ListViewStory> createState() => _ListViewStoryState();
 }
 
-class _StoriessState extends State<Storiess> {
+class _ListViewStoryState extends State<ListViewStory> {
   late List<AssetEntity> _mediaList = [];
+
+  
 
   @override
   void initState() {
     _assetImagesDevice();
     super.initState();
   }
+
+  
 
   _assetImagesDevice() async {
     var result = await PhotoManager.requestPermissionExtend();
@@ -56,7 +61,7 @@ class _StoriessState extends State<Storiess> {
     return Container(
       padding: const EdgeInsets.only(left: 10.0),
       height: 200.0,
-      alignment: Alignment.center,
+      
       // width: Dimensions.screenWidth
       child: ListView(
         physics: const BouncingScrollPhysics(),
@@ -89,21 +94,22 @@ class _StoriessState extends State<Storiess> {
                           ),
                           itemBuilder: (context, i) {
                             return FutureBuilder(
-                              future: _mediaList[i].thumbnailDataWithSize(
+                              future: _mediaList.isEmpty ? Future.sync(() => null) : _mediaList[i].thumbnailDataWithSize(
                                 const ThumbnailSize(110, 110),
                               ),
                               builder: (context,
                                   AsyncSnapshot<Uint8List?> snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.done) {
-                                  return Container(
+                                      return _mediaList.isNotEmpty ?
+                                  Container(
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: MemoryImage(snapshot.data!),
                                       ),
                                     ),
-                                  );
+                                  ) : Container();
                                 }
                                 return const SizedBox();
                               },
@@ -147,10 +153,9 @@ class _StoriessState extends State<Storiess> {
             );
           }),
           GetBuilder<HomeCtrl>(builder: (homeCtrl) {
-            return SizedBox(
-              height: 200.0,
-              width: Dimensions.screenWidth * 10,
-              child: ListView.builder(
+            return ListView.builder(
+                shrinkWrap: true,
+                reverse: true,
                 scrollDirection: Axis.horizontal,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
@@ -174,8 +179,8 @@ class _StoriessState extends State<Storiess> {
                     ),
                   );
                 },
-              ),
-            );
+              );
+            
           }),
         ],
       ),
@@ -197,12 +202,10 @@ class _StoryCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12.0),
-          child: CachedNetworkImage(
-            imageUrl: story.stories[0].story!,
-            height: double.infinity,
-            width: 110.0,
-            fit: BoxFit.cover,
-          ),
+          child: DisplayImageVideoStory(
+            message: story.stories[0].story!, 
+            type: story.stories[0].type!,
+            ),
         ),
         Container(
           height: double.infinity,

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:dots_indicator/dots_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -9,12 +9,12 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:social_app/config/routes/app_pages.dart';
 import 'package:social_app/features/view/home/home_screens/post_comments_screen.dart';
-import 'package:social_app/features/view/post/post_ctrl/post_ctrl.dart';
-import 'package:social_app/features/view/story/story_widgets/stories.dart';
+import 'package:social_app/features/view/story/story_widgets/list_view_story.dart';
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/utils/dimensions.dart';
 
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/widgets/expandable_text_widget.dart';
 import '../home_ctrl/home_ctrl.dart';
 import '../../../data/models/post_model.dart';
 
@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> _loadResources() async {
     await Get.find<HomeCtrl>().fetchAllPosts();
+    await Get.find<HomeCtrl>().fetchAllStories();
   }
 
   @override
@@ -70,7 +71,7 @@ class HomeScreen extends StatelessWidget {
             child: ListView(
               physics: const BouncingScrollPhysics(),
               children: [
-                const Storiess(),
+                const ListViewStory(),
                 const SizedBox(height: 5.0),
                 homeCtrl.posts.isNotEmpty
                     ? !homeCtrl.isLoading
@@ -101,6 +102,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 class _ListViewPosts extends StatefulWidget {
   // final int index;
 
@@ -158,6 +160,7 @@ class _ListViewPostsState extends State<_ListViewPosts> {
 
     return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
       return ListView.builder(
+        reverse: true,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: homeCtrl.posts.length,
@@ -183,18 +186,12 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    if (postData.userData!.id !=
-                                        Get.find<UserCtrl>().user.id) {
                                       Get.toNamed(
                                         Routes.PROFILE,
-                                        arguments: postData.userData,
+                                        arguments: postData.userData!.id,
                                       );
-                                    } else {
-                                      Get.toNamed(
-                                        Routes.PROFILE,
-                                      );
-                                    }
-                                  },
+                                    },
+                                  
                                   child: Row(
                                     children: [
                                       CircleAvatar(
@@ -240,48 +237,46 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: TextCustom(
+                    child: ExpandableTextWidget(
                       text: postData.description!,
-                      fontSize: 15,
                     ),
+                    // TextCustom(
+                    //   text: postData.description!,
+                    //   fontSize: 15,
+                    // ),
                   ),
                   Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
                       SizedBox(
                         height: 400,
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            controller: pageController,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: postData.posts!.length,
-                            itemBuilder: (context, index) {
-                              return DisplayTextImageVideoPost(
-                                post: posts[index].post!,
-                                type: posts[index].type!,
-                              );
-                            }),
+                        child: CarouselSlider.builder(
+                          itemCount: postData.posts!.length,
+                          options: CarouselOptions(
+                            viewportFraction: 1.0,
+                            enableInfiniteScroll: false,
+                            height: 400,
+                            scrollPhysics: const BouncingScrollPhysics(),
+                            autoPlay: false,
+                          ),
+                          itemBuilder: (context, i, realIndex) =>
+                              
+                              DisplayTextImageVideoPost(
+                            post: posts[index].post!,
+                            type: posts[index].type!,
+                          )
+                        ),
                       ),
                       Positioned(
-                        bottom: Dimensions.height10 * 6,
+                        top: Dimensions.height10,
+                        left: Dimensions.height10,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             postData.posts!.length > 1
-                                ? DotsIndicator(
-                                    dotsCount: postData.posts!.isEmpty
-                                        ? 1
-                                        : postData.posts!.length,
-                                    position: _currPageValue,
-                                    decorator: DotsDecorator(
-                                      activeColor: Colors.blue,
-                                      size: const Size.square(7.0),
-                                      activeSize: const Size(12.0, 10.0),
-                                      activeShape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                    ),
+                                ? const Icon(
+                                    Icons.layers_outlined,
+                                    size: 30,
                                   )
                                 : Container(),
                           ],
@@ -309,75 +304,66 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                     Row(
                                       children: [
                                         Row(
-                                              children: [
-                                                GetBuilder<HomeCtrl>(
-                                                  builder: (homeCtrl) {
-                                                    return InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          isLike = !isLike;
-                                                          if (isLike) {
-                                                            homeCtrl.postLike(
-                                                              postData.id!,
-                                                              1,
-                                                            );
-                                                          } else {
-                                                            homeCtrl.postLike(
-                                                              postData.id!,
-                                                              0,
-                                                            );
-                                                          }
-                                                        });
-                                                      },
-                                                      child: isLike
-                                                          ? const Icon(
-                                                              Icons
-                                                                  .favorite_outlined,
-                                                              color: Colors.red,
-                                                            )
-                                                          : const Icon(
-                                                              Icons
-                                                                  .favorite_border_outlined,
-                                                              color: Colors.white,
-                                                            ),
-                                                    );
-                                                  }
-                                                ),
-                                                const SizedBox(width: 8.0),
-                                                InkWell(
-                                                  onTap: () {
-                                                    if (postData
-                                                        .likes!.isNotEmpty) {
-                                                      Get.toNamed(
-                                                        Routes.LIKES,
-                                                        arguments:
-                                                            postData.likes,
+                                          children: [
+                                            GetBuilder<HomeCtrl>(
+                                                builder: (homeCtrl) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    isLike = !isLike;
+                                                    if (isLike) {
+                                                      homeCtrl.postLike(
+                                                        postData.id!,
+                                                        1,
+                                                      );
+                                                    } else {
+                                                      homeCtrl.postLike(
+                                                        postData.id!,
+                                                        0,
                                                       );
                                                     }
-                                                  },
-                                                  child: TextCustom(
-                                                    text: postData
-                                                            .likes!.isEmpty
-                                                        ? "Like"
-                                                        : postData.likes!.length
-                                                            .toString(),
-                                                    fontSize: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          
-                                        
+                                                  });
+                                                },
+                                                child: isLike
+                                                    ? const Icon(
+                                                        Icons.favorite_outlined,
+                                                        color: Colors.red,
+                                                      )
+                                                    : const Icon(
+                                                        Icons
+                                                            .favorite_border_outlined,
+                                                        color: Colors.white,
+                                                      ),
+                                              );
+                                            }),
+                                            const SizedBox(width: 8.0),
+                                            InkWell(
+                                              onTap: () {
+                                                if (postData
+                                                    .likes!.isNotEmpty) {
+                                                  Get.toNamed(
+                                                    Routes.POST_LIKES,
+                                                    arguments: postData.likes,
+                                                  );
+                                                }
+                                              },
+                                              child: TextCustom(
+                                                text: postData.likes!.isEmpty
+                                                    ? "Like"
+                                                    : postData.likes!.length
+                                                        .toString(),
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                         const SizedBox(width: 20.0),
                                         TextButton(
                                           onPressed: () {
-                                            Get.find<HomeCtrl>()
-                                                .fetchAllPostComment(postData.id!);
-                                            Get.to(
-                                              PostCommentsScreen(
-                                                uid: postData.id!,
-                                              ),
+                                            Get.toNamed(
+                                              Routes.POST_COMMENTS,
+                                              arguments: postData.id,
                                             );
                                           },
                                           child: Row(

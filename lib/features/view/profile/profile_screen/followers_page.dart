@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:social_app/config/routes/app_pages.dart';
+import 'package:social_app/features/data/models/user_model.dart';
+import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
 
 import '../../../../core/widgets/widgets.dart';
 
@@ -17,7 +21,10 @@ class _FollowersPageState extends State<FollowersPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: const TextCustom(
-              text: 'Seguidores', letterSpacing: .8, fontSize: 19),
+            text: 'Followers',
+            letterSpacing: .8,
+            fontSize: 19,
+          ),
           elevation: 0,
           leading: IconButton(
               splashRadius: 20,
@@ -50,14 +57,16 @@ class _ListFollowers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<UserModel> usersData = Get.arguments;
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        itemCount: 4,
+        itemCount: usersData.length,
         itemBuilder: (context, i) {
+          UserModel userData = usersData[i];
           return InkWell(
             borderRadius: BorderRadius.circular(10.0),
             splashColor: Colors.grey[300],
-            // onTap: () => Navigator.push(context, routeSlide(page: ProfileAnotherUserPage(idUser: follow[i].uidUser))),
+            onTap: () => Get.toNamed(Routes.PROFILE, arguments: userData.id),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration:
@@ -68,39 +77,44 @@ class _ListFollowers extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.amber,
-                        // backgroundImage: NetworkImage(Environment.baseUrl + follow[i].avatar),
+                        backgroundImage: NetworkImage(userData.photo),
                       ),
                       const SizedBox(width: 10.0),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextCustom(text: "follow[i].username", fontSize: 16),
+                          TextCustom(text: userData.name, fontSize: 16),
                           TextCustom(
-                              text: "follow[i].fullname",
-                              color: Colors.grey,
-                              fontSize: 15)
+                            text: userData.email,
+                            color: Colors.grey,
+                            fontSize: 15,
+                          )
                         ],
                       ),
                     ],
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.grey[300]!),
-                        borderRadius: BorderRadius.circular(50.0)),
-                    elevation: 0,
-                    child: InkWell(
-                        borderRadius: BorderRadius.circular(50.0),
-                        splashColor: Colors.blue[50],
-                        // onTap: () => userBloc.add(OnDeletefollowersEvent(follow[i].uidUser)),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 17.0, vertical: 6.0),
-                          child: TextCustom(text: 'Eliminar', fontSize: 16),
-                        )),
+                  GetBuilder<ProfileCtrl>(
+                    builder: (profileCtrl) {
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.grey[300]!),
+                            borderRadius: BorderRadius.circular(50.0)),
+                        elevation: 0,
+                        child: InkWell(
+                            borderRadius: BorderRadius.circular(50.0),
+                            splashColor: Colors.blue[50],
+                            onTap: () => profileCtrl.deleteFollower(userData.id),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 17.0, vertical: 6.0),
+                              child: TextCustom(text: 'Eliminar', fontSize: 16),
+                            )),
+                      );
+                    }
                   ),
                 ],
               ),

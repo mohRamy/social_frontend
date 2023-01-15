@@ -107,4 +107,42 @@ class ProfileCtrl extends GetxController implements GetxService {
     }
     update();
   }
+
+  void deleteFollower(
+    String followerId,
+  ) async {
+    try {
+      http.Response res = await profileRepo.deleteFollower(
+        followerId: followerId,
+      );
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar("Success", color: Colors.green);
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    update();
+  }
+
+  void deleteFollowing(
+    String followingId,
+  ) async {
+    try {
+      http.Response res = await profileRepo.deleteFollowing(
+        followingId: followingId,
+      );
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar("Success", color: Colors.green);
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    update();
+  }
 }

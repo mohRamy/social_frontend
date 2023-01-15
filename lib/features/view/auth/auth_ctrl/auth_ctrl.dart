@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_app/features/data/models/user_model.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../controller/user_ctrl.dart';
@@ -142,8 +143,9 @@ class AuthCtrl extends GetxController implements GetxService {
     update();
   }
 
-  void fetchUserData(String userId) async {
-    try {
+  Future<UserModel> fetchUserData(String userId) async {
+    UserModel? userData;
+    
       _isLoading = true;
       update();
 
@@ -151,14 +153,16 @@ class AuthCtrl extends GetxController implements GetxService {
 
       stateHandle(
         res: res,
-        onSuccess: () {},
+        onSuccess: () {
+          userData = UserModel.fromMap(
+            jsonDecode(
+              res.body,
+            ),
+          );
+        },
       );
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      return userData!;
     }
-    _isLoading = false;
-    update();
-  }
 
   bool userLoggedIn() {
     return authRepo.userLoggedIn();

@@ -186,9 +186,10 @@ class HomeCtrl extends GetxController implements GetxService {
     }
   }
 
-  Future<void> fetchAllPostComment(
+  Future<List<CommentModel>> fetchAllPostComment(
     String postId,
   ) async {
+    List<CommentModel> postComments = [];
     try {
       _isLoading = true;
       update();
@@ -214,8 +215,10 @@ class HomeCtrl extends GetxController implements GetxService {
       );
       _isLoading = false;
       update();
+      return postComments;
     } catch (e) {
       Components.showCustomSnackBar(e.toString());
+      return Future.value();
     }
   }
 

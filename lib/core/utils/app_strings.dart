@@ -4,7 +4,7 @@ class AppString {
   static const int APP_V = 1;
 
   //api
-  static const String BASE_URL = "http://192.168.54.79:8000";
+  static const String BASE_URL = "http://192.168.34.79:8000";
   static const String SIGN_UP_URL = "$BASE_URL/api/signup";
   static const String SIGN_IN_URL = "$BASE_URL/api/signin";
   static const String TOKEN_IS_VALID_URL = "$BASE_URL/tokenIsValid";
@@ -32,10 +32,6 @@ class AppString {
   static const String MYPOST_GET_URL = "$BASE_URL/api/user/get-mypost";
   static const String PROFILE_BGIMAGE_URL = "$BASE_URL/api/user/modify-bgimage";
   static const String PROFILE_IMAGE_URL = "$BASE_URL/api/user/modify-image";
-
-
-
-
 
 
   //token

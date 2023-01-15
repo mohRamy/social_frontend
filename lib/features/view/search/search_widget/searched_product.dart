@@ -27,7 +27,7 @@ class SearchedProduct extends GetView<SearchCtrl> {
                 onTap: () {
                   Get.toNamed(
                     Routes.PROFILE,
-                    arguments: user,
+                    arguments: user.id,
                   );
                 },
                 child: Row(
