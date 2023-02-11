@@ -1,56 +1,55 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/profile/profile_screen/followers_page.dart';
-import 'package:social_app/features/view/profile/profile_screen/following_page.dart';
-import '../../../../config/routes/app_pages.dart';
-import '../../../data/models/user_model.dart';
 
+import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'package:social_app/features/view/home/home_widgets/hero_image.dart';
+import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import 'package:social_app/features/view/profile/profile_screen/followers_screen.dart';
+import 'package:social_app/features/view/profile/profile_screen/following_screen.dart';
+import 'package:social_app/features/view/profile/profile_screen/setting_profile_page.dart';
+
+import '../../../../config/routes/app_pages.dart';
 import '../../../../controller/user_ctrl.dart';
-import '../../../../core/picker/picker.dart';
+import '../../../../core/displaies/display_image_video_card.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/dimensions.dart';
-import '../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../data/models/post_model.dart';
+import '../../../data/models/user_model.dart';
 import '../../chat/screens/chat_screen.dart';
 import '../profile_ctrl/profile_ctrl.dart';
-import '../profile_widgets/display_text_image_video.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Get.find<ProfileCtrl>().myPost = [];
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: FutureBuilder<UserModel>(
-        future: Get.find<AuthCtrl>().fetchUserData(Get.arguments??Get.find<UserCtrl>().user.id),
-        builder: (context, snapshot) {
-          return !snapshot.hasData
-          ? const CustomShimmer()
-          : ListView(
-            children: [
-              _CoverAndProfile(userData: snapshot.data!),
-              const SizedBox(height: 10.0),
-              _UsernameAndDescription(userData: snapshot.data!),
-              const SizedBox(height: 30.0),
-              const _PostAndFollowingAndFollowers(),
-              const SizedBox(height: 30.0),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child:
-                    //  const _ListFotosProfile()
-                    _ListSaveProfile(),
-              ),
-            ],
-          );
-        }
-      ),
+          future: Get.find<AuthCtrl>()
+              .fetchUserData(Get.arguments ?? Get.find<UserCtrl>().user.id),
+          builder: (context, snapshot) {
+            return !snapshot.hasData
+                ? const CustomShimmer()
+                : ListView(
+                    children: [
+                      _CoverAndProfile(userData: snapshot.data!),
+                      const SizedBox(height: 10.0),
+                      _UsernameAndDescription(userData: snapshot.data!),
+                      const SizedBox(height: 30.0),
+                      (snapshot.data!.private &&
+                              snapshot.data!.id != Get.find<UserCtrl>().user.id)
+                          ? const _PrivateAccount()
+                          : _PostAndFollow(userData: snapshot.data!)
+                    ],
+                  );
+          }),
     );
   }
 }
@@ -97,137 +96,231 @@ class _ListFotosProfile extends StatelessWidget {
   }
 }
 
-class _ListSaveProfile extends StatelessWidget {
-  const _ListSaveProfile({Key? key}) : super(key: key);
+class _ListUserPost extends StatelessWidget {
+  final UserModel userData;
+  const _ListUserPost({
+    Key? key,
+    required this.userData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileCtrl>(builder: (profileCtrl) {
-      return GridView.builder(
-          itemCount: profileCtrl.myPost.length,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, crossAxisSpacing: 2, mainAxisExtent: 170),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, i) {
-            PostModel postData = profileCtrl.myPost[i];
-            return InkWell(
-                onTap: () {
-                  Get.toNamed(
-                    Routes.LIST_PHOTO_PROFILE,
-                    arguments: profileCtrl.myPost,
-                  );
-                },
-                child: postData.posts!.length == 1
-                    ? ProfileTextImageVideoPost(
-                        post: postData.posts![0].post!,
-                        type: postData.posts![0].type!,
-                      )
-                    : Stack(
-                        children: [
-                          InkWell(
-                            child: ProfileTextImageVideoPost(
-                              post: postData.posts![0].post!,
-                              type: postData.posts![0].type!,
-                            ),
-                          ),
-                          Positioned(
-                            top: Dimensions.width10,
-                            right: Dimensions.width10,
-                            child: const Icon(Icons.layers),
-                          ),
-                        ],
-                      ));
+      return FutureBuilder<List<PostModel>>(
+          future: profileCtrl.fetchUserPost(userData.id),
+          builder: (context, snapshot) {
+            return !snapshot.hasData
+                ? const CustomShimmer()
+                : GridView.builder(
+                    itemCount: snapshot.data!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 2,
+                      mainAxisExtent: 170,
+                    ),
+                    // scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, i) {
+                      PostModel postData = snapshot.data![i];
+                      return InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.LIST_PHOTO_PROFILE,
+                              arguments: snapshot.data,
+                            );
+                          },
+                          child: Stack(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.LIST_PHOTO_PROFILE,
+                                    arguments: snapshot.data,
+                                  );
+                                },
+                                child: DisplayImageVideoCard(
+                                  file: postData.posts![0].post!,
+                                  type: postData.posts![0].type!,
+                                  isOut: true,
+                                ),
+                              ),
+                              postData.posts!.length == 1
+                                  ? Container()
+                                  : Positioned(
+                                      top: Dimensions.width10,
+                                      right: Dimensions.width10,
+                                      child: const Icon(Icons.layers),
+                                    ),
+                            ],
+                          ));
+                    });
           });
     });
   }
 }
 
-class _PostAndFollowingAndFollowers extends StatelessWidget {
-  const _PostAndFollowingAndFollowers({Key? key}) : super(key: key);
+class _PostAndFollow extends StatelessWidget {
+  UserModel userData;
+  _PostAndFollow({
+    Key? key,
+    required this.userData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return GetBuilder<UserCtrl>(builder: (userCtrl) {
-      var userData = userCtrl.user;
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-        width: size.width,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GetBuilder<ProfileCtrl>(builder: (profileCtrl) {
-                  return Column(
+    return GetBuilder<ProfileCtrl>(builder: (profileCtrl) {
+      return FutureBuilder<List<PostModel>>(
+          future: profileCtrl.fetchUserPost(userData.id),
+          builder: (context, snapshot) {
+            return !snapshot.hasData
+                ? const CustomShimmer()
+                : Column(
                     children: [
-                      TextCustom(
-                        text: 'Posts',
-                        fontSize: Dimensions.font20 + 2,
-                        fontWeight: FontWeight.w500,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        width: size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GetBuilder<ProfileCtrl>(builder: (profileCtrl) {
+                              return Column(
+                                children: [
+                                  TextCustom(
+                                    text: 'Posts',
+                                    fontSize: Dimensions.font20 + 2,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  TextCustom(
+                                    text: snapshot.data!.length.toString(),
+                                    fontSize: 17,
+                                    color: Colors.grey,
+                                    letterSpacing: .7,
+                                  ),
+                                ],
+                              );
+                            }),
+                            InkWell(
+                              onTap: () async {
+                                // List<UserModel> followers = [];
+                                // for (var i = 0;
+                                //     i < userData.followers.length;
+                                //     i++) {
+                                //   followers.add(await Get.find<AuthCtrl>()
+                                //       .fetchUserData(userData.followers[i]));
+                                // }
+                                Get.to(
+                                  const FollowersScreen(),
+                                  arguments: userData.followers,
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  TextCustom(
+                                      text: 'Followers',
+                                      fontSize: Dimensions.font20 + 2,
+                                      fontWeight: FontWeight.w500),
+                                  TextCustom(
+                                    text: userData.followers.length.toString(),
+                                    fontSize: 17,
+                                    color: Colors.grey,
+                                    letterSpacing: .7,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                // List<UserModel> usersData = [];
+                                // for (var i = 0;
+                                //     i < userData.following.length;
+                                //     i++) {
+                                //   usersData.add(await Get.find<AuthCtrl>()
+                                //       .fetchUserData(userData.following[i]));
+                                // }
+                                Get.to(const FollowingScreen(),
+                                    arguments: userData.following);
+                              },
+                              child: Column(
+                                children: [
+                                  TextCustom(
+                                      text: 'Following',
+                                      fontSize: Dimensions.font20 + 2,
+                                      fontWeight: FontWeight.w500),
+                                  TextCustom(
+                                    text: userData.following.length.toString(),
+                                    fontSize: 17,
+                                    color: Colors.grey,
+                                    letterSpacing: .7,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      TextCustom(
-                        text: profileCtrl.myPost.length.toString(),
-                        fontSize: 17,
-                        color: Colors.grey,
-                        letterSpacing: .7,
+                      SizedBox(height: Dimensions.height15),
+                      Padding(
+                        padding: EdgeInsets.all(Dimensions.height10),
+                        child:
+                            // GetBuilder<ProfileCtrl>(builder: (profileCtrl) {
+                            //   return FutureBuilder<List<PostModel>>(
+                            //       future: profileCtrl.fetchUserPost(userData.id),
+                            //       builder: (context, snapshot) {
+                            //         return !snapshot.hasData
+                            //             ? const CustomShimmer()
+                            GridView.builder(
+                                itemCount: snapshot.data!.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 2,
+                                  mainAxisExtent: 170,
+                                ),
+                                // scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemBuilder: (context, i) {
+                                  PostModel postData = snapshot.data![i];
+                                  return InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          Routes.LIST_PHOTO_PROFILE,
+                                          arguments: snapshot.data,
+                                        );
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Get.toNamed(
+                                                Routes.LIST_PHOTO_PROFILE,
+                                                arguments: snapshot.data,
+                                              );
+                                            },
+                                            child: DisplayImageVideoCard(
+                                              file: postData.posts![0].post!,
+                                              type: postData.posts![0].type!,
+                                              isOut: true,
+                                            ),
+                                          ),
+                                          postData.posts!.length == 1
+                                              ? Container()
+                                              : Positioned(
+                                                  top: Dimensions.width10,
+                                                  right: Dimensions.width10,
+                                                  child:
+                                                      const Icon(Icons.layers),
+                                                ),
+                                        ],
+                                      ));
+                                }),
                       ),
                     ],
                   );
-                }),
-                InkWell(
-                  onTap: ()async{
-                    List<UserModel> usersData = [];
-                    for (var i = 0; i < userCtrl.user.followers.length; i++) {
-                      usersData.add(await Get.find<AuthCtrl>().fetchUserData(userCtrl.user.followers[i]));
-                    }
-                    Get.to(const FollowersPage(), arguments: usersData);
-                  },
-                  child: Column(
-                    children: [
-                      TextCustom(
-                          text: 'Followers',
-                          fontSize: Dimensions.font20 + 2,
-                          fontWeight: FontWeight.w500),
-                      TextCustom(
-                        text: userData.followers.length.toString(),
-                        fontSize: 17,
-                        color: Colors.grey,
-                        letterSpacing: .7,
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: ()async{
-                    List<UserModel> usersData = [];
-                    for (var i = 0; i < userCtrl.user.following.length; i++) {
-                      usersData.add(await Get.find<AuthCtrl>().fetchUserData(userCtrl.user.following[i]));
-                    }
-                    Get.to(const FollowingPage(), arguments: usersData);
-                  },
-                  child: Column(
-                    children: [
-                      TextCustom(
-                          text: 'Following',
-                          fontSize: Dimensions.font20 + 2,
-                          fontWeight: FontWeight.w500),
-                      TextCustom(
-                        text: userData.following.length.toString(),
-                        fontSize: 17,
-                        color: Colors.grey,
-                        letterSpacing: .7,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+          });
     });
   }
 }
@@ -278,83 +371,55 @@ class _CoverAndProfile extends StatefulWidget {
 }
 
 class _CoverAndProfileState extends State<_CoverAndProfile> {
-  @override
-  void initState() {
-    Get.find<ProfileCtrl>().fetchMyPost(widget.userData.id);
-    super.initState();
-  }
-
-  File? image;
-
-  void pickImageGallery() async {
-    image = await pickImageFromGallery();
-    Get.find<ProfileCtrl>().modifyBGImage(image);
-    Get.back();
-    setState(() {});
-  }
-
-  void pickImageCamera() async {
-    image = await pickImageFromCamera();
-    Get.find<ProfileCtrl>().modifyBGImage(image);
-    Get.back();
-    setState(() {});
-  }
-
-  File? imageP;
-
-  void pickImageGalleryP() async {
-    imageP = await pickImageFromGallery();
-    Get.find<ProfileCtrl>().modifyBGImage(image);
-    Get.back();
-    setState(() {});
-  }
-
-  void pickImageCameraP() async {
-    imageP = await pickImageFromCamera();
-    Get.find<ProfileCtrl>().modifyBGImage(image);
-    Get.back();
-    setState(() {});
-  }
-
+  bool private = false;
   @override
   Widget build(BuildContext context) {
-    bool isMy = widget.userData.id == Get.find<UserCtrl>().user.id;
-
+    bool isMe = widget.userData.id == Get.find<UserCtrl>().user.id;
+    bool isFriend =
+        Get.find<UserCtrl>().user.following.contains(widget.userData.id);
     return SizedBox(
       height: 200,
       width: Dimensions.screenWidth,
       child: Stack(
         children: [
-          Container(
-            height: 170,
-            width: Dimensions.screenWidth,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(.7),
+          InkWell(
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () {
+              Get.to(
+                HeroImage(
+                  post: widget.userData.backgroundImage,
+                ),
+              );
+            },
+            child: Container(
+              height: 170,
+              width: Dimensions.screenWidth,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(.7),
+              ),
+              child: widget.userData.backgroundImage.isNotEmpty
+                  ? Image.network(
+                      widget.userData.backgroundImage,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXYE2NzC7cY66U6JRENpM0eVXn9JyOUJ5PVQ&usqp=CAU',
+                      fit: BoxFit.cover,
+                    ),
             ),
-            child: widget.userData.backgroundImage.isNotEmpty
-                ? Image.network(
-                    widget.userData.backgroundImage,
-                    fit: BoxFit.cover,
-                  )
-                : image != null
-                    ? Image.file(
-                        image!,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXYE2NzC7cY66U6JRENpM0eVXn9JyOUJ5PVQ&usqp=CAU',
-                        fit: BoxFit.cover,
-                      ),
           ),
           Positioned(
             bottom: 28,
             child: Container(
               height: Dimensions.height20,
               width: Dimensions.screenWidth,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
+              decoration: BoxDecoration(
+                  color: Get.isDarkMode
+                      ? AppColors.bgDarkColor
+                      : AppColors.bgLightColor,
                   borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(20.0))),
+                      const BorderRadius.vertical(top: Radius.circular(20.0))),
             ),
           ),
           Positioned(
@@ -373,30 +438,15 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      bottomSheet(
-                        pickImageCameraP,
-                        pickImageGalleryP,
+                      Get.to(
+                        HeroImage(
+                          post: widget.userData.photo,
+                        ),
                       );
                     },
-
-                    // onTap: () => modalSelectPicture(
-                    //   context: context,
-                    //   title: 'Actualizar image de perfil',
-                    //   onPressedImage: () async {
-
-                    //     Navigator.pop(context);
-                    //     AppPermission().permissionAccessGalleryOrCameraForProfile(await Permission.storage.request(), context, ImageSource.gallery);
-                    //   },
-                    //   onPressedPhoto: () async {
-
-                    //     Navigator.pop(context);
-                    //     AppPermission().permissionAccessGalleryOrCameraForProfile(await Permission.camera.request(), context, ImageSource.camera);
-                    //   }
-                    // ),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        widget.userData.photo,
-                      ),
+                    child: ProfileAvatar(
+                      imageUrl: widget.userData.photo,
+                      sizeImage: 100,
                     ),
                   )),
             ),
@@ -407,11 +457,39 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
               right: Dimensions.width30,
               child: Row(
                 children: [
+                  isMe
+                      ? Container()
+                      : InkWell(
+                          onTap: () {
+                            Get.to(ChatScreen(
+                              name: widget.userData.name,
+                              uid: widget.userData.id,
+                              isGroupChat: false,
+                            ));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(Dimensions.height10 - 3),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 0.4,
+                                color: Colors.grey,
+                              ),
+                              color: context.theme.scaffoldBackgroundColor,
+                            ),
+                            child: SvgPicture.asset('assets/svg/chat-icon.svg', height: Dimensions.iconSize24, color: context.theme.dividerColor),
+                          ),
+                        ),
+                  SizedBox(width: Dimensions.width15),
                   InkWell(
                     onTap: () {
-                      if (isMy) {
-                        Get.toNamed(Routes.NAV_USER_SCREEN);
+                      if (isMe) {
+                        Get.toNamed(Routes.ACCOUNT_PROFILE,
+                            arguments: widget.userData);
                       } else {
+                        setState(() {
+                          private = !private;
+                        });
                         profileCtrl.followUser(
                           widget.userData.id,
                         );
@@ -423,52 +501,27 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
                         vertical: Dimensions.height10 - 5,
                       ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimensions.radius30),
-                        border: Border.all(
-                          width: 0.4,
-                          color: isMy ? Colors.grey : Colors.transparent,
-                        ),
-                        color: isMy ? Colors.transparent : Colors.black,
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radius30),
+                        border: Border.all(width: 0.4, color: Colors.grey),
+                        color: isMe
+                            ? AppColors.bgLightColor
+                            : (isFriend || private)
+                                ? AppColors.bgLightColor
+                                : Colors.black,
                       ),
                       child: Text(
-                        isMy ? "Modify your profile" : "Follow",
+                        isMe
+                            ? "Modify your profile"
+                            : (isFriend || private)
+                                ? "followed"
+                                : "Follow",
                         style: TextStyle(
-                          color: isMy ? Colors.black : Colors.white,
-                          fontSize: Dimensions.font20 - 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  isMy?
-                  Container():
-                  InkWell(
-                    onTap: () {
-                      Get.to(
-                        ChatScreen(
-                        isGroupChat: false,
-                        name: widget.userData.name,
-                        uid: widget.userData.id,
-                        profilePic: widget.userData.photo,
-                      )
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Dimensions.height10,
-                        vertical: Dimensions.height10 - 5,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimensions.radius30),
-                        border: Border.all(
-                          width: 0.4,
-                          color: isMy ? Colors.grey : Colors.transparent,
-                        ),
-                        color: isMy ? Colors.transparent : Colors.black,
-                      ),
-                      child: Text(
-                      "Message",
-                        style: TextStyle(
-                          color: isMy ? Colors.black : Colors.white,
+                          color: isMe
+                              ? Colors.black
+                              : (isFriend || private)
+                                  ? Colors.black
+                                  : Colors.white,
                           fontSize: Dimensions.font20 - 2,
                         ),
                       ),
@@ -481,19 +534,21 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
           Positioned(
             left: 0.0,
             child: IconButton(
-          splashRadius: 20,
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.black87,
-          ),
-        ),
+              splashRadius: 20,
+              onPressed: () => Get.back(),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black87,
+              ),
+            ),
           ),
           Positioned(
               right: 0,
               child: IconButton(
-                onPressed: () {},
-                // onPressed: () => modalProfileSetting(context, size),
+                onPressed: () {
+                  Get.to(const SettingProfilePage());
+                },
+                //onPressed: () => modalProfileSetting(context, size),
                 icon: const Icon(Icons.dashboard_customize_outlined,
                     color: Colors.white),
               )),
@@ -501,12 +556,7 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
             right: 40,
             child: IconButton(
               splashRadius: 20,
-              onPressed: () {
-                bottomSheet(
-                  pickImageCamera,
-                  pickImageGallery,
-                );
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.add_box_outlined,
                 color: Colors.white,
@@ -515,6 +565,30 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PrivateAccount extends StatelessWidget {
+  const _PrivateAccount({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: Dimensions.height10 * 10),
+        Icon(
+          Icons.lock_outlined,
+          size: Dimensions.iconSize24,
+        ),
+        SizedBox(width: Dimensions.width10),
+        TextCustom(
+          text: 'this account is private',
+          fontSize: Dimensions.font26,
+        ),
+      ],
     );
   }
 }

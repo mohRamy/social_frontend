@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:social_app/config/routes/app_pages.dart';
+import 'package:social_app/controller/user_ctrl.dart';
+import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'package:social_app/features/view/profile/profile_screen/account_profile_page.dart';
+import 'package:social_app/features/view/profile/profile_screen/change_password_page.dart';
+import 'package:social_app/features/view/profile/profile_screen/privacy_profile_page.dart';
+import 'package:social_app/features/view/profile/profile_screen/theme_profile_page.dart';
 import '../../../../core/utils/app_colors.dart';
 
 import '../../../../core/widgets/widgets.dart';
@@ -11,16 +19,11 @@ class SettingProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: const TextCustom(
-            text: 'Configuración', fontSize: 19, fontWeight: FontWeight.w500),
+            text: 'Setting', fontSize: 19, fontWeight: FontWeight.w500),
         elevation: 0,
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: Colors.black)),
       ),
       body: SafeArea(
         child: ListView(
@@ -35,55 +38,59 @@ class SettingProfilePage extends StatelessWidget {
               child: TextFormField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Buscar',
+                    hintText: 'Look for',
                     hintStyle:
                         GoogleFonts.getFont('Roboto', color: Colors.grey[400]),
-                    prefixIcon: const Icon(Icons.search)),
+                    prefixIcon: Icon(Icons.search, color: AppColors.primary)),
               ),
             ),
             const SizedBox(height: 15.0),
             ItemProfile(
-                text: 'Seguir y invitar a un amigo',
+                text: 'Follow and invite a friend',
                 icon: Icons.person_add_alt,
                 onPressed: () {}),
             ItemProfile(
-                text: 'Notificaciones',
+                text: 'notifications',
                 icon: Icons.notifications_none_rounded,
                 onPressed: () {}),
             ItemProfile(
-              text: 'Privacidad',
+              text: 'Privacy',
               icon: Icons.lock_outline_rounded,
-              onPressed: () {},
+              onPressed: () {
+                Get.to(const PrivacyProfilePage());
+              },
             ),
-            // onPressed: () => Navigator.push(
-            //     context, routeSlide(page: const PrivacyProgilePage()))),
             ItemProfile(
-              text: 'Seguridad',
+              text: 'Security',
               icon: Icons.security_outlined,
-              onPressed: () {},
-
-              // onPressed: () => Navigator.push(
-              //     context, routeSlide(page: const ChangePasswordPage()))),
+              onPressed: () {
+                Get.to(const ChangePasswordPage());
+              },
             ),
             ItemProfile(
-              text: 'Cuenta',
+              text: 'Account',
               icon: Icons.account_circle_outlined,
-              onPressed: () {},
-              // onPressed: () => Navigator.push(context, routeSlide(page: const AccountProfilePage()))
+              onPressed: () {
+                Get.toNamed(
+                  Routes.ACCOUNT_PROFILE,
+                  arguments: Get.find<UserCtrl>().user,
+                );
+              },
             ),
             ItemProfile(
                 text: 'Help',
                 icon: Icons.help_outline_rounded,
                 onPressed: () {}),
             ItemProfile(
-                text: 'Acerda de',
+                text: 'About',
                 icon: Icons.info_outline_rounded,
                 onPressed: () {}),
             ItemProfile(
-              text: 'Temas',
+              text: 'Themes',
               icon: Icons.palette_outlined,
-              onPressed: () {},
-              // onPressed: () => Navigator.push(context, routeSlide(page: const ThemeProfilePage()))
+              onPressed: () {
+                Get.to(const ThemeProfilePage());
+              },
             ),
             const SizedBox(height: 20.0),
             Row(
@@ -91,28 +98,29 @@ class SettingProfilePage extends StatelessWidget {
                 Icon(Icons.copyright_outlined),
                 SizedBox(width: 5.0),
                 TextCustom(
-                    text: 'FRAVE DEVELOPER',
+                    text: 'RAMY DEVELOPER',
                     fontSize: 17,
                     fontWeight: FontWeight.w500),
               ],
             ),
             const SizedBox(height: 30.0),
             const TextCustom(
-                text: 'Sesiones', fontSize: 17, fontWeight: FontWeight.w500),
+                text: 'Sessions', fontSize: 17, fontWeight: FontWeight.w500),
             const SizedBox(height: 10.0),
             ItemProfile(
-                text: 'Agregar o cambiar de cuenta',
+                text: 'Add or change account',
                 icon: Icons.add,
-                colorText: AppColors.primary,
+                // colorText: AppColors.primary,
                 onPressed: () {}),
             ItemProfile(
-                text: 'Cerrar cuenta ',
+                text: 'Sign out',
                 icon: Icons.logout_rounded,
-                colorText: AppColors.primary,
+                // colorText: AppColors.primary,
                 onPressed: () {
-                  // authBloc.add( OnLogOutEvent() );
-                  // userBloc.add( OnLogOutUser() );
-                  // Navigator.pushAndRemoveUntil(context, routeSlide(page: const StartedPage()), (_) => false);
+                  if (Get.find<AuthCtrl>().userLoggedIn()) {
+                    Get.find<AuthCtrl>().clearSharedData();
+                    Get.offNamed(Routes.SIGN_IN);
+                  }
                 }),
           ],
         ),

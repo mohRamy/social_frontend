@@ -75,7 +75,7 @@ class _MobileLayoutScreenState extends State<ChatHomeScreen>
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: AppColors.bgBlackColor,
+          backgroundColor: Colors.transparent,
           centerTitle: false,
           title: Text(
             "Chat",
@@ -113,9 +113,9 @@ class _MobileLayoutScreenState extends State<ChatHomeScreen>
           ],
           bottom: TabBar(
             controller: tabBarController,
-            indicatorColor: AppColors.bgBlackColor,
+            indicatorColor: AppColors.blackColor,
             indicatorWeight: 4,
-            labelColor: AppColors.bgBlackColor,
+            labelColor: AppColors.blackColor,
             unselectedLabelColor: Colors.grey,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -152,7 +152,7 @@ class _MobileLayoutScreenState extends State<ChatHomeScreen>
             //   Navigator.pushNamed(context, Routes.selectContactScreen);
             // }
           },
-          backgroundColor: AppColors.bgBlackColor,
+          backgroundColor: AppColors.blackColor,
           child: Icon(
             tabBarController.index == 0
                 ? Icons.comment

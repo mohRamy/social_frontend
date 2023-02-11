@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:social_app/config/themes/theme_services.dart';
 import '../../../../core/utils/app_colors.dart';
 
 import '../../../../core/widgets/widgets.dart';
@@ -13,10 +16,10 @@ class ThemeProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Get.isDarkMode? Colors.black: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const TextCustom(text: 'Cambiar Tema', fontWeight: FontWeight.w500 ),
+        title: const TextCustom(text: 'change theme', fontWeight: FontWeight.w500 ),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
@@ -29,18 +32,24 @@ class ThemeProfilePage extends StatelessWidget {
           child: Column(
             children: [
               
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const TextCustom(text: 'Día'),
-                  Icon(Icons.radio_button_checked, color: AppColors.primary)
-                ],
+              InkWell(
+                onTap: () {
+                  ModeTheme().changeTheme();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Icon(CupertinoIcons.sun_dust),
+                    const TextCustom(text: 'Day'),
+                    Icon(Icons.radio_button_checked, color: AppColors.primary)
+                  ],
+                ),
               ),
               const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  TextCustom(text: 'Noche'),
+                  TextCustom(text: 'Evening'),
                   Icon(Icons.radio_button_off_rounded )
                 ],
               ),
@@ -48,11 +57,10 @@ class ThemeProfilePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  TextCustom(text: 'Sistema'),
+                  TextCustom(text: 'System'),
                   Icon(Icons.radio_button_off_rounded )
                 ],
               ),
-
             ],
           ),
         ),

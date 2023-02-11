@@ -15,6 +15,7 @@ class UserCtrl extends GetxController{
     password: '', 
     address: '', 
     type: '', 
+    private: false,
     token: '',
     );
 

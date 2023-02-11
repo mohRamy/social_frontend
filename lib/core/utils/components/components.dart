@@ -15,7 +15,7 @@ class Components {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(500, 50),
-            backgroundColor: AppColors.bgColor,
+            backgroundColor: AppColors.canvas,
           ),
           onPressed: () {
             onPressed;
@@ -53,11 +53,11 @@ class Components {
             prefixIcon: prefixIcon,
             contentPadding: EdgeInsets.all(contentPadding),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.bgColor),
+              borderSide: BorderSide(color: AppColors.canvas),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.bgColor),
+              borderSide: BorderSide(color: AppColors.canvas),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             fillColor: fillColor,

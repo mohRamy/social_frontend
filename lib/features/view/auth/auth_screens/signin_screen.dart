@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/core/utils/app_colors.dart';
+import 'package:social_app/features/view/auth/auth_widgets/text_field_auth.dart';
 
 import '../../../../config/routes/app_pages.dart';
-import '../../../../core/widgets/custom_loader.dart';
-import '../auth_ctrl/auth_ctrl.dart';
-
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/utils/dimensions.dart';
+import '../../../../core/widgets/custom_loader.dart';
+import '../auth_ctrl/auth_ctrl.dart';
 import '../auth_widgets/painter_custom.dart';
 import '../auth_widgets/text_custom.dart';
 
@@ -71,18 +72,34 @@ class SignInScreen extends GetView<AuthCtrl> {
                     const BottomAuth(),
                     Positioned(
                       top: 270,
-                      child: _TextFieldCustom(
+                      child: TextFieldAuthCustom(
                         controller: controller.emailIC,
                         label: 'Email',
                         isPass: false,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ),
                     Positioned(
                       top: 340,
-                      child: _TextFieldCustom(
-                        controller: controller.passwordIC,
-                        label: 'Password',
-                        isPass: true,
+                      child: GetBuilder<AuthCtrl>(
+                        builder: (authCtrl) {
+                          return TextFieldAuthCustom(
+                            controller: controller.passwordIC,
+                            label: 'Password',
+                            suffixIcon: GestureDetector(
+                                onTap: () {
+                                  authCtrl.changeObsure();
+                                },
+                                child: Icon(
+                                  authCtrl.isObscure
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            isPass: authCtrl.isObscure,
+                          );
+                        }
                       ),
                     ),
                     const Positioned(
@@ -137,38 +154,3 @@ class SignInScreen extends GetView<AuthCtrl> {
   }
 }
 
-class _TextFieldCustom extends StatelessWidget {
-  final String label;
-  final bool isPass;
-  final TextEditingController controller;
-
-  const _TextFieldCustom({
-    Key? key,
-    required this.label,
-    required this.isPass,
-    required this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: SizedBox(
-        width: Dimensions.screenWidth * 0.9,
-        child: TextField(
-          controller: controller,
-          obscureText: isPass,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: TextStyle(color: Colors.grey[700]),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey[700]!,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

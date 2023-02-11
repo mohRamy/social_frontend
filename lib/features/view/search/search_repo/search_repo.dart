@@ -12,7 +12,7 @@ class SearchRepo {
     required String searchQuery,
   }) async {
     return await apiClient.getData(
-      '${AppString.BASE_URL}/api/users/search/$searchQuery',
+      '${AppString.USER_SEARCH_URL}/$searchQuery',
     );
   }
 }

@@ -11,11 +11,10 @@ class NavUserScreen extends GetView<NavUserCtrl> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       bottomNavigationBar: Obx(
         () =>  BottomNavigationBar(
+          // backgroundColor: Get.isDarkMode ? AppColors.bgDarkColor : AppColors.bgLightColor,
           type: BottomNavigationBarType.fixed,
           items: controller.item.map(
             (lable, icon)=> MapEntry(

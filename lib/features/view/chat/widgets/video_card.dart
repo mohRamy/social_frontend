@@ -1,13 +1,14 @@
-import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_app/core/utils/dimensions.dart';
+import 'package:video_player/video_player.dart';
 
-import '../../../../config/routes/app_pages.dart';
-import '../../../../core/utils/components/components.dart';
+import '../../home/home_widgets/video_item.dart';
+
 
 class VideoCard extends StatefulWidget {
   final String videoUrl;
-  const VideoCard({
+  const VideoCard({ 
     Key? key,
     required this.videoUrl,
   }) : super(key: key);
@@ -17,31 +18,30 @@ class VideoCard extends StatefulWidget {
 }
 
 class _VideoCardState extends State<VideoCard> {
-  late CachedVideoPlayerController videoPlayerController;
-  bool isPlaying = false;
+  late VideoPlayerController videoPlayerC;
 
   @override
   void initState() {
     super.initState();
-    videoPlayerController =
-        CachedVideoPlayerController.network(widget.videoUrl);
+    videoPlayerC =
+        VideoPlayerController.network(widget.videoUrl)..initialize();
   }
 
   @override
   void dispose() {
     super.dispose();
-    videoPlayerController.dispose();
+    videoPlayerC.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          // Components.navigateTo(context, Routes.videoItem, widget.videoUrl);
-        },
-        child: Stack(
+          onTap: (){
+            Get.to(VideoItem(videoUrl: widget.videoUrl));
+          },
+          child: Stack(
           children: [
-            CachedVideoPlayer(videoPlayerController),
+            VideoPlayer(videoPlayerC),
             Align(
               alignment: Alignment.center,
               child: CircleAvatar(

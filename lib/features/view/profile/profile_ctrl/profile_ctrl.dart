@@ -19,8 +19,6 @@ class ProfileCtrl extends GetxController implements GetxService {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<PostModel> myPost = [];
-
   void followUser(
     String userId,
   ) async {
@@ -40,61 +38,51 @@ class ProfileCtrl extends GetxController implements GetxService {
     update();
   }
 
-  void fetchMyPost(
+  Future<List<PostModel>> fetchUserPost(
     String userId,
   ) async {
-    try {
-      http.Response res = await profileRepo.fetchMyPost(
-        userId: userId,
-      );
+    List<PostModel> userPost = [];
 
-      stateHandle(
-        res: res,
-        onSuccess: () {
-          for (var i = 0; i < jsonDecode(res.body).length; i++) {
-            myPost.add(
-              PostModel.fromJson(
-                jsonEncode(
-                  jsonDecode(
-                    res.body,
-                  )[i],
-                ),
+    http.Response res = await profileRepo.fetchUserPost(
+      userId: userId,
+    );
+    stateHandle(
+      res: res,
+      onSuccess: () {
+        for (var i = 0; i < jsonDecode(res.body).length; i++) {
+          userPost.add(
+            PostModel.fromJson(
+              jsonEncode(
+                jsonDecode(
+                  res.body,
+                )[i],
               ),
-            );
-          }
-        },
-      );
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
-    }
-    update();
+            ),
+          );
+        }
+      },
+    );
+    return userPost;
   }
 
-  void modifyBGImage(
-    File? image,
+  void modifyUserData(
+    String name,
+    String bio,
+    String email,
+    String address,
+    String phone,
+    File? photo,
+    File? backgroundImage,
   ) async {
     try {
-      http.Response res = await profileRepo.modifyBGImage(
-        image: image,
-      );
-      stateHandle(
-        res: res,
-        onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
-        },
-      );
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
-    }
-    update();
-  }
-
-  void modifyImage(
-    String image,
-  ) async {
-    try {
-      http.Response res = await profileRepo.modifyImage(
-        image: image,
+      http.Response res = await profileRepo.modifyUserData(
+        name: name,
+        bio: bio,
+        email: email,
+        address: address,
+        phone: phone,
+        photo: photo,
+        backgroundImage: backgroundImage,
       );
       stateHandle(
         res: res,
@@ -133,6 +121,42 @@ class ProfileCtrl extends GetxController implements GetxService {
     try {
       http.Response res = await profileRepo.deleteFollowing(
         followingId: followingId,
+      );
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar("Success", color: Colors.green);
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    update();
+  }
+
+  void privateAccount() async {
+    try {
+      http.Response res = await profileRepo.privateAccount();
+      stateHandle(
+        res: res,
+        onSuccess: () {
+          Components.showCustomSnackBar("Success", color: Colors.green);
+        },
+      );
+    } catch (e) {
+      Components.showCustomSnackBar(e.toString());
+    }
+    update();
+  }
+
+  void changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    try {
+      http.Response res = await profileRepo.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
       );
       stateHandle(
         res: res,

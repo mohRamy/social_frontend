@@ -13,6 +13,7 @@ class UserModel {
   final String password;
   final String address;
   final String type;
+  final bool private;
   final String token;
 
   UserModel({
@@ -28,6 +29,7 @@ class UserModel {
     required this.password,
     required this.address,
     required this.type,
+    required this.private,
     required this.token,
   });
 
@@ -45,13 +47,14 @@ class UserModel {
       'password': password,
       'address': address,
       'type': type,
+      'private': private,
       'token': token,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] ?? '',
+      id: map['_id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       bio: map['bio'] ?? '',
@@ -63,6 +66,7 @@ class UserModel {
       password: map['password'] ?? '',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
+      private: map['private']?? false,
       token: map['token'] ?? '',
     );
   }
@@ -85,6 +89,7 @@ class UserModel {
     String? password,
     String? address,
     String? type,
+    bool? private,
     String? token,
   }) {
     return UserModel(
@@ -100,6 +105,7 @@ class UserModel {
       password: password ?? this.password,
       address: address ?? this.address,
       type: type ?? this.type,
+      private: private ?? this.private,
       token: token ?? this.token,
     );
   }

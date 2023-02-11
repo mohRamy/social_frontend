@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/utils/app_colors.dart';
 
@@ -26,14 +27,19 @@ class TextFormProfile extends StatelessWidget {
     return TextFormField(
       controller: controller,
       style: GoogleFonts.getFont('Roboto', fontSize: 18),
-      cursorColor: AppColors.bgColor,
+      cursorColor: AppColors.canvas,
       keyboardType: keyboardType,
       readOnly: isReadOnly,
+      minLines: 1,
       maxLines: maxLines,
       decoration: InputDecoration(
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)), 
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Get.isDarkMode ? Colors.white : Colors.black)), 
         focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)), 
         labelText: labelText,
+        labelStyle: TextStyle(
+          color: context.textTheme.bodyText1!.color,
+        ),
+
       ),
       validator: validator,
     );

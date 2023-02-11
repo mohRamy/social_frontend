@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/dimensions.dart';
@@ -40,7 +41,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
     return Container(
         child: secondHalf.isEmpty
             ? SmallText(
-                color: AppColors.black,
+                color: context.textTheme.bodyText1!.color,
                 size: Dimensions.font16,
                 text: firstHalf,
               )
@@ -49,7 +50,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
                 children: [
                   SmallText(
                     height: 1.8,
-                    color: AppColors.black,
+                    color: context.textTheme.bodyText1!.color,
                     size: Dimensions.font16,
                     text: hiddenText
                         ? ('$firstHalf...')
@@ -65,13 +66,13 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
                       children: [
                         SmallText(
                           text: hiddenText ? 'Show more' : 'Show less',
-                          color: AppColors.bgBlackColor,
+                          color: context.textTheme.bodyText1!.color,
                         ),
                         Icon(
                           hiddenText
                               ? Icons.arrow_drop_down
                               : Icons.arrow_drop_up,
-                          color: AppColors.bgBlackColor,
+                          color: context.textTheme.bodyText1!.color,
                         ),
                       ],
                     ),

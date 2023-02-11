@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_app/features/view/home/home_widgets/hero_image.dart';
-import '../../../../core/enums/story_enum.dart';
-import '../../../../core/utils/dimensions.dart';
+import '../enums/story_enum.dart';
+import '../utils/dimensions.dart';
 
-import '../../post/post_widgets/video_card.dart';
+import '../../features/view/post/post_widgets/video_card.dart';
 
 class DisplayFileStory extends StatelessWidget {
   final File message;

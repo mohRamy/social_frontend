@@ -21,7 +21,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       style: GoogleFonts.getFont('Roboto', fontSize: 18),
-      cursorColor: AppColors.bgColor,
+      cursorColor: AppColors.canvas,
       obscureText: isPassword,
       keyboardType: keyboardType,
       decoration: InputDecoration(

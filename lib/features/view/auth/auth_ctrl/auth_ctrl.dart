@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_app/core/utils/constants/global_variables.dart';
 import 'package:social_app/features/data/models/user_model.dart';
 
 import '../../../../config/routes/app_pages.dart';
@@ -95,6 +96,7 @@ class AuthCtrl extends GetxController implements GetxService {
         res: res,
         onSuccess: () async {
           await dep.init();
+          Get.lazyPut(() => UserCtrl());
           authRepo.saveUserToken(jsonDecode(res.body)['token']);
 
           Get.find<UserCtrl>().setUserFromJson(res.body);
@@ -122,7 +124,6 @@ class AuthCtrl extends GetxController implements GetxService {
       update();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(AppString.TOKEN);
-
       if (token == null) {
         prefs.setString(AppString.TOKEN, '');
       }
@@ -132,7 +133,7 @@ class AuthCtrl extends GetxController implements GetxService {
 
       if (response == true) {
         http.Response userRes = await authRepo.fetchMyData();
-
+        Get.lazyPut(() => UserCtrl());
         UserCtrl userController = Get.find<UserCtrl>();
         userController.setUserFromJson(userRes.body);
       }

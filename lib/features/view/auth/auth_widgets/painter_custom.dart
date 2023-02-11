@@ -120,7 +120,6 @@ class BottomRegister extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      // color: Colors.red,
       child: CustomPaint(
         painter: _BottomRegisterPainter(),
       ),
@@ -134,12 +133,12 @@ class _BottomRegisterPainter extends CustomPainter {
     final Rect rect =
         Rect.fromCircle(center: const Offset(150.0, 50.0), radius: 180);
 
-    Gradient gradient = const LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [Color(0xff149e8e), Color(0xff36ea7d)]);
+    // Gradient gradient = const LinearGradient(
+    //     begin: Alignment.centerLeft,
+    //     end: Alignment.centerRight,
+    //     colors: [Color(0xff149e8e), Color(0xff36ea7d)]);
 
-    final paint = Paint()..shader = gradient.createShader(rect);
+    final paint = Paint()..shader = AppColors.gradient.createShader(rect);
     paint.style = PaintingStyle.fill;
     paint.strokeWidth = 5;
 

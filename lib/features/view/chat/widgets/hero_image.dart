@@ -16,7 +16,7 @@ class ChatHeroImage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.bgBlackColor,
+        backgroundColor: AppColors.blackColor,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

@@ -85,9 +85,10 @@ import 'user_model.dart';
 class PostModel {
   String? _id;
   UserModel? _userData;
+  String? _userId;
   int? _time;
   List<Posts>? _posts;
-  List<UserModel>? _likes;
+  List<String>? _likes;
   List<CommentModel>? _comments;
   String? _description;
 
@@ -95,9 +96,10 @@ class PostModel {
       {
       String? id,
       UserModel? userData,
+      String? userId,
       int? time,
       List<Posts>? posts,
-      List<UserModel>? likes,
+      List<String>? likes,
       List<CommentModel>? comments,
       String? description}) {
     if (id != null) {
@@ -105,6 +107,9 @@ class PostModel {
     }
     if (userData != null) {
       _userData = userData;
+    }
+    if (userId != null) {
+      _userId = userId;
     }
     if (time != null) {
       _time = time;
@@ -128,12 +133,14 @@ class PostModel {
   set id(String? id) => _id = id;
   UserModel? get userData => _userData;
   set userData(UserModel? userData) => _userData = userData;
+  String? get userId => _userId;
+  set userId(String? userId) => _userId = userId;
   int? get time => _time;
   set time(int? time) => _time = time;
   List<Posts>? get posts => _posts;
   set posts(List<Posts>? posts) => _posts = posts;
-  List<UserModel>? get likes => _likes;
-  set likes(List<UserModel>? likes) => _likes = likes;
+  List<String>? get likes => _likes;
+  set likes(List<String>? likes) => _likes = likes;
   List<CommentModel>? get comments => _comments;
   set comments(List<CommentModel>? comments) => _comments = comments;
   String? get description => _description;
@@ -143,9 +150,10 @@ class PostModel {
     return PostModel(
     id: map['_id']??map['id'],
     userData: UserModel.fromMap(map['userData']),
+    userId: map['userId'] ?? '',
     time: map['time']??0,
     posts : List<Posts>.from(map['posts']?.map((x) => Posts.fromJson(x))??[]),
-    likes : List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
+    likes : List<String>.from(map['likes']??[]),
     comments: List<CommentModel>.from(map['comments']?.map((x) => CommentModel.fromMap(x))??[]),
     description: map['description']??"",
     );
@@ -155,12 +163,13 @@ class PostModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id;
     data['userData'] = _userData;
+    data['userId'] = _userId;
     data['time'] = _time;
     if (_posts != null) {
       data['posts'] = _posts!.map((v) => v.toJson()).toList();
     }
     if (_likes != null) {
-      data['likes'] = _likes!.map((v) => v.toJson()).toList();
+      data['likes'] = _likes;
     }
     if (_comments != null) {
       data['comments'] = _comments!.map((v) => v.toJson()).toList();

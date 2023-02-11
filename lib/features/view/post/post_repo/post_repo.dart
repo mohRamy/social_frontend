@@ -71,7 +71,6 @@ class PostRepo {
       postCloudinary.add(res.secureUrl);
     }
 
-    print(Get.find<UserCtrl>().user.id);
     return await apiClient.postData(
       AppString.POST_ADD_URL,
       jsonEncode({

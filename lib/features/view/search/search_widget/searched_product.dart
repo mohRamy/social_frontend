@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
+import 'package:social_app/core/widgets/widgets.dart';
+import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
 import '../../../data/models/user_model.dart';
 
-import '../../../../config/routes/app_pages.dart';
 import '../../../../core/utils/dimensions.dart';
 import '../../../../core/widgets/big_text.dart';
 import 'package:flutter/material.dart';
@@ -17,63 +18,40 @@ class SearchedProduct extends GetView<SearchCtrl> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: GetBuilder<SearchCtrl>(
-              builder: (cont) => GestureDetector(
-                onTap: () {
-                  Get.toNamed(
-                    Routes.PROFILE,
-                    arguments: user.id,
-                  );
-                },
-                child: Row(
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Column(
+        children: [
+          MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: GetBuilder<SearchCtrl>(
+                builder: (cont) => Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //image
-                    Container(
-                      width: Dimensions.height20 * 3,
-                      height: Dimensions.height20 * 3,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            user.photo,
-                          ),
-                        ),
-                      ),
+                    ProfileAvatar(
+                      imageUrl: user.photo,
+                      sizeImage: 50,
                     ),
-                    SizedBox(
-                      width: Dimensions.width10,
-                    ),
+                    SizedBox(width: Dimensions.width15),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          BigText(
-                            text: user.name,
-                            color: Colors.black54,
-                            overflow: TextOverflow.clip,
-                          ),
+                          TextCustom(text: user.name),
                           SizedBox(height: Dimensions.height10 - 5),
-                          Text(
-                            user.email,
-                            style: TextStyle(fontSize: Dimensions.height15),
-                          ),
+                          TextCustom(text: user.email),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            )),
-        SizedBox(height: Dimensions.height15),
-      ],
+              )),
+          SizedBox(height: Dimensions.height15),
+        ],
+      ),
     );
   }
 }

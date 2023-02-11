@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:social_app/config/routes/app_pages.dart';
 import 'package:social_app/features/data/models/story_model.dart';
-import 'package:social_app/features/view/story/story_ctrl/story_ctrl.dart';
-import 'package:social_app/features/view/story/story_screens/story_comment_screen.dart';
+import 'package:social_app/features/data/models/user_model.dart';
+import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
+import 'package:social_app/features/view/home/home_screens/story_comment_screen.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/utils.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -225,8 +227,10 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                 height: 430,
                 width: 80,
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: GetBuilder<StoryCtrl>(
-                  builder: (storyCtrl) {
+                child: GetBuilder<HomeCtrl>(
+                  builder: (homeCtrl) {
+                    bool meLike = widget.story.likes
+                        .contains(Get.find<UserCtrl>().user.id);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -238,44 +242,42 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                         Column(
                           children: [
                             InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isLike = !isLike;
-                                  if (isLike) {
-                                    storyCtrl.storyLike(
-                                      widget.story.id,
-                                      1,
-                                    );
-                                  } else {
-                                    storyCtrl.storyLike(
-                                      widget.story.id,
-                                      0,
-                                    );
-                                  }
-                                });
-                              },
-                              child: isLike
-                                  ? const Icon(
-                                      Icons.favorite,
-                                      color: Colors.red,
-                                      size: 40,
-                                    )
-                                  : const Icon(
-                                      Icons.favorite,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                            ),
+                                onTap: () {
+                                  setState(() {
+                                    isLike = !isLike;
+                                  });
+                                  homeCtrl.storyLike(
+                                    widget.story.id,
+                                  );
+                                },
+                                child: Icon(
+                                  (meLike || isLike)
+                                      ? Icons.favorite_outlined
+                                      : Icons.favorite_border_outlined,
+                                  color: (meLike || isLike)
+                                      ? Colors.red
+                                      : Colors.white,
+                                  size: 40,
+                                )),
                             const SizedBox(
                               height: 3,
                             ),
                             widget.story.likes.isNotEmpty
                                 ? InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (widget.story.likes.isNotEmpty) {
+                                        List<UserModel> userLikes = [];
+                                        for (var i = 0;
+                                            i < widget.story.likes.length;
+                                            i++) {
+                                          userLikes.add(
+                                              await Get.find<AuthCtrl>()
+                                                  .fetchUserData(
+                                                      widget.story.likes[i]));
+                                        }
                                         Get.toNamed(
-                                          Routes.POST_LIKES,
-                                          arguments: widget.story.likes,
+                                          Routes.LIKES,
+                                          arguments: userLikes,
                                         );
                                       }
                                     },
@@ -291,7 +293,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                         ),
                         IconButton(
                           onPressed: () {
-                            Get.find<StoryCtrl>()
+                            Get.find<HomeCtrl>()
                                 .fetchAllStoryComment(widget.story.id);
                             Get.to(
                               StoryCommentsScreen(

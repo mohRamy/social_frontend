@@ -1,50 +1,50 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:social_app/controller/user_ctrl.dart';
+import 'package:social_app/features/data/models/chat_model.dart';
 import 'package:swipe_to/swipe_to.dart';
 
-import '../../../../core/enums/message_enum.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/dimensions.dart';
 import 'display_text_image_gif.dart';
 
 class SenderMessageCard extends StatelessWidget {
-  final String message;
+  final Msg msg;
   final String date;
-  final MessageEnum type;
   final VoidCallback onRightSwipe;
-  final String repliedText;
-  final String username;
-  final MessageEnum repliedMessageType;
+  final RepliedMsg repliedMsg;
   
 
   const SenderMessageCard({
     Key? key,
-    required this.message,
+    required this.msg,
     required this.date,
-    required this.type,
     required this.onRightSwipe,
-    required this.repliedText,
-    required this.username,
-    required this.repliedMessageType,
+    required this.repliedMsg,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isReplying = repliedText.isNotEmpty;
+    String message = msg.message!;
+    String type = msg.type!;
+    String repliedMessage = repliedMsg.repliedMessage!;
+    String repliedType = repliedMsg.type!;
+    final isReplying = repliedMsg.repliedMessage!.isNotEmpty;
     String typeIcon() {
       String contactMsg;
-      switch (repliedMessageType) {
-        case MessageEnum.image:
+      switch (repliedMsg.type) {
+        case 'image':
           contactMsg = '📷 Photo';
           break;
-        case MessageEnum.video:
+        case 'video':
           contactMsg = '📸 Video';
           break;
-        case MessageEnum.audio:
+        case 'audio':
           contactMsg = '🎵 Audio';
           break;
-        case MessageEnum.gif:
+        case 'gif':
           contactMsg = 'GIF';
           break;
         default:
@@ -59,16 +59,16 @@ class SenderMessageCard extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minWidth: type == MessageEnum.text ? 130 : 200,
+              minWidth: type == 'text' ? 130 : 200,
               maxWidth: 270,
             ),
             child: Card(
               elevation: 1,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
-              color: AppColors.bgBlackColor,
+              color: AppColors.chatBoxOther,
               margin:  EdgeInsets.symmetric(horizontal: Dimensions.height15, vertical: Dimensions.height10 - 5),
-              child: type == MessageEnum.text || type == MessageEnum.audio
+              child: type == 'text' || type == 'audio'
                   ? Stack(
                       children: [
                         Padding(
@@ -84,9 +84,9 @@ class SenderMessageCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 isReplying
-                                    ? repliedMessageType == MessageEnum.text ||
-                                            repliedMessageType ==
-                                                MessageEnum.audio
+                                    ? repliedType == 'text' ||
+                                            repliedType ==
+                                                'audio'
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -95,9 +95,9 @@ class SenderMessageCard extends StatelessWidget {
                                               Container(
                                                 width: double.infinity,
                                                 padding:
-                                                     EdgeInsets.all(Dimensions.height10 - 5),
+                                                    EdgeInsets.all(Dimensions.height10 - 5),
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.bgBlackColor
+                                                  color: AppColors.blackColor
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
@@ -105,38 +105,32 @@ class SenderMessageCard extends StatelessWidget {
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(username,
-                                                          // username ==
-                                                          //         FirebaseAuth
-                                                          //             .instance
-                                                          //             .currentUser!
-                                                          //             .displayName
-                                                          //     ? username
-                                                          //     : 'You',
+                                                    Text(
+                                                          repliedMsg.repliedTo ==
+                                                                  Get.find<UserCtrl>().user.name
+                                                              ? repliedMsg.repliedTo!
+                                                              : 'You',
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                                color: AppColors.bgBlackColor,
-                                                            // color: username ==
-                                                            //         FirebaseAuth
-                                                            //             .instance
-                                                            //             .currentUser!
-                                                            //             .displayName
-                                                            //     ? Colors.orange
-                                                            //     : AppColors.bgBlackColor,
+                                                                
+                                                            color: repliedMsg.repliedTo ==
+                                                                  Get.find<UserCtrl>().user.name
+                                                                ? Colors.orange
+                                                                : AppColors.blackColor,
                                                           ),
                                                         ),
-                                                         SizedBox(
+                                                        SizedBox(
                                                           height: Dimensions.height10 - 5,
                                                         ),
                                                     DisplayTextImageGIF(
-                                                      message: repliedText,
-                                                      type: repliedMessageType,
+                                                      message: repliedMessage,
+                                                      type: repliedType,
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                               SizedBox(
+                                              SizedBox(
                                                 height: Dimensions.height10,
                                               ),
                                               DisplayTextImageGIF(
@@ -152,7 +146,7 @@ class SenderMessageCard extends StatelessWidget {
                                               Container(
                                                 width: double.infinity,
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.bgBlackColor
+                                                  color: AppColors.blackColor
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
@@ -169,25 +163,19 @@ class SenderMessageCard extends StatelessWidget {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Text( username,
-                                                            // username ==
-                                                            //         FirebaseAuth
-                                                            //             .instance
-                                                            //             .currentUser!
-                                                            //             .displayName
-                                                            //     ? 'You'
-                                                            //     : username,
+                                                          Text( 
+                                                            repliedMsg.repliedTo ==
+                                                                  Get.find<UserCtrl>().user.name
+                                                                ? 'You'
+                                                                : repliedMsg.repliedTo!,
                                                             style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight.bold,
-                                                              color: AppColors.bgBlackColor, 
-                                                              // username ==
-                                                              //         FirebaseAuth
-                                                              //             .instance
-                                                              //             .currentUser!
-                                                              //             .displayName
-                                                              //     ? Colors.orange
-                                                              //     : AppColors.bgBlackColor,
+                                                              color:
+                                                              repliedMsg.repliedTo ==
+                                                                  Get.find<UserCtrl>().user.name
+                                                                  ? Colors.orange
+                                                                  : AppColors.blackColor,
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -219,14 +207,14 @@ class SenderMessageCard extends StatelessWidget {
                                                         height: Dimensions.height45 + 5,
                                                         child:
                                                             CachedNetworkImage(
-                                                          imageUrl: repliedText,
+                                                          imageUrl: repliedMessage,
                                                         ),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                               SizedBox(height: Dimensions.height10 - 5,),
+                                              SizedBox(height: Dimensions.height10 - 5,),
                                               DisplayTextImageGIF(
                                                 message: message,
                                                 type: type,

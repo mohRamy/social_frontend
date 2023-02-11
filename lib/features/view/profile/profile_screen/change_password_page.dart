@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
+import 'package:social_app/features/view/auth/json/chat_json.dart';
+import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
 import '../../../../core/utils/app_colors.dart';
 
 import '../../../../core/widgets/widgets.dart';
@@ -17,64 +20,57 @@ class ChangePasswordPage extends StatefulWidget {
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
-  late TextEditingController _currentPasswordController;
-  late TextEditingController _newPasswordController;
-  late TextEditingController _newPasswordAgainController;
+  late TextEditingController _currentPasswordC;
+  late TextEditingController _newPasswordC;
+  late TextEditingController _newPasswordAgainC;
   final _keyForm = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-
-    _currentPasswordController = TextEditingController();
-    _newPasswordController = TextEditingController();
-    _newPasswordAgainController = TextEditingController();
+    _currentPasswordC = TextEditingController();
+    _newPasswordC = TextEditingController();
+    _newPasswordAgainC = TextEditingController();
 
   }
 
   @override
   void dispose() {
-    _currentPasswordController.dispose();
-    _newPasswordController.dispose();
-    _newPasswordAgainController.dispose();
-
+    _currentPasswordC.dispose();
+    _newPasswordC.dispose();
+    _newPasswordAgainC.dispose();
     super.dispose();
   }
 
   void clear(){
-    _currentPasswordController.clear();
-    _newPasswordController.clear();
-    _newPasswordAgainController.clear();
+    _currentPasswordC.clear();
+    _newPasswordC.clear();
+    _newPasswordAgainC.clear();
   }
 
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: const TextCustom(text: 'Contraseña', fontSize: 19),
+          backgroundColor: Colors.transparent,
+          title: const TextCustom(text: 'Password', fontSize: 19),
           elevation: 0,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
-          ),
           actions: [
-            TextButton(
-              onPressed: (){
-                if( _keyForm.currentState!.validate() ){
-    
-                  // userBloc.add( OnChangePasswordEvent(
-                  //   _currentPasswordController.text.trim(), 
-                  //   _newPasswordAgainController.text.trim()
-                  // ));
-    
-                }
-              }, 
-              child: TextCustom(text: 'Guardar', fontSize: 15, color: AppColors.primary)
+            GetBuilder<ProfileCtrl>(
+              builder: (profileCtrl) {
+                return TextButton(
+                  onPressed: (){
+                    if( _keyForm.currentState!.validate() ){
+                      profileCtrl.changePassword(
+                        _currentPasswordC.text.trim(), 
+                        _newPasswordAgainC.text.trim(),
+                        );
+                    }
+                  }, 
+                  child: TextCustom(text: 'Keep', fontSize: 15, color: AppColors.primary)
+                );
+              }
             )
           ],
         ),
@@ -86,36 +82,34 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-        
                     TextFormProfile(
-                      controller: _currentPasswordController, 
-                      labelText: 'Contraseña actual',
+                      controller: _currentPasswordC, 
+                      labelText: 'Current password',
                       validator: MultiValidator([
-                        MinLengthValidator(8, errorText: 'Minimo 8 caracteres'),
-                        RequiredValidator(errorText: 'El campo no puede estar vacio')
+                        MinLengthValidator(6, errorText: 'Minimum 6 characters'),
+                        RequiredValidator(errorText: 'The field cannot be empty')
                       ]),
                     ),
         
                     const SizedBox(height: 20.0),
                     TextFormProfile(
-                      controller: _newPasswordController, 
-                      labelText: 'Nueva Contraseña',
+                      controller: _newPasswordC, 
+                      labelText: 'New Password',
                       validator: MultiValidator([
-                        MinLengthValidator(8, errorText: 'Minimo 8 caracteres'),
-                        RequiredValidator(errorText: 'El campo no puede estar vacio')
+                        MinLengthValidator(6, errorText: 'Minimum 6 characters'),
+                        RequiredValidator(errorText: 'The field cannot be empty')
                       ]),
                     ),
         
                     const SizedBox(height: 20.0),
                     TextFormProfile(
-                      controller: _newPasswordAgainController, 
-                      labelText: 'Repetir contraseña',
+                      controller: _newPasswordAgainC, 
+                      labelText: 'Repeat password',
                       validator: MultiValidator([
-                        MinLengthValidator(8, errorText: 'Minimo 8 caracteres'),
-                        RequiredValidator(errorText: 'El campo no puede estar vacio')
+                        MinLengthValidator(6, errorText: 'Minimum 6 characters'),
+                        RequiredValidator(errorText: 'The field cannot be empty')
                       ]),
                     ),
-        
                   ],
                 ),
               ),

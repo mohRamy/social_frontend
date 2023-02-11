@@ -4,7 +4,8 @@ class AppString {
   static const int APP_V = 1;
 
   //api
-  static const String BASE_URL = "http://192.168.34.79:8000";
+  static const String BASE_URL = "http://192.168.177.79:8000";
+  //auth
   static const String SIGN_UP_URL = "$BASE_URL/api/signup";
   static const String SIGN_IN_URL = "$BASE_URL/api/signin";
   static const String TOKEN_IS_VALID_URL = "$BASE_URL/tokenIsValid";
@@ -30,8 +31,14 @@ class AppString {
   // profile
   static const String PROFILE_FOLLOW_URL = "$BASE_URL/api/user/follow";
   static const String MYPOST_GET_URL = "$BASE_URL/api/user/get-mypost";
-  static const String PROFILE_BGIMAGE_URL = "$BASE_URL/api/user/modify-bgimage";
-  static const String PROFILE_IMAGE_URL = "$BASE_URL/api/user/modify-image";
+  static const String PROFILE_MODIFY_URL = "$BASE_URL/api/user/modify-data";
+  static const String PROFILE_PRIVATE_URL = "$BASE_URL/api/user/private";
+  static const String PROFILE_CHAGNE_PASSWORD_URL = "$BASE_URL/api/user/change-password";
+  // search
+  static const String USER_SEARCH_URL = "$BASE_URL/api/users/search";
+  // message
+  static const String MESSAGE_ADD_URL = "$BASE_URL/message/add-message";
+  static const String CHAT_GET_URL = "$BASE_URL/chat/";
 
 
   //token

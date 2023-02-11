@@ -1,7 +1,6 @@
 
 import '../../post/post_screen/post_screen.dart';
 import '../../profile/profile_screen/profile_screen.dart';
-import '../../profile/profile_screen/saved_posts_page.dart';
 import '../../search/search_screens/search_screen.dart';
 
 import '../../home/home_screens/home_screen.dart';
@@ -22,7 +21,7 @@ class NavUserCtrl extends GetxController {
   final Map<String, IconData> _items = {
     'home': Icons.home_outlined,
     'search': Icons.search,
-    'history': Icons.movie,
+    'history': Icons.add,
     'cart': Icons.favorite_border_rounded,
     'me': Icons.person,
   };

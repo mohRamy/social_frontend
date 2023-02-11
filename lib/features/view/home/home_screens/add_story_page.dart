@@ -6,14 +6,13 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_app/core/utils/app_colors.dart';
 import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/story/story_ctrl/story_ctrl.dart';
-import 'package:social_app/features/view/story/story_widgets/display_file_story.dart';
+import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
 
 import '../../../../core/enums/story_enum.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../post/post_widgets/display_text_image_gif.dart';
+import '../../../../core/displaies/display_file_story.dart';
 
 class AddStoryScreen extends StatefulWidget {
   const AddStoryScreen({Key? key}) : super(key: key);
@@ -23,15 +22,13 @@ class AddStoryScreen extends StatefulWidget {
 }
 
 class _AddStoryScreenState extends State<AddStoryScreen> {
-  final StoryCtrl storyCtrl = Get.find<StoryCtrl>();
+  final HomeCtrl homeCtrl = Get.find<HomeCtrl>();
   late List<AssetEntity> _mediaList = [];
-
-  final StoryCtrl postCtrl = Get.find<StoryCtrl>();
-
   late File fileImage;
 
   @override
   void initState() {
+    homeCtrl.imageFileSelected = [];
     _assetImagesDevice();
     super.initState();
   }
@@ -54,10 +51,10 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
   }
 
   void selectImage() async {
-    File? image = await pickImageFromGallery();
+    File? image = await pickImageFromCamera();
     if (image != null) {
       setState(() {
-        postCtrl.imageFileSelected.add({
+        homeCtrl.imageFileSelected.add({
           StoryEnum.image: image,
         });
       });
@@ -68,7 +65,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
     File? video = await pickVideoFromGallery();
     if (video != null) {
       setState(() {
-        postCtrl.imageFileSelected.add({
+        homeCtrl.imageFileSelected.add({
           StoryEnum.video: video,
         });
       });
@@ -77,24 +74,24 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     final size = MediaQuery.of(context).size;
 
     List<StoryEnum> itemsKey = [];
     List<File> itemsVal = [];
 
-    storyCtrl.imageFileSelected
+    homeCtrl.imageFileSelected
         .map((e) => e.forEach((key, value) {
               itemsKey.add(key);
             }))
         .toList();
-    storyCtrl.imageFileSelected
+    homeCtrl.imageFileSelected
         .map((e) => e.forEach((key, value) {
               itemsVal.add(value);
             }))
         .toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -131,7 +128,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
       ),
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         title: const TextCustom(
           text: 'Add Story',
@@ -141,13 +138,13 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
         leading: IconButton(
             splashRadius: 20,
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: Colors.black87)),
+            icon: const Icon(Icons.close)),
         actions: [
           TextButton(
             onPressed: () {
-              if (storyCtrl.imageFileSelected.isNotEmpty) {
-                storyCtrl.addStory(
-                  story: storyCtrl.imageFileSelected,
+              if (homeCtrl.imageFileSelected.isNotEmpty) {
+                homeCtrl.addStory(
+                  story: homeCtrl.imageFileSelected,
                 );
                 setState(() {});
               } else {
@@ -184,7 +181,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           ),
                     physics: const BouncingScrollPhysics(),
                     
-                    itemCount: storyCtrl.imageFileSelected.length,
+                    itemCount: homeCtrl.imageFileSelected.length,
                     itemBuilder: (_, index) {
                       return Stack(
                         children: [
@@ -198,7 +195,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  storyCtrl.imageFileSelected.removeAt(index);
+                                  homeCtrl.imageFileSelected.removeAt(index);
                                 });
                               },
                               child: const CircleAvatar(
@@ -235,7 +232,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       fileImage = (await _mediaList[i].file)!;
                       setState(
                         () {
-                          storyCtrl.imageFileSelected.add({
+                          homeCtrl.imageFileSelected.add({
                             StoryEnum.image: fileImage,
                           });
                         },

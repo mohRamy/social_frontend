@@ -1,80 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_app/core/utils/dimensions.dart';
+import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../data/models/user_model.dart';
-import '../widgets/bottom_chat_field.dart';
+import '../../../data/models/chat_model.dart';
+import '../controller/chat_ctrl.dart';
 import '../widgets/chat_list.dart';
 
-class ChatScreen extends StatelessWidget {
-  static const String routeName = '/mobile-chat-screen';
+class ChatScreen extends StatefulWidget {
   final String name;
   final String uid;
-  final bool isGroupChat; // select contact عند الخطأ زوده في
-  final String profilePic;
+  final bool isGroupChat;
+  final String photo;
   const ChatScreen({
     Key? key,
     required this.name,
     required this.uid,
     required this.isGroupChat,
-    this.profilePic = AppString.ASSETS_APPLIANCES,
+    this.photo = AppString.ASSETS_MOBILES,
   }) : super(key: key);
 
   @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ChatModel chatModel = Get.find<ChatCtrl>().chatContacts;
+    List<Messages> userMessages = [];
+    if (chatModel.contents != null) {
+      for (var i = 0; i < chatModel.contents!.length; i++) {
+        if (chatModel.contents![i].recieverId == widget.uid) {
+          for (var j = 0; j < chatModel.contents![i].messages!.length; j++) {
+            userMessages.add(chatModel.contents![i].messages![j]);
+          }
+        }
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bgBlackColor,
+        titleSpacing: 0.0,
+        backgroundColor: AppColors.chatBoxMe,
+        elevation: 0.0,
         automaticallyImplyLeading: false,
-        title: StreamBuilder<UserModel>(
-            // stream: ref.read(authControllerProvider).userDataById(uid),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
-              }
-              return Row(
-                children: [
-                  InkWell(
-                      borderRadius: BorderRadius.circular(Dimensions.radius20),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.arrow_back,
-                            ),
-                            CircleAvatar(
-                              radius: Dimensions.radius20,
-                              backgroundImage: NetworkImage(profilePic),
-                            ),
-                          ],
-                        ),
-                      )),
-                  SizedBox(width: Dimensions.width10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
+          children: [
+            InkWell(
+                borderRadius: BorderRadius.circular(Dimensions.radius20),
+                onTap: () {
+                  Get.back();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Row(
                     children: [
-                      Text(name),
-                      // !isGroupChat
-                      //     ? snapshot.data!.isOnline
-                      //         ? 
-                              // Text(
-                              //     'online',
-                              //     style: TextStyle(
-                              //       fontSize: Dimensions.font16 - 3,
-                              //       fontWeight: FontWeight.normal,
-                              //     ),
-                              //   )
-                              // : Container()
-                          // : Container(),
+                      const Icon(
+                        Icons.arrow_back,
+                      ),
+                      ProfileAvatar(
+                        imageUrl: widget.photo,
+                        sizeImage: Dimensions.height30,
+                      ),
                     ],
                   ),
-                ],
-              );
-            }),
+                )),
+            SizedBox(width: Dimensions.width15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.name),
+                // !isGroupChat
+                //     ? snapshot.data!.isOnline
+                //?
+                Text(
+                  'online',
+                  style: TextStyle(
+                    fontSize: Dimensions.font16 - 3,
+                    fontWeight: FontWeight.normal,
+                  ),
+                )
+                //     : Container()
+                // : Container(),
+              ],
+            ),
+          ],
+        ),
         centerTitle: false,
         actions: [
           IconButton(
@@ -88,113 +111,27 @@ class ChatScreen extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_vert),
-          ),
+          )
         ],
       ),
       body: Stack(
         children: [
-          Image.asset(
-            AppString.APP_NAME,
-            height: Dimensions.screenHeight,
-            fit: BoxFit.fill,
-          ),
-          Column(
-            children: [
-              Expanded(
-                child: ChatList(
-                  recieverUserId: uid,
-                  isGroupChat: isGroupChat,
+                ChatList(
+                  recieverUserId: widget.uid,
+                  isGroupChat: widget.isGroupChat,
+                  userMessages: userMessages,
+                  username: widget.name,
                 ),
-              ),
-              BottomChatField(
-                recieverUserId: uid,
-                isGroupChat: isGroupChat,
-              ),
-            ],
-          ),
+              // ),
+              // BottomChatField(
+              //   recieverUserId: widget.uid,
+              //   isGroupChat: widget.isGroupChat,
+              //   username: widget.name,
+              // ),
+            // ],
+          // ),
         ],
       ),
     );
   }
 }
-
-// Row iconChat({
-//   required IconData icon,
-//   required double width,
-// }) {
-//   return Row(
-//     children: [
-//       InkWell(
-//         borderRadius: BorderRadius.circular(50),
-//         onTap: () {},
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Icon(
-//             icon,
-//           ),
-//         ),
-//       ),
-//       SizedBox(
-//         width: width,
-//       ),
-//     ],
-//   );
-// }
-
-// appBar: AppBar(
-//         automaticallyImplyLeading: false,
-//         title: Row(
-//           children: [
-//             InkWell(
-//               borderRadius: BorderRadius.circular(50),
-//               onTap: () => Navigator.pop(context),
-//               child: Padding(
-//                 padding: const EdgeInsets.all(3.0),
-//                 child: Row(
-//                   children: [
-//                     const Icon(Icons.arrow_back),
-//                     CircleAvatar(
-//                       radius: 18,
-//                       backgroundImage: NetworkImage(profilePic),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(width: 10),
-//             StreamBuilder(
-//               stream: ref.read(authControllerProvider).userDataById(uid),
-//               builder: (context, snapshot) {
-//                 if (snapshot.connectionState == ConnectionState.waiting) {
-//                   return  Container();
-//                 }
-//                 return Column(
-//               children: [
-//                 Text(
-//                   name,
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.w400,
-//                     fontSize: 18,
-//                   ),
-//                 ),
-//                 snapshot.data!.isOnline ?
-//                 const Text(
-//                   'online',
-//                 style: TextStyle(
-//                     color: Colors.white70,
-//                     fontWeight: FontWeight.w400,
-//                     fontSize: 13,
-//                   ),):
-//                 Container(),
-//               ],
-//             );
-//               },
-//             ),
-//           ],
-//         ),
-//         actions: [
-//           iconChat(icon: Icons.video_call, width: 8),
-//           iconChat(icon: Icons.call, width: 8),
-//           iconChat(icon: Icons.more_vert, width: 5),
-//         ],
-//       ),

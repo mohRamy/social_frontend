@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:social_app/core/utils/dimensions.dart';
 import 'package:social_app/features/view/chat/widgets/hero_image.dart';
 
-import '../../../../core/enums/message_enum.dart';
-import '../../home/home_widgets/hero_image.dart';
 import '../../post/post_widgets/video_card.dart';
 
 class DisplayTextImageGIF extends StatelessWidget {
   final String message;
-  final MessageEnum type;
+  final String type;
 
   const DisplayTextImageGIF({
     Key? key,
@@ -23,14 +21,14 @@ class DisplayTextImageGIF extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isPlaying = false;
     // final AudioPlayer audioPlayer = AudioPlayer();
-    return type == MessageEnum.text
+    return type == 'text'
         ? Text(
             message,
             style: TextStyle(
               fontSize: Dimensions.font16,
             ),
           )
-        : type == MessageEnum.image
+        : type == 'image'
             ? InkWell(
                 onTap: () {
                   Navigator.push(
@@ -93,7 +91,7 @@ class DisplayTextImageGIF extends StatelessWidget {
             //           icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
             //         );
             //       })
-            : type == MessageEnum.gif
+            : type == 'gif'
                 ? CachedNetworkImage(
                     imageUrl: message,
                   )

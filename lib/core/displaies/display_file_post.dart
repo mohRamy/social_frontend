@@ -1,17 +1,16 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/utils/dimensions.dart';
-import 'video_card.dart';
+import '../utils/dimensions.dart';
+import '../../features/view/post/post_widgets/video_card.dart';
 
-import '../../../../core/enums/post_enum.dart';
+import '../enums/post_enum.dart';
 
-class DisplayTextImageGIF extends StatelessWidget {
+class DisplayFilePost extends StatelessWidget {
   final File message;
   final PostEnum type;
 
-  const DisplayTextImageGIF({
+  const DisplayFilePost({
     Key? key,
     required this.message,
     required this.type,

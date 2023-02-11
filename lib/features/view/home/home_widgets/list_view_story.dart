@@ -4,18 +4,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_app/core/utils/dimensions.dart';
 
 import 'package:social_app/features/data/models/story_model.dart';
 import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
-import 'package:social_app/features/view/story/story_widgets/display_file_story.dart';
-import 'package:social_app/features/view/story/story_widgets/display_image_video.dart';
-import 'package:social_app/features/view/story/story_widgets/palette.dart';
-import 'package:social_app/features/view/story/story_widgets/profile_avatar.dart';
+import 'package:social_app/features/view/home/home_widgets/palette.dart';
+import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import 'package:social_app/core/displaies/display_image_video_card.dart';
 
 import '../../../../controller/user_ctrl.dart';
-import '../story_screens/add_story_page.dart';
-import '../story_screens/view_story_page.dart';
+import '../../home/home_screens/add_story_page.dart';
+import '../../home/home_screens/view_story_page.dart';
 
 class ListViewStory extends StatefulWidget {
   const ListViewStory({
@@ -97,8 +95,7 @@ class _ListViewStoryState extends State<ListViewStory> {
                               future: _mediaList.isEmpty ? Future.sync(() => null) : _mediaList[i].thumbnailDataWithSize(
                                 const ThumbnailSize(110, 110),
                               ),
-                              builder: (context,
-                                  AsyncSnapshot<Uint8List?> snapshot) {
+                              builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.done) {
                                       return _mediaList.isNotEmpty ?
@@ -202,9 +199,10 @@ class _StoryCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12.0),
-          child: DisplayImageVideoStory(
-            message: story.stories[0].story!, 
+          child: DisplayImageVideoCard(
+            file: story.stories[0].story!, 
             type: story.stories[0].type!,
+            isOut: false,
             ),
         ),
         Container(

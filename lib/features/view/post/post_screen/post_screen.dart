@@ -7,12 +7,13 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/enums/post_enum.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/components/components.dart';
 import '../post_ctrl/post_ctrl.dart';
-import '../post_widgets/display_text_image_gif.dart';
+import '../../../../core/displaies/display_file_post.dart';
 
 import '../../../../core/picker/picker.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -39,7 +40,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   void selectImage() async {
-    File? image = await pickImageFromGallery();
+    File? image = await pickImageFromCamera();
     if (image != null) {
       setState(() {
         postCtrl.imageFileSelected.add({
@@ -97,7 +98,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
         .toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
           child: Form(
         key: _keyForm,
@@ -118,29 +118,27 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           GetBuilder<UserCtrl>(builder: (userCtrl) {
                             return Container(
                               alignment: Alignment.topLeft,
-                              height: 120,
-                              width: size.width * .125,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                  userCtrl.user.photo,
-                                ),
+                              child: ProfileAvatar(
+                                imageUrl: userCtrl.user.photo,
+                                sizeImage: 50,
                               ),
                             );
                           }),
                           Container(
-                            height: 100,
                             width: size.width * .78,
                             color: Colors.white,
                             child: TextFormField(
                               controller: postCtrl.descriptionC,
+                              minLines: 1,
                               maxLines: 4,
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(
                                       left: 10.0, top: 10.0),
                                   border: InputBorder.none,
                                   hintText: 'Add a comment',
-                                  hintStyle: GoogleFonts.roboto(fontSize: 18)),
+                                  hintStyle: GoogleFonts.roboto(
+                                      fontSize: 17, color: Colors.grey[700])),
                               validator: RequiredValidator(
                                   errorText: 'This field is required'),
                             ),
@@ -157,7 +155,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           itemBuilder: (_, index) {
                             return Stack(
                               children: [
-                                DisplayTextImageGIF(
+                                DisplayFilePost(
                                   type: itemsKey[index],
                                   message: itemsVal[index],
                                 ),
@@ -188,8 +186,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     },
                                     child: const CircleAvatar(
                                       backgroundColor: Colors.black38,
-                                      child: Icon(Icons.close_rounded,
-                                          color: Colors.white),
+                                      child: Icon(
+                                        Icons.close_rounded,
+                                      ),
                                     ),
                                   ),
                                 )
@@ -250,42 +249,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   },
                 ),
               ),
-              InkWell(
-                // onTap: () => modalPrivacyPost(context),
-                onTap: () {},
-                child: Row(
-                  children: const [
-                    // BlocBuilder<PostBloc, PostState>(builder: (_, state) {
-                    //   if (state.privacyPost == 1) {
-                    //     return const Icon(Icons.public_rounded);
-                    //   }
-                    //   if (state.privacyPost == 2) {
-                    //     return const Icon(Icons.group_outlined);
-                    //   }
-                    //   if (state.privacyPost == 3) {
-                    //     return const Icon(Icons.lock_outline_rounded);
-                    //   }
-                    //   return const SizedBox();
-                    // }),
-                    SizedBox(width: 5.0),
-                    // BlocBuilder<PostBloc, PostState>(builder: (_, state) {
-                    //   if (state.privacyPost == 1) {
-                    //     return const TextCustom(
-                    //         text: 'Todos pueden comentar', fontSize: 16);
-                    //   }
-                    //   if (state.privacyPost == 2) {
-                    //     return const TextCustom(
-                    //         text: 'Solo seguidores', fontSize: 16);
-                    //   }
-                    //   if (state.privacyPost == 3) {
-                    //     return const TextCustom(
-                    //         text: 'Nadie', fontSize: 16);
-                    //   }
-                    //   return const SizedBox();
-                    // }),
-                  ],
-                ),
-              ),
               const Divider(),
               const SizedBox(height: 5.0),
               SizedBox(
@@ -297,33 +260,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         splashRadius: 20,
                         onPressed: () {
                           selectVideo();
-                          // AppPermission()
-                          //     .permissionAccessGalleryMultiplesImagesNewPost(
-                          //   await Permission.storage.request(),
-                          //   context,
-                          // );
                         },
                         icon: SvgPicture.asset('assets/svg/gallery.svg')),
                     IconButton(
                         splashRadius: 20,
                         onPressed: () {
                           selectImage();
-                          // AppPermission()
-                          //     .permissionAccessGalleryOrCameraForNewPost(
-                          //   await Permission.camera.request(),
-                          //   context,
-                          //   ImageSource.camera,
-                          // );
                         },
                         icon: SvgPicture.asset('assets/svg/camera.svg')),
-                    IconButton(
-                        splashRadius: 20,
-                        onPressed: () {},
-                        icon: SvgPicture.asset('assets/svg/gif.svg')),
-                    IconButton(
-                        splashRadius: 20,
-                        onPressed: () {},
-                        icon: SvgPicture.asset('assets/svg/location.svg')),
                   ],
                 ),
               ),
@@ -339,9 +283,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       IconButton(
           splashRadius: 20,
-          // onPressed: () => Navigator.pushAndRemoveUntil(
-          //     context, routeSlide(page: const HomePage()), (_) => false),
-          onPressed: () {},
+          onPressed: () {
+            postCtrl.descriptionC.text = '';
+            postCtrl.imageFileSelected.clear();
+          },
           icon: const Icon(Icons.close_rounded)),
       GetBuilder<PostCtrl>(builder: (postCtrl) {
         return TextButton(
@@ -352,12 +297,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0))),
             onPressed: () {
-              // List<File> posts = [];
-              // postCtrl.imageFileSelected
-              //     .map((e) => e.forEach((key, value) {
-              //           posts.add(value);
-              //         }))
-              //     .toList();
               if (_keyForm.currentState!.validate()) {
                 if (postCtrl.imageFileSelected.isNotEmpty) {
                   postCtrl.addPost(
@@ -373,7 +312,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               }
             },
             child: const TextCustom(
-              text: 'publishing',
+              text: 'public',
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,

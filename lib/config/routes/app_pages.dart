@@ -1,7 +1,9 @@
 
 import 'package:get/get.dart';
+import 'package:social_app/features/view/chat/widgets/contacts_list.dart';
 import 'package:social_app/features/view/home/home_screens/likes_screen.dart';
 import 'package:social_app/features/view/home/home_screens/post_comments_screen.dart';
+import 'package:social_app/features/view/profile/profile_screen/account_profile_page.dart';
 
 import '../../features/view/auth/auth_screens/signin_screen.dart';
 import '../../features/view/auth/auth_screens/signup_screen.dart';
@@ -53,13 +55,23 @@ class AppPages {
       transition: Transition.fadeIn,
     ),
     GetPage(
-      name: _Paths.POST_LIKES,
+      name: _Paths.LIKES,
       page: () => LikesScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.POST_COMMENTS,
       page: () => const PostCommentsScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.CONTACTS_LIST,
+      page: () => const ContactsList(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT_PROFILE,
+      page: () => const AccountProfilePage(),
       transition: Transition.fadeIn,
     ),
   ];

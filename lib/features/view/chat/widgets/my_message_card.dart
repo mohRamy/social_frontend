@@ -1,50 +1,50 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:social_app/controller/user_ctrl.dart';
 import 'package:swipe_to/swipe_to.dart';
 
-import '../../../../core/enums/message_enum.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/dimensions.dart';
+import '../../../data/models/chat_model.dart';
 import 'display_text_image_gif.dart';
 
 class MyMessageCard extends StatelessWidget {
-  final String message;
+  final Msg msg;
   final String date;
-  final MessageEnum type;
   final VoidCallback onLeftSwipe;
-  final String repliedText;
-  final String username;
-  final MessageEnum repliedMessageType;
+  final RepliedMsg repliedMsg;
   final bool isSeen;
 
   const MyMessageCard({
     Key? key,
-    required this.message,
+    required this.msg,
     required this.date,
-    required this.type,
     required this.onLeftSwipe,
-    required this.repliedText,
-    required this.username,
-    required this.repliedMessageType,
+    required this.repliedMsg,
     required this.isSeen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isReplying = repliedText.isNotEmpty;
+    String message = msg.message!;
+    String type = msg.type!;
+    String repliedMessage = repliedMsg.repliedMessage!;
+    String repliedType = repliedMsg.type!;
+    bool isReplying = repliedMsg.repliedMessage!.isNotEmpty;
     String typeIcon() {
       String contactMsg;
-      switch (repliedMessageType) {
-        case MessageEnum.image:
+      switch (repliedMsg.type) {
+        case 'image':
           contactMsg = '📷 Photo';
           break;
-        case MessageEnum.video:
+        case 'video':
           contactMsg = '📸 Video';
           break;
-        case MessageEnum.audio:
+        case 'audio':
           contactMsg = '🎵 Audio';
           break;
-        case MessageEnum.gif:
+        case 'gif':
           contactMsg = 'GIF';
           break;
         default:
@@ -59,17 +59,17 @@ class MyMessageCard extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minWidth: type == MessageEnum.text ? 130 : 200,
+              minWidth: type == 'text' ? 130 : 200,
               maxWidth: 270,
             ),
             child: Card(
               elevation: 1,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
-              color: AppColors.bgBlackColor,
+              color: AppColors.chatBoxMe,
               margin: EdgeInsets.symmetric(
                   horizontal: Dimensions.height15, vertical: Dimensions.height10 - 5),
-              child: type == MessageEnum.text || type == MessageEnum.audio
+              child: type == 'text' || type == 'audio'
                   ? Stack(
                       children: [
                         Padding(
@@ -86,9 +86,9 @@ class MyMessageCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 isReplying
-                                    ? repliedMessageType == MessageEnum.text ||
-                                            repliedMessageType ==
-                                                MessageEnum.audio
+                                    ? repliedMsg.type == 'text' ||
+                                            repliedMsg.type ==
+                                                'audio'
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class MyMessageCard extends StatelessWidget {
                                                     Dimensions.height10 - 5),
                                                 decoration: BoxDecoration(
                                                   color: AppColors
-                                                      .bgBlackColor
+                                                      .blackColor
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
@@ -108,26 +108,20 @@ class MyMessageCard extends StatelessWidget {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    const Text("You",
-                                                      // username ==
-                                                      //         FirebaseAuth
-                                                      //             .instance
-                                                      //             .currentUser!
-                                                      //             .displayName
-                                                      //     ? username
-                                                      //     : 'You',
+                                                    Text(
+                                                      repliedMsg.repliedTo ==
+                                                              Get.find<UserCtrl>().user.name
+                                                          ? repliedMsg.repliedTo!
+                                                          : 'You',
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        color: Colors.black,
-                                                        // username ==
-                                                        //         FirebaseAuth
-                                                        //             .instance
-                                                        //             .currentUser!
-                                                        //             .displayName
-                                                        //     ? Colors.orange
-                                                        //     : AppColors
-                                                        //         .tabColor,
+                                                        color: 
+                                                        repliedMsg.repliedTo ==
+                                                              Get.find<UserCtrl>().user.name
+                                                            ? Colors.orange
+                                                            : AppColors
+                                                                .greyColor,
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -135,8 +129,8 @@ class MyMessageCard extends StatelessWidget {
                                                           Dimensions.height10 - 5,
                                                     ),
                                                     DisplayTextImageGIF(
-                                                      message: repliedText,
-                                                      type: repliedMessageType,
+                                                      message: repliedMessage,
+                                                      type: repliedType,
                                                     ),
                                                   ],
                                                 ),
@@ -158,7 +152,7 @@ class MyMessageCard extends StatelessWidget {
                                                 width: double.infinity,
                                                 decoration: BoxDecoration(
                                                   color: AppColors
-                                                      .bgBlackColor
+                                                      .blackColor
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
@@ -176,28 +170,22 @@ class MyMessageCard extends StatelessWidget {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Text( username,
-                                                            // username ==
-                                                            //         FirebaseAuth
-                                                            //             .instance
-                                                            //             .currentUser!
-                                                            //             .displayName
-                                                            //     ? 'You'
-                                                            //     : username,
-                                                            style: const TextStyle(
+                                                          Text( 
+                                                            repliedMsg.repliedTo ==
+                                                              Get.find<UserCtrl>().user.name
+                                                                ? 'You'
+                                                                : repliedMsg.repliedTo!,
+                                                            style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              color: Colors.black,
-                                                              // username ==
-                                                              //         FirebaseAuth
-                                                              //             .instance
-                                                              //             .currentUser!
-                                                              //             .displayName
-                                                              //     ? Colors
-                                                              //         .orange
-                                                              //     : AppColors
-                                                              //         .tabColor,
+                                                              color: 
+                                                              repliedMsg.repliedTo ==
+                                                              Get.find<UserCtrl>().user.name
+                                                                  ? Colors
+                                                                      .orange
+                                                                  : AppColors
+                                                                      .greyColor,
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -231,7 +219,7 @@ class MyMessageCard extends StatelessWidget {
                                                                 5,
                                                         child:
                                                             CachedNetworkImage(
-                                                          imageUrl: repliedText,
+                                                          imageUrl: repliedMessage,
                                                         ),
                                                       ),
                                                     ),
@@ -258,8 +246,7 @@ class MyMessageCard extends StatelessWidget {
                         Positioned(
                           bottom: Dimensions.height10 - 5,
                           right: Dimensions.height10 - 5,
-                          child: Row(
-                            children: [
+                          child: 
                               Text(
                                 date,
                                 style: TextStyle(
@@ -267,16 +254,14 @@ class MyMessageCard extends StatelessWidget {
                                   color: Colors.white60,
                                 ),
                               ),
-                              SizedBox(
-                                width: Dimensions.width10 - 5,
-                              ),
-                              Icon(
-                                isSeen ? Icons.done_all : Icons.done,
-                                size: Dimensions.iconSize16 + 4,
-                                color: isSeen ? Colors.blue : Colors.white60,
-                              ),
-                            ],
-                          ),
+                              
+                              // Icon(
+                              //   isSeen ? Icons.done_all : Icons.done,
+                              //   size: Dimensions.iconSize16 + 4,
+                              //   color: isSeen ? Colors.blue : Colors.white60,
+                              // ),
+                            
+                          
                         ),
                       ],
                     )

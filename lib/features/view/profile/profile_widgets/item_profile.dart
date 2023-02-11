@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/widgets/widgets.dart';
 
 class ItemProfile extends StatelessWidget {
-
   final double height;
   final String text;
   final IconData icon;
-  final Color colorText; 
   final Function() onPressed;
 
   const ItemProfile({
@@ -16,7 +15,6 @@ class ItemProfile extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.height = 45,
-    this.colorText = Colors.black
   }) : super(key: key);
 
   @override
@@ -24,16 +22,13 @@ class ItemProfile extends StatelessWidget {
     return SizedBox(
       height: height,
       width: double.infinity,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.only(left: 0)
-        ),
-        onPressed: onPressed,
+      child: InkWell(
+        onTap: onPressed,
         child: Row(
           children: [
-            Icon(icon, color: colorText),
+            Icon(icon),
             const SizedBox(width: 10.0),
-            TextCustom(text: text, fontSize: 17, color: colorText)
+            TextCustom(text: text, fontSize: 17)
           ],
         ),
       ),

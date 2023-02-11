@@ -1,30 +1,37 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/features/view/story/story_widgets/palette.dart';
+
+import 'package:social_app/core/utils/dimensions.dart';
+import 'package:social_app/features/view/home/home_widgets/palette.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String imageUrl;
   final bool isActive;
   final bool hasBorder;
+  final double sizeImage;
 
   const ProfileAvatar({
     Key? key,
     required this.imageUrl,
     this.isActive = false,
     this.hasBorder = false,
+    this.sizeImage = 45,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CircleAvatar(
-          radius: 20.0,
-          backgroundColor: Palette.facebookBlue,
-          child: CircleAvatar(
-            radius: hasBorder ? 17.0 : 20.0,
-            backgroundColor: Colors.grey[200],
-            backgroundImage: CachedNetworkImageProvider(imageUrl),
+        SizedBox(
+          width: sizeImage,
+          height: sizeImage,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(sizeImage),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(),
+            ),
           ),
         ),
         isActive

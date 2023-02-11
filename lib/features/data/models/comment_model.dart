@@ -1,16 +1,14 @@
 import 'dart:convert';
 
-import 'user_model.dart';
-
 class CommentModel {
   final String id;
-  final UserModel userData;
+  final String userId;
   final String comment;
-  final List<UserModel> likes;
+  final List<String> likes;
   final int time;
   CommentModel({
     required this.id,
-    required this.userData,
+    required this.userId,
     required this.comment,
     required this.likes,
     required this.time,
@@ -19,9 +17,9 @@ class CommentModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'userData': userData.toMap(),
+      'userId': userId,
       'comment': comment,
-      'likes': likes.map((x) => x.toMap()).toList(),
+      'likes': likes,
       'time': time,
     };
   }
@@ -29,9 +27,9 @@ class CommentModel {
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
       id: map['_id'] ?? '',
-      userData: UserModel.fromMap(map['userData']),
+      userId: map['userId']??'',
       comment: map['comment'] ?? '',
-      likes: List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
+      likes: List<String>.from(map['likes']??[]),
       time: map['time']?.toInt() ?? 0,
     );
   }
@@ -42,14 +40,14 @@ class CommentModel {
 
   CommentModel copyWith({
     String? id,
-    UserModel? userData,
+    String? userId,
     String? comment,
-    List<UserModel>? likes,
+    List<String>? likes,
     int? time,
   }) {
     return CommentModel(
       id: id ?? this.id,
-      userData: userData ?? this.userData,
+      userId: userId ?? this.userId,
       comment: comment ?? this.comment,
       likes: likes ?? this.likes,
       time: time ?? this.time,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/features/view/auth/auth_screens/signin_screen.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -13,6 +14,7 @@ import '../auth_widgets/text_custom.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/utils/components/components.dart';
 import '../../../../core/widgets/custom_loader.dart';
+import '../auth_widgets/text_field_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -68,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgBlackColor,
+      backgroundColor: Colors.white,
       body: GetBuilder<AuthCtrl>(builder: (authCtrl) {
         return !authCtrl.isLoading
             ? SingleChildScrollView(
@@ -102,7 +104,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       right: 0.0,
                       child: GestureDetector(
                         onTap: () {
-                          
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -115,7 +116,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                     actions: <Widget>[
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
                                           GestureDetector(
                                             onTap: () async {
@@ -188,23 +190,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: photo != null
                             ? CircleAvatar(
                                 radius: Dimensions.radius45 + 20,
-                                backgroundColor: Colors.white60,
+                                backgroundColor: Colors.grey[700],
                                 backgroundImage: FileImage(photo!),
                               )
                             : CircleAvatar(
                                 radius: Dimensions.radius45 + 20,
-                                backgroundColor: Colors.white60,
+                                backgroundColor: Colors.grey.withOpacity(0.4),
                                 child: Icon(
                                   Icons.camera_alt_rounded,
                                   color: Colors.black45,
-                                  size: Dimensions.iconSize24,
+                                  size: Dimensions.iconSize24 + 10,
                                 ),
                               ),
                       ),
                     ),
                     Positioned(
                       top: 320,
-                      child: _TextFieldCustom(
+                      child: TextFieldAuthCustom(
                         controller: authCtrl.nameUC,
                         label: 'Full Name',
                         isPass: false,
@@ -212,28 +214,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Positioned(
                       top: 390,
-                      child: _TextFieldCustom(
+                      child: TextFieldAuthCustom(
                         controller: authCtrl.emailUC,
                         label: 'Email',
                         isPass: false,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ),
                     Positioned(
                       top: 460,
-                      child: _TextFieldCustom(
-                        controller: authCtrl.passwordUC,
-                        label: 'Password',
-                        isPass: true,
-                      ),
+                      child: GetBuilder<AuthCtrl>(builder: (authCtrl) {
+                        return TextFieldAuthCustom(
+                          controller: authCtrl.passwordUC,
+                          label: 'Password',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              authCtrl.changeObsure();
+                            },
+                            child: Icon(
+                              authCtrl.isObscure
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          isPass: authCtrl.isObscure,
+                        );
+                      }),
                     ),
                     Positioned(
                       top: 550,
                       left: 15,
                       child: TextButton(
                         onPressed: () => _registration(authCtrl),
-                        child: const CustomText(
+                        child: CustomText(
                           text: 'Sign Up',
-                          color: Colors.white,
+                          color: Colors.grey[700]!,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
@@ -270,38 +286,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-class _TextFieldCustom extends StatelessWidget {
-  final String label;
-  final bool isPass;
-  final TextEditingController controller;
 
-  const _TextFieldCustom({
-    Key? key,
-    required this.label,
-    required this.isPass,
-    required this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: SizedBox(
-        width: Dimensions.screenWidth * 0.9,
-        child: TextField(
-          controller: controller,
-          obscureText: isPass,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(color: Colors.white),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

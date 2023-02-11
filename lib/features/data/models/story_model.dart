@@ -9,7 +9,7 @@ class StoryModel {
   UserModel userData;
   DateTime createdAt;
   List<Stories> stories;
-  List<UserModel> likes;
+  List<String> likes;
   List<CommentModel> comments;
 
   StoryModel({
@@ -27,7 +27,7 @@ class StoryModel {
     userData: UserModel.fromMap(map['userData']),
     createdAt: DateTime.parse(map["createdAt"]),
     stories : List<Stories>.from(map['stories']?.map((x) => Stories.fromJson(x))??[]),
-    likes : List<UserModel>.from(map['likes']?.map((x) => UserModel.fromMap(x))??[]),
+    likes : List<String>.from(map['likes']),
     comments: List<CommentModel>.from(map['comments']?.map((x) => CommentModel.fromMap(x))??[]),
     );
   }
@@ -37,8 +37,8 @@ class StoryModel {
       'id': id,
       'userData': userData.toMap(),
       'comments': comments,
-      'likes': likes.map((x) => x.toMap()).toList(),
-      'createdAt': createdAt.toIso8601String(),
+      'likes': likes,
+      'createdAt': createdAt,
       'stories': stories.map((v) => v.toJson()).toList(),
 
     };
@@ -66,6 +66,4 @@ class Stories {
     data['type'] = type;
     return data;
   }
-
-  
 }

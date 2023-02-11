@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:social_app/core/utils/app_colors.dart';
+import '../../../../config/routes/app_pages.dart';
 import '../../../../core/utils/dimensions.dart';
 
 import '../search_ctrl/search_ctrl.dart';
@@ -13,10 +15,8 @@ class SearchScreen extends GetView<SearchCtrl> {
   Widget build(BuildContext context) {
     controller.users = [];
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
-          child: Column(
-            children: [
+          child: Column(children: [
         GetBuilder<SearchCtrl>(builder: (searchCtrl) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -32,11 +32,12 @@ class SearchScreen extends GetView<SearchCtrl> {
                 onChanged: (val) {
                   searchCtrl.changeSearchStatus(val);
                 },
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Users ...",
-                    hintStyle: GoogleFonts.roboto(fontSize: 17),
-                    suffixIcon: const Icon(Icons.search_rounded)),
+                    hintStyle: GoogleFonts.roboto(fontSize: 17, color: Colors.grey[700]),
+                    suffixIcon: Icon(Icons.search_rounded, color: AppColors.primary,)),
               ),
             ),
           );
@@ -45,7 +46,7 @@ class SearchScreen extends GetView<SearchCtrl> {
         const SizedBox(height: 10.0),
 
         GetBuilder<SearchCtrl>(
-          builder: (controller) => controller.users.isEmpty
+          builder: (searchCtrl) => searchCtrl.users.isEmpty
               ? Container()
               : MediaQuery.removePadding(
                   removeTop: true,
@@ -56,21 +57,17 @@ class SearchScreen extends GetView<SearchCtrl> {
                         ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.users.length,
+                          itemCount: searchCtrl.users.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                //   Get.toNamed(
-                                //     Routes.RATING_PRODUCT,
-                                //       arguments: {
-                                //         AppString.ARGUMENT_PRODUCT:
-                                //             controller.products[index],
-                                //         AppString.ARGUMENT_RATINGS:
-                                //             controller.products[index].rating,
-                                //       });
+                                Get.toNamed(
+                                  Routes.PROFILE,
+                                  arguments: searchCtrl.users[index].id,
+                                );
                               },
                               child: SearchedProduct(
-                                user: controller.users[index],
+                                user: searchCtrl.users[index],
                               ),
                             );
                           },

@@ -6,60 +6,107 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
+
 import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/features/view/home/home_screens/post_comments_screen.dart';
-import 'package:social_app/features/view/story/story_widgets/list_view_story.dart';
+import 'package:social_app/config/themes/theme_services.dart';
+import 'package:social_app/core/utils/app_strings.dart';
+import 'package:social_app/features/view/chat/controller/chat_ctrl.dart';
+import 'package:social_app/features/view/home/home_screens/view_story_page.dart';
+import 'package:social_app/core/displaies/display_image_video_card.dart';
+
 import '../../../../controller/user_ctrl.dart';
-import '../../../../core/utils/dimensions.dart';
-
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/dimensions.dart';
 import '../../../../core/widgets/expandable_text_widget.dart';
-import '../home_ctrl/home_ctrl.dart';
-import '../../../data/models/post_model.dart';
-
 import '../../../../core/widgets/widgets.dart';
-import '../home_widgets/display_text_image_video.dart';
+import '../../../data/models/chat_model.dart';
+import '../../../data/models/post_model.dart';
+import '../../../data/models/story_model.dart';
+import '../../../data/models/user_model.dart';
+import '../../auth/auth_ctrl/auth_ctrl.dart';
+import '../home_ctrl/home_ctrl.dart';
+import '../home_widgets/palette.dart';
+import '../home_widgets/profile_avatar.dart';
+import 'add_story_page.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadResources() async {
     await Get.find<HomeCtrl>().fetchAllPosts();
     await Get.find<HomeCtrl>().fetchAllStories();
   }
 
+  late List<AssetEntity> mediaList = [];
+
+  @override
+  void initState() {
+    _assetImagesDevice();
+    super.initState();
+  }
+
+  _assetImagesDevice() async {
+    var result = await PhotoManager.requestPermissionExtend();
+    if (result.isAuth) {
+      List<AssetPathEntity> albums =
+          await PhotoManager.getAssetPathList(onlyAll: true);
+
+      if (albums.isNotEmpty) {
+        List<AssetEntity> photos =
+            await albums[0].getAssetListPaged(page: 0, size: 90);
+
+        setState(() => mediaList = photos);
+      }
+    } else {
+      PhotoManager.openSetting();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: TextCustom(
-          text: 'Ramy social',
+          text: AppString.APP_NAME,
           fontWeight: FontWeight.w600,
-          fontSize: 22,
-          color: AppColors.bgColor,
+          fontSize: Dimensions.font20,
+          
           isTitle: true,
         ),
         elevation: 0,
         actions: [
           IconButton(
               splashRadius: 20,
-              onPressed: () {},
-              // onPressed:()=> Navigator.pushAndRemoveUntil(context, routeSlide(page: const AddPostPage()), (_) => false);
-              icon: SvgPicture.asset('assets/svg/add_rounded.svg', height: 32)),
+              onPressed: () {
+                ModeTheme().changeTheme();
+              },
+              icon: Icon(
+                  Get.isDarkMode
+                      ? Icons.wb_sunny_outlined
+                      : Icons.nightlight_round_outlined,
+                  color: context.theme.dividerColor)),
           IconButton(
               splashRadius: 20,
-              onPressed: () {},
-              // onPressed: () => Navigator.pushAndRemoveUntil(context, routeSlide(page: const NotificationsPage()), (_) => false),
-              icon: SvgPicture.asset('assets/svg/notification-icon.svg',
-                  height: 26)),
-          IconButton(
-              splashRadius: 20,
-              onPressed: () {},
-              // onPressed: () => Navigator.push(context, routeSlide(page: const ListMessagesPage())),
-              icon: SvgPicture.asset('assets/svg/chat-icon.svg', height: 24)),
+              onPressed: () async {
+                if (Get.find<ChatCtrl>().chatContacts.contents != null) {
+                  ChatModel chatModel = Get.find<ChatCtrl>().chatContacts;
+                  List<UserModel> usersData = [];
+                  for (var i = 0; i < chatModel.contents!.length; i++) {
+                    usersData.add(await Get.find<AuthCtrl>()
+                        .fetchUserData(chatModel.contents![i].recieverId!));
+                  }
+                  Get.toNamed(Routes.CONTACTS_LIST, arguments: usersData);
+                }
+              },
+              icon: SvgPicture.asset('assets/svg/chat-icon.svg', height: 24, color: context.theme.dividerColor,)),
         ],
       ),
       body: GetBuilder<HomeCtrl>(builder: (homeCtrl) {
@@ -71,29 +118,29 @@ class HomeScreen extends StatelessWidget {
             child: ListView(
               physics: const BouncingScrollPhysics(),
               children: [
-                const ListViewStory(),
+                _ListViewStories(mediaList: mediaList),
                 const SizedBox(height: 5.0),
                 homeCtrl.posts.isNotEmpty
                     ? !homeCtrl.isLoading
                         ? const _ListViewPosts()
-                        : Expanded(
-                            child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: 10,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: const [
-                                    CustomShimmer(),
-                                    SizedBox(height: 10.0),
-                                    CustomShimmer(),
-                                    SizedBox(height: 10.0),
-                                  ],
-                                );
-                              },
-                            ),
-                          )
-                    : _ListWithoutPosts(),
+                        : _ListWithoutPosts()
+                    : Expanded(
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: const [
+                                CustomShimmer(),
+                                SizedBox(height: 10.0),
+                                CustomShimmer(),
+                                SizedBox(height: 10.0),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
               ],
             ),
           ),
@@ -103,12 +150,188 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _ListViewPosts extends StatefulWidget {
-  // final int index;
+class _ListViewStories extends StatelessWidget {
+  final List<AssetEntity> mediaList;
+  const _ListViewStories({
+    Key? key,
+    required this.mediaList,
+  }) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    HomeCtrl homeCtrl = Get.find<HomeCtrl>();
+    UserCtrl userCtrl = Get.find<UserCtrl>();
+    return Container(
+      padding: const EdgeInsets.only(left: 10.0),
+      height: 200.0,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          InkWell(
+            onTap: () {
+              Get.to(
+                const AddStoryScreen(),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      width: 110,
+                      height: double.infinity,
+                      child: GridView.builder(
+                        itemCount: 4,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                          childAspectRatio: 4 / 7,
+                        ),
+                        itemBuilder: (context, i) {
+                          return FutureBuilder(
+                            future: mediaList.isEmpty
+                                ? Future.sync(() => null)
+                                : mediaList[i].thumbnailDataWithSize(
+                                    const ThumbnailSize(110, 110),
+                                  ),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return mediaList.isNotEmpty
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: MemoryImage(snapshot.data!),
+                                          ),
+                                        ),
+                                      )
+                                    : Container();
+                              }
+                              return const SizedBox();
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: double.infinity,
+                      width: 110.0,
+                      decoration: BoxDecoration(
+                        gradient: Palette.storyGradient,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    Positioned(
+                      top: 8.0,
+                      left: 8.0,
+                      child: ProfileAvatar(
+                        imageUrl: userCtrl.user.photo,
+                        hasBorder: false,
+                      ),
+                    ),
+                    const Positioned(
+                      bottom: 8.0,
+                      left: 8.0,
+                      right: 8.0,
+                      child: Text(
+                        "Add Story",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          homeCtrl.stories.isNotEmpty
+              ? !homeCtrl.isLoading
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      reverse: true,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 8.0,
+                      ),
+                      itemCount: homeCtrl.stories.length,
+                      itemBuilder: (context, index) {
+                        final StoryModel storyData = homeCtrl.stories[index];
+                        return SizedBox(
+                          width: 110,
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                ViewStoryScreen(
+                                  story: storyData,
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    child: DisplayImageVideoCard(
+                                      file: storyData.stories[0].story!,
+                                      type: storyData.stories[0].type!,
+                                      isOut: true,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      gradient: Palette.storyGradient,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 8.0,
+                                    left: 8.0,
+                                    child: ProfileAvatar(
+                                      imageUrl: storyData.userData.photo,
+                                      hasBorder: false,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 8.0,
+                                    left: 8.0,
+                                    right: 8.0,
+                                    child: TextCustom(
+                                      text: storyData.userData.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : Container()
+              : Container(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ListViewPosts extends StatefulWidget {
   const _ListViewPosts({
     Key? key,
-    // required this.index,
   }) : super(key: key);
 
   @override
@@ -116,26 +339,10 @@ class _ListViewPosts extends StatefulWidget {
 }
 
 class _ListViewPostsState extends State<_ListViewPosts> {
-  PageController pageController = PageController(viewportFraction: 0.85);
-  var _currPageValue = 0.0;
+  HomeCtrl homeCtrl = Get.find<HomeCtrl>();
+  UserCtrl userCtrl = Get.find<UserCtrl>();
 
   bool isLike = false;
-
-  @override
-  void initState() {
-    super.initState();
-    pageController.addListener(() {
-      setState(() {
-        _currPageValue = pageController.page!;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,99 +365,94 @@ class _ListViewPostsState extends State<_ListViewPosts> {
       return "just now";
     }
 
-    return GetBuilder<HomeCtrl>(builder: (homeCtrl) {
-      return ListView.builder(
-        reverse: true,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: homeCtrl.posts.length,
-        itemBuilder: (context, index) {
-          PostModel postData = homeCtrl.posts[index];
-          List<Posts> posts = postData.posts!;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Card(
-              elevation: 4,
-              margin: const EdgeInsets.only(bottom: 5.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                      Get.toNamed(
-                                        Routes.PROFILE,
-                                        arguments: postData.userData!.id,
-                                      );
-                                    },
-                                  
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            postData.userData!.photo),
-                                      ),
-                                      const SizedBox(width: 10.0),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextCustom(
-                                            text: postData.userData!.name,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          TextCustom(
-                                            text: timeAgoCustom(
-                                              DateTime
-                                                  .fromMillisecondsSinceEpoch(
-                                                postData.time!,
-                                              ),
+    return ListView.builder(
+      reverse: true,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: homeCtrl.posts.length,
+      itemBuilder: (context, index) {
+        PostModel postData = homeCtrl.posts[index];
+        List<Posts> posts = postData.posts!;
+        bool meLike = postData.likes!.contains(Get.find<UserCtrl>().user.id);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Card(
+            elevation: 4,
+            margin: const EdgeInsets.only(bottom: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.PROFILE,
+                                    arguments: postData.userData!.id,
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    ProfileAvatar(
+                                      imageUrl: postData.userData!.photo,
+                                    ),
+                                    const SizedBox(width: 10.0),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextCustom(
+                                          text: postData.userData!.name,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        SizedBox(height: Dimensions.height10 - 5),
+                                        TextCustom(
+                                          text: timeAgoCustom(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                              postData.time!,
                                             ),
-                                            fontSize: 13,
                                           ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                                          fontSize: 13,
+
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.more_vert_rounded,
-                              size: 25,
-                            ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.more_vert_rounded,
+                            size: 25,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ExpandableTextWidget(
-                      text: postData.description!,
+                        ),
+                      ],
                     ),
-                    // TextCustom(
-                    //   text: postData.description!,
-                    //   fontSize: 15,
-                    // ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ExpandableTextWidget(
+                    text: postData.description!,
                   ),
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      SizedBox(
-                        height: 400,
-                        child: CarouselSlider.builder(
+                ),
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    SizedBox(
+                      height: 400,
+                      child: CarouselSlider.builder(
                           itemCount: postData.posts!.length,
                           options: CarouselOptions(
                             viewportFraction: 1.0,
@@ -260,171 +462,168 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                             autoPlay: false,
                           ),
                           itemBuilder: (context, i, realIndex) =>
-                              
-                              DisplayTextImageVideoPost(
-                            post: posts[index].post!,
-                            type: posts[index].type!,
-                          )
-                        ),
+                              DisplayImageVideoCard(
+                                file: posts[i].post!,
+                                type: posts[i].type!,
+                                isOut: false,
+                              )),
+                    ),
+                    Positioned(
+                      top: Dimensions.height10,
+                      left: Dimensions.height10,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          postData.posts!.length > 1
+                              ? const Icon(
+                                  Icons.layers_outlined,
+                                  size: 30,
+                                )
+                              : Container(),
+                        ],
                       ),
-                      Positioned(
-                        top: Dimensions.height10,
-                        left: Dimensions.height10,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            postData.posts!.length > 1
-                                ? const Icon(
-                                    Icons.layers_outlined,
-                                    size: 30,
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          height: 45,
-                          width: Dimensions.screenWidth * .9,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: BackdropFilter(
-                              filter:
-                                  ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                color: Colors.white.withOpacity(0.2),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            GetBuilder<HomeCtrl>(
-                                                builder: (homeCtrl) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isLike = !isLike;
-                                                    if (isLike) {
-                                                      homeCtrl.postLike(
-                                                        postData.id!,
-                                                        1,
-                                                      );
-                                                    } else {
-                                                      homeCtrl.postLike(
-                                                        postData.id!,
-                                                        0,
-                                                      );
-                                                    }
-                                                  });
-                                                },
-                                                child: isLike
-                                                    ? const Icon(
-                                                        Icons.favorite_outlined,
-                                                        color: Colors.red,
-                                                      )
-                                                    : const Icon(
-                                                        Icons
-                                                            .favorite_border_outlined,
-                                                        color: Colors.white,
-                                                      ),
-                                              );
-                                            }),
-                                            const SizedBox(width: 8.0),
-                                            InkWell(
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        height: 45,
+                        width: Dimensions.screenWidth * .9,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              color: Colors.white.withOpacity(0.2),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          InkWell(
                                               onTap: () {
-                                                if (postData
-                                                    .likes!.isNotEmpty) {
-                                                  Get.toNamed(
-                                                    Routes.POST_LIKES,
-                                                    arguments: postData.likes,
+                                                setState(() {
+                                                  isLike = !isLike;
+                                                });
+                                                  homeCtrl.postLike(
+                                                    postData.id!,
                                                   );
-                                                }
+                                                
                                               },
-                                              child: TextCustom(
-                                                text: postData.likes!.isEmpty
-                                                    ? "Like"
-                                                    : postData.likes!.length
-                                                        .toString(),
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
+                                              child: Icon(
+                                                (meLike || isLike)
+                                                    ? Icons.favorite_outlined
+                                                    : Icons
+                                                        .favorite_border_outlined,
+                                                color: (meLike || isLike)
+                                                    ? Colors.red
+                                                    : Colors.white,
+                                              )),
+                                          const SizedBox(width: 8.0),
+                                          InkWell(
+                                            onTap: () async {
+                                              if (postData.likes!.isNotEmpty) {
+                                                List<UserModel> userLikes = [];
+                                                for (var i = 0;
+                                                    i < postData.likes!.length;
+                                                    i++) {
+                                                  userLikes.add(
+                                                      await Get.find<AuthCtrl>()
+                                                          .fetchUserData(
+                                                              postData
+                                                                  .likes![i]));
+                                                }
+                                                Get.toNamed(
+                                                  Routes.LIKES,
+                                                  arguments: userLikes,
+                                                );
+                                              }
+                                            },
+                                            child: TextCustom(
+                                              text: postData.likes!.isEmpty
+                                                  ? "Like"
+                                                  : postData.likes!.length
+                                                      .toString(),
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(width: 20.0),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.find<HomeCtrl>()
+                                              .fetchAllPostComment(
+                                                  postData.id!);
+                                          Get.toNamed(
+                                            Routes.POST_COMMENTS,
+                                            arguments: postData.id,
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svg/message-icon.svg',
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(width: 5.0),
+                                            const TextCustom(
+                                              text: "Comment",
+                                              fontSize: 16,
+                                              color: Colors.white,
                                             )
                                           ],
                                         ),
-                                        const SizedBox(width: 20.0),
-                                        TextButton(
-                                          onPressed: () {
-                                            Get.toNamed(
-                                              Routes.POST_COMMENTS,
-                                              arguments: postData.id,
-                                            );
-                                          },
-                                          child: Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/svg/message-icon.svg',
-                                                color: Colors.white,
-                                              ),
-                                              const SizedBox(width: 5.0),
-                                              const TextCustom(
-                                                text: "Comment",
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              )
-                                            ],
-                                          ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () async {
+                                          await Share.share(
+                                              postData.posts![0].post!);
+                                        },
+                                        icon: SvgPicture.asset(
+                                          'assets/svg/send-icon.svg',
+                                          height: 24,
+                                          color: Colors.white,
                                         ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          onPressed: () async {
-                                            await Share.share(
-                                                postData.posts![0].post!);
-                                          },
-                                          icon: SvgPicture.asset(
-                                            'assets/svg/send-icon.svg',
-                                            height: 24,
-                                            color: Colors.white,
-                                          ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () async {
+                                          await GallerySaver.saveImage(
+                                              postData.posts![0].post!);
+                                        },
+                                        icon: const Icon(
+                                          Icons.bookmark_border_rounded,
+                                          size: 27,
+                                          color: Colors.white,
                                         ),
-                                        IconButton(
-                                          onPressed: () async {
-                                            await GallerySaver.saveImage(
-                                                postData.posts![0].post!);
-                                          },
-                                          icon: const Icon(
-                                            Icons.bookmark_border_rounded,
-                                            size: 27,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        },
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 }
 
