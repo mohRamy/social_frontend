@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/profile/profile_screen/account_profile_page.dart';
-import 'package:social_app/features/view/profile/profile_screen/change_password_page.dart';
-import 'package:social_app/features/view/profile/profile_screen/privacy_profile_page.dart';
-import 'package:social_app/features/view/profile/profile_screen/theme_profile_page.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../../../../controller/user_ctrl.dart';
+import 'change_password_page.dart';
+import 'privacy_profile_page.dart';
+import 'theme_profile_page.dart';
 import '../../../../core/utils/app_colors.dart';
 
 import '../../../../core/widgets/widgets.dart';
@@ -117,8 +116,8 @@ class SettingProfilePage extends StatelessWidget {
                 icon: Icons.logout_rounded,
                 // colorText: AppColors.primary,
                 onPressed: () {
-                  if (Get.find<AuthCtrl>().userLoggedIn()) {
-                    Get.find<AuthCtrl>().clearSharedData();
+                  if (Get.find<AuthController>().userLoggedIn()) {
+                    Get.find<AuthController>().clearSharedData();
                     Get.offNamed(Routes.SIGN_IN);
                   }
                 }),

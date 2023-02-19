@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../profile_ctrl/profile_ctrl.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../data/models/user_model.dart';
 
 class FollowingScreen extends StatefulWidget {
   const FollowingScreen({
@@ -25,16 +25,16 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: const TextCustom(
             text: 'Following', letterSpacing: .8, fontSize: 19),
         elevation: 0,
         leading: IconButton(
             splashRadius: 20,
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
+            onPressed: () => Get.back(),
+            icon: Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: Colors.black,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
             )),
       ),
       body: SafeArea(
@@ -42,11 +42,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             itemCount: usersId.length,
             itemBuilder: (context, i) {
-              return FutureBuilder<UserModel>(
-                  future: Get.find<AuthCtrl>().fetchUserData(usersId[i]),
+              return FutureBuilder<Auth>(
+                  future: Get.find<AuthController>().getUserData(usersId[i]),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      UserModel userData = snapshot.data!;
+                      Auth userData = snapshot.data!;
                       bool isFriend = Get.find<UserCtrl>()
                           .user
                           .following

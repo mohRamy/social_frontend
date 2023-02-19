@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/core/displaies/display_image_video_card.dart';
-import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
+import '../../../../core/displaies/display_image_video_card.dart';
+import '../profile_ctrl/profile_ctrl.dart';
 import '../../../../core/utils/dimensions.dart';
 import '../../../data/models/post_model.dart';
 

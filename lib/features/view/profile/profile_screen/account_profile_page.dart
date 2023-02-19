@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
-import 'package:social_app/core/picker/picker.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/core/widgets/custom_bottom_sheet.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../core/picker/picker.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../profile_ctrl/profile_ctrl.dart';
 import '../../../../core/utils/app_colors.dart';
 
 import '../../../../core/widgets/widgets.dart';
@@ -28,7 +28,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   late TextEditingController _phoneC;
   final _keyForm = GlobalKey<FormState>();
 
-  final UserModel userData = Get.arguments;
+  final Auth userData = Get.arguments;
 
   File? image;
 
@@ -128,21 +128,74 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                   ),
                   child: image != null
                       ? Image.file(image!, fit: BoxFit.cover)
-                      : userData.backgroundImage.isNotEmpty ?
-                      Image.network(
-                          userData.backgroundImage,
-                          fit: BoxFit.cover,
-                        )
-                        : Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXYE2NzC7cY66U6JRENpM0eVXn9JyOUJ5PVQ&usqp=CAU',
-                      fit: BoxFit.cover,
-                    ),
+                      : userData.backgroundImage.isNotEmpty
+                          ? Image.network(
+                              userData.backgroundImage,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXYE2NzC7cY66U6JRENpM0eVXn9JyOUJ5PVQ&usqp=CAU',
+                              fit: BoxFit.cover,
+                            ),
                 ),
                 InkWell(
                   onTap: () {
-                    bottomSheet(
-                      pickImageCamera,
-                      pickImageGallery,
+                    Get.bottomSheet(
+                      SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radius15),
+                            color: Get.isDarkMode ? Colors.black : Colors.white,
+                          ),
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 4,
+                          ),
+                          width: Dimensions.screenWidth,
+                          height: Dimensions.height10 * 15,
+                          child: Column(
+                            children: [
+                              Flexible(
+                                child: Container(
+                                  height: 6,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Get.isDarkMode
+                                        ? Colors.grey[600]
+                                        : Colors.grey[300],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              AppComponent.buildbottomsheet(
+                                icon: Icon(
+                                  Icons.camera,
+                                  color: AppColors.primary,
+                                ),
+                                label: "From camera",
+                                ontap: pickImageCamera,
+                              ),
+                              Divider(
+                                color: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                              AppComponent.buildbottomsheet(
+                                icon: Icon(
+                                  Icons.photo,
+                                  color: AppColors.primary,
+                                ),
+                                label: "From Gallery",
+                                ontap: pickImageGallery,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      elevation: 0.4,
                     );
                   },
                   child: Container(
@@ -159,9 +212,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                     height: Dimensions.height20,
                     width: Dimensions.screenWidth,
                     decoration: BoxDecoration(
-                        color: Get.isDarkMode ? AppColors.bgDarkColor : AppColors.bgLightColor,
-                        borderRadius:
-                            const BorderRadius.vertical(top: Radius.circular(20.0))),
+                        color: Get.isDarkMode
+                            ? AppColors.bgDarkColor
+                            : AppColors.bgLightColor,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(20.0))),
                   ),
                 ),
                 Positioned(
@@ -180,10 +235,63 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             onTap: () {
-                              bottomSheet(
-                                pickImageCameraP,
-                                pickImageGalleryP,
-                              );
+                              Get.bottomSheet(
+                      SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radius15),
+                            color: Get.isDarkMode ? Colors.black : Colors.white,
+                          ),
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 4,
+                          ),
+                          width: Dimensions.screenWidth,
+                          height: Dimensions.height10 * 15,
+                          child: Column(
+                            children: [
+                              Flexible(
+                                child: Container(
+                                  height: 6,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Get.isDarkMode
+                                        ? Colors.grey[600]
+                                        : Colors.grey[300],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              AppComponent.buildbottomsheet(
+                                icon: Icon(
+                                  Icons.camera,
+                                  color: AppColors.primary,
+                                ),
+                                label: "From camera",
+                                ontap: pickImageCameraP,
+                              ),
+                              Divider(
+                                color: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                              AppComponent.buildbottomsheet(
+                                icon: Icon(
+                                  Icons.photo,
+                                  color: AppColors.primary,
+                                ),
+                                label: "From Gallery",
+                                ontap: pickImageGalleryP,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      elevation: 0.4,
+                    );
                             },
                             child: Stack(
                               children: [

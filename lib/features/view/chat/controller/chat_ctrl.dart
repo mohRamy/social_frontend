@@ -5,12 +5,12 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:social_app/core/network/network_info.dart';
-import 'package:social_app/features/data/models/chat_model.dart';
-import 'package:social_app/features/data/models/group.dart';
+import '../../../../core/network/network_info.dart';
+import '../../../data/models/chat_model.dart';
+import '../../../data/models/group.dart';
 
-import '../../../../core/utils/components/components.dart';
-import '../../../../core/utils/constants/error_handling.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 import '../repo/chat_repo.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -134,7 +134,7 @@ class ChatCtrl extends GetxController {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     } else {
       try {
@@ -144,7 +144,7 @@ class ChatCtrl extends GetxController {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     }
   }
@@ -287,13 +287,22 @@ class ChatCtrl extends GetxController {
   // }
     
     void setChatMessageSeen(
-    String recieverUserId,
-    String messageId,
-  ) {
-    chatRepo.setChatMessageSeen(
-      recieverUserId,
-      messageId,
+    String recieverId,
+    // String messageId,
+  ) async {
+    try {
+      http.Response res = await chatRepo.setChatMessageSeen(
+      recieverId,
+      // messageId,
     );
+    stateHandle(
+      res: res, 
+      onSuccess: (){
+      AppComponent.showCustomSnackBar('Seen True');
+    });
+    } catch (e) {
+      AppComponent.showCustomSnackBar(e.toString());
+    }
   }
   }
 

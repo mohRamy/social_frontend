@@ -1,0 +1,62 @@
+import 'dart:convert';
+import 'package:social_app/features/home/domain/entities/post.dart';
+
+import '../../../auth/data/models/auth_model.dart';
+import '../../../data/models/comment_model.dart';
+
+class PostModel extends Post {
+  const PostModel({
+    required super.id,
+    required super.userData,
+    required super.userId,
+    required super.time,
+    required super.posts,
+    required super.likes,
+    required super.comments,
+    super.description,
+  });
+
+  factory PostModel.fromMap(Map<String, dynamic> map) {
+    return PostModel(
+      id: map['_id'] ?? map['id'],
+      userData: AuthModel.fromJson(map['userData']),
+      userId: map['userId'] ?? '',
+      time: map['time'] ?? 0,
+      posts: List<PostsModel>.from(
+          map['posts']?.map((x) => PostsModel.fromJson(x)) ?? []),
+      likes: List<String>.from(map['likes'] ?? []),
+      comments: List<CommentMode>.from(
+          map['comments']?.map((x) => CommentMode.fromMap(x)) ?? []),
+      description: map['description'] ?? "",
+    );
+  }
+
+  factory PostModel.fromJson(String source) =>
+      PostModel.fromMap(json.decode(source));
+}
+
+class PostsModel extends Posts {
+  const PostsModel({
+    required super.post,
+    required super.type,
+  });
+
+  factory PostsModel.fromMap(Map<String, dynamic> map) {
+    return PostsModel(
+      post: map['post'],
+      type: map['type'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['post'] = post;
+    data['type'] = type;
+    return data;
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory PostsModel.fromJson(String source) =>
+      PostsModel.fromMap(json.decode(source));
+}

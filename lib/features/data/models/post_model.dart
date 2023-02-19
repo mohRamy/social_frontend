@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+
+import '../../auth/data/models/auth_model.dart';
 import 'comment_model.dart';
 import 'user_model.dart';
 
@@ -84,23 +87,23 @@ import 'user_model.dart';
 
 class PostModel {
   String? _id;
-  UserModel? _userData;
+  Auth? _userData;
   String? _userId;
   int? _time;
   List<Posts>? _posts;
   List<String>? _likes;
-  List<CommentModel>? _comments;
+  List<CommentMode>? _comments;
   String? _description;
 
   PostModel(
       {
       String? id,
-      UserModel? userData,
+      Auth? userData,
       String? userId,
       int? time,
       List<Posts>? posts,
       List<String>? likes,
-      List<CommentModel>? comments,
+      List<CommentMode>? comments,
       String? description}) {
     if (id != null) {
       _id = id;
@@ -131,8 +134,8 @@ class PostModel {
 
   String? get id => _id;
   set id(String? id) => _id = id;
-  UserModel? get userData => _userData;
-  set userData(UserModel? userData) => _userData = userData;
+  Auth? get userData => _userData;
+  set userData(Auth? userData) => _userData = userData;
   String? get userId => _userId;
   set userId(String? userId) => _userId = userId;
   int? get time => _time;
@@ -141,20 +144,20 @@ class PostModel {
   set posts(List<Posts>? posts) => _posts = posts;
   List<String>? get likes => _likes;
   set likes(List<String>? likes) => _likes = likes;
-  List<CommentModel>? get comments => _comments;
-  set comments(List<CommentModel>? comments) => _comments = comments;
+  List<CommentMode>? get comments => _comments;
+  set comments(List<CommentMode>? comments) => _comments = comments;
   String? get description => _description;
   set description(String? description) => _description = description;
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
     id: map['_id']??map['id'],
-    userData: UserModel.fromMap(map['userData']),
+    userData: AuthModel.fromJson(map['userData']),
     userId: map['userId'] ?? '',
     time: map['time']??0,
     posts : List<Posts>.from(map['posts']?.map((x) => Posts.fromJson(x))??[]),
     likes : List<String>.from(map['likes']??[]),
-    comments: List<CommentModel>.from(map['comments']?.map((x) => CommentModel.fromMap(x))??[]),
+    comments: List<CommentMode>.from(map['comments']?.map((x) => CommentMode.fromMap(x))??[]),
     description: map['description']??"",
     );
   }

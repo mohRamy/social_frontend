@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/features/view/home/home_widgets/hero_image.dart';
+import '../../features/view/home/home_widgets/hero_image.dart';
 import '../enums/story_enum.dart';
 import '../utils/dimensions.dart';
 

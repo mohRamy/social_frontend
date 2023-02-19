@@ -4,7 +4,7 @@ class AppString {
   static const int APP_V = 1;
 
   //api
-  static const String BASE_URL = "http://192.168.177.79:8000";
+  static const String BASE_URL = "http://192.168.110.79:8000";
   //auth
   static const String SIGN_UP_URL = "$BASE_URL/api/signup";
   static const String SIGN_IN_URL = "$BASE_URL/api/signin";
@@ -39,10 +39,12 @@ class AppString {
   // message
   static const String MESSAGE_ADD_URL = "$BASE_URL/message/add-message";
   static const String CHAT_GET_URL = "$BASE_URL/chat/";
+  static const String MESSAGE_SEEN_URL = "$BASE_URL/message/seen-message";
+
 
 
   //token
-  static const String TOKEN_KEY = 'x-auth-token';
+  static const String TOKEN_KEY = "x-auth-token";
 
 
   
@@ -68,8 +70,8 @@ class AppString {
   //keys sharedPreference
   static const String CART_KEY = 'cashe-cart';
   static const String CART_HISTORY_KEY = 'cashe-cart-history';
-  static const String TOKEN = '';
-  static const String TYPE_KEY = 'type-key';
+  static const String token = '';
+  static const String typeKey = 'type-key';
   static const CACHED_POSTS = "cached_posts";
   static const CACHED_STORIES = "cached_stories";
 }

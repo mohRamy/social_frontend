@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-class CommentModel {
+class CommentMode {
   final String id;
   final String userId;
   final String comment;
   final List<String> likes;
   final int time;
-  CommentModel({
+  CommentMode({
     required this.id,
     required this.userId,
     required this.comment,
@@ -24,8 +24,8 @@ class CommentModel {
     };
   }
 
-  factory CommentModel.fromMap(Map<String, dynamic> map) {
-    return CommentModel(
+  factory CommentMode.fromMap(Map<String, dynamic> map) {
+    return CommentMode(
       id: map['_id'] ?? '',
       userId: map['userId']??'',
       comment: map['comment'] ?? '',
@@ -36,16 +36,16 @@ class CommentModel {
 
   String toJson() => json.encode(toMap());
 
-  factory CommentModel.fromJson(String source) => CommentModel.fromMap(json.decode(source));
+  factory CommentMode.fromJson(String source) => CommentMode.fromMap(json.decode(source));
 
-  CommentModel copyWith({
+  CommentMode copyWith({
     String? id,
     String? userId,
     String? comment,
     List<String>? likes,
     int? time,
   }) {
-    return CommentModel(
+    return CommentMode(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       comment: comment ?? this.comment,

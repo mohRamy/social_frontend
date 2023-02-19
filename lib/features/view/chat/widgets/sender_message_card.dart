@@ -2,8 +2,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/data/models/chat_model.dart';
+import '../../../../controller/user_ctrl.dart';
+import '../../../data/models/chat_model.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import '../../../../core/utils/app_colors.dart';

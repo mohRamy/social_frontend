@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:social_app/core/utils/dimensions.dart';
+import '../../../../core/utils/dimensions.dart';
 
 import '../../../../core/picker/picker.dart';
 import '../../../../core/utils/app_colors.dart';

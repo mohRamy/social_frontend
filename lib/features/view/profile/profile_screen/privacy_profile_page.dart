@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/core/utils/app_colors.dart';
-import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
+import '../../../../controller/user_ctrl.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../profile_ctrl/profile_ctrl.dart';
 
 import '../../../../core/widgets/widgets.dart';
 import '../profile_widgets/item_profile.dart';

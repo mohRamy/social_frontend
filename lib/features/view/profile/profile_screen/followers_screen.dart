@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/core/utils/app_colors.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/profile/profile_ctrl/profile_ctrl.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../profile_ctrl/profile_ctrl.dart';
 
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -26,7 +26,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           title: const TextCustom(
             text: 'Followers',
             letterSpacing: .8,
@@ -34,23 +34,23 @@ class _FollowersScreenState extends State<FollowersScreen> {
           ),
           elevation: 0,
           leading: IconButton(
-              splashRadius: 20,
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-              )),
+            splashRadius: 20,
+            onPressed: () => Get.back(),
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
+            )),
         ),
       body: SafeArea(
         child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             itemCount: usersId.length,
             itemBuilder: (context, i) {
-              return FutureBuilder<UserModel>(
-                  future: Get.find<AuthCtrl>().fetchUserData(usersId[i]),
+              return FutureBuilder<Auth>(
+                  future: Get.find<AuthController>().getUserData(usersId[i]),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      UserModel userData = snapshot.data!;
+                      Auth userData = snapshot.data!;
                       bool isFriend =
                           Get.find<UserCtrl>().user.following.contains(userData.id);
                       return InkWell(

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:social_app/core/network/api_constance.dart';
+import '../../../../core/enums/post_enum.dart';
 
 import '../../../../core/enums/story_enum.dart';
 import '../../../../core/utils/app_strings.dart';
@@ -10,24 +12,24 @@ import '../../../data/api/api_client.dart';
 import 'package:http/http.dart' as http;
 
 class HomeRepo {
-  final ApiClient apiClient;
+  final ApiClie apiClient;
   HomeRepo({
     required this.apiClient,
   });
 
   Future<http.Response> fetchAllPosts() async {
-    return await apiClient.getData(AppString.POST_GET_URL);
+    return await apiClient.getData(ApiConstance.getPost);
   }
 
   Future<http.Response> updatePost({
+    required String postId,
     required String description,
-    required String postUrl,
   }) async {
     return await apiClient.postData(
       AppString.POST_UPDATE_URL,
       jsonEncode({
-        "description": description,
-        "postUrl": postUrl,
+        "postId": postId,
+        "desc": description,
       }),
     );
   }
@@ -38,7 +40,7 @@ class HomeRepo {
     return await apiClient.postData(
       AppString.POST_DELETE_URL,
       jsonEncode({
-        "id": postId,
+        "postId": postId,
       }),
     );
   }

@@ -4,13 +4,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_app/core/utils/app_colors.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../home_ctrl/home_ctrl.dart';
 
 import '../../../../core/enums/story_enum.dart';
 import '../../../../core/picker/picker.dart';
-import '../../../../core/utils/components/components.dart';
+import '../../../../core/utils/app_component.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../core/displaies/display_file_story.dart';
 
@@ -148,7 +148,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                 );
                 setState(() {});
               } else {
-                Components.showCustomSnackBar('error');
+                AppComponent.showCustomSnackBar('error');
               }
             },
             child: TextCustom(

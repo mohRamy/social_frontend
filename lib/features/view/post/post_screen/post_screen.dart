@@ -7,11 +7,11 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import '../../home/home_widgets/profile_avatar.dart';
 import '../../../../controller/user_ctrl.dart';
 import '../../../../core/enums/post_enum.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/components/components.dart';
+import '../../../../core/utils/app_component.dart';
 import '../post_ctrl/post_ctrl.dart';
 import '../../../../core/displaies/display_file_post.dart';
 
@@ -298,7 +298,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     borderRadius: BorderRadius.circular(50.0))),
             onPressed: () {
               if (_keyForm.currentState!.validate()) {
-                if (postCtrl.imageFileSelected.isNotEmpty) {
                   postCtrl.addPost(
                     description: postCtrl.descriptionC.text,
                     posts: postCtrl.imageFileSelected,
@@ -306,9 +305,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   postCtrl.descriptionC.text = '';
                   postCtrl.imageFileSelected.clear();
                   setState(() {});
-                } else {
-                  Components.showCustomSnackBar('error');
-                }
               }
             },
             child: const TextCustom(

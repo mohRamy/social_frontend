@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:social_app/core/utils/app_strings.dart';
+import '../../../core/utils/app_strings.dart';
 
 import '../models/post_model.dart';
 

@@ -4,15 +4,16 @@ import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/data/models/user_model.dart';
+import 'package:social_app/features/auth/data/models/auth_model.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../controller/user_ctrl.dart';
 
 import '../../../../core/utils/app_strings.dart';
 import '../../../data/api/api_client.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepo {
-  final ApiClient apiClient;
+  final ApiClie apiClient;
   ProfileRepo({
     required this.apiClient,
   });
@@ -84,14 +85,14 @@ class ProfileRepo {
         ),
       );
       photoCloud = res.secureUrl;
-    }else{
+    } else {
       photoCloud = Get.find<UserCtrl>().user.photo;
     }
 
     String backgroundImageCloud = '';
     if (backgroundImage != null) {
       final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-  
+
       int random = Random().nextInt(1000);
 
       CloudinaryResponse res = await cloudinary.uploadFile(
@@ -101,17 +102,17 @@ class ProfileRepo {
         ),
       );
       backgroundImageCloud = res.secureUrl;
-    }else{
+    } else {
       backgroundImageCloud = Get.find<UserCtrl>().user.backgroundImage;
     }
 
-    UserModel userData = UserModel(
+    Auth userData = Auth(
       id: "",
       name: name,
       email: email,
       bio: bio,
-      followers: [],
-      following: [],
+      followers: const [],
+      following: const [],
       photo: photoCloud,
       backgroundImage: backgroundImageCloud,
       phone: phone,
@@ -121,9 +122,10 @@ class ProfileRepo {
       private: false,
       token: "",
     );
+    
     return await apiClient.postData(
       AppString.PROFILE_MODIFY_URL,
-      userData.toJson(),
+      jsonEncode(userData),
     );
   }
 
@@ -159,10 +161,8 @@ class ProfileRepo {
     );
   }
 
-  Future<http.Response> changePassword({
-    required String currentPassword, 
-    required String newPassword
-    }) async {
+  Future<http.Response> changePassword(
+      {required String currentPassword, required String newPassword}) async {
     return await apiClient.postData(
       AppString.PROFILE_CHAGNE_PASSWORD_URL,
       jsonEncode(

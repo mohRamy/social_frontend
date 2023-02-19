@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
-import '../utils/components/components.dart';
+
+import '../utils/app_component.dart';
 
 Future<File?> pickImageFromGallery() async {
   File? image;
@@ -12,7 +13,7 @@ Future<File?> pickImageFromGallery() async {
       image = File(pickedImage.path);
     }
   } catch (e) {
-    Components.showCustomSnackBar(e.toString());
+    AppComponent.showCustomSnackBar(e.toString());
   }
   return image;
 }
@@ -26,7 +27,7 @@ Future<File?> pickImageFromCamera() async {
       image = File(pickedImage.path);
     }
   } catch (e) {
-    Components.showCustomSnackBar(e.toString());
+    AppComponent.showCustomSnackBar(e.toString());
   }
   return image;
 }
@@ -40,7 +41,7 @@ Future<File?> pickVideoFromGallery() async {
       video = File(pickedVideo.path);
     }
   } catch (e) {
-    Components.showCustomSnackBar(e.toString());
+    AppComponent.showCustomSnackBar(e.toString());
   }
   return video;
 }
@@ -54,7 +55,7 @@ Future<File?> pickVideoFromCamera() async {
       video = File(pickedVideo.path);
     }
   } catch (e) {
-    Components.showCustomSnackBar(e.toString());
+    AppComponent.showCustomSnackBar(e.toString());
   }
   return video;
 }

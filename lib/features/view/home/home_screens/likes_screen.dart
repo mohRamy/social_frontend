@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../home_ctrl/home_ctrl.dart';
 
 import '../../../../core/widgets/widgets.dart';
 
@@ -44,12 +43,12 @@ class LikesScreen extends GetView<HomeCtrl> {
           children: [
             Expanded(
               child: GetBuilder<HomeCtrl>(builder: (homeCtrl) {
-                List<UserModel> users = Get.arguments;
+                List<Auth> users = Get.arguments;
                 return ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     itemCount: users.length,
                     itemBuilder: (context, i) {
-                      UserModel userData = users[i];
+                      Auth userData = users[i];
                       String timeAgoCustom(DateTime d) {
                         Duration diff = DateTime.now().difference(d);
                         if (diff.inDays > 365) {

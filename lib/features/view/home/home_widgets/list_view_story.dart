@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-import 'package:social_app/features/data/models/story_model.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
-import 'package:social_app/features/view/home/home_widgets/palette.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
-import 'package:social_app/core/displaies/display_image_video_card.dart';
+import '../../../data/models/story_model.dart';
+import '../home_ctrl/home_ctrl.dart';
+import 'palette.dart';
+import 'profile_avatar.dart';
+import '../../../../core/displaies/display_image_video_card.dart';
 
 import '../../../../controller/user_ctrl.dart';
 import '../../home/home_screens/add_story_page.dart';

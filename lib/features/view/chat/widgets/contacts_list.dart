@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/core/utils/app_colors.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/chat/screens/chat_screen.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../screens/chat_screen.dart';
+import '../../home/home_widgets/profile_avatar.dart';
 
 import '../../../data/models/user_model.dart';
 
@@ -12,7 +13,7 @@ class ContactsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<UserModel> usersData = Get.arguments;
+    List<Auth> usersData = Get.arguments;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.chatBoxMe,
@@ -88,7 +89,7 @@ class ContactsList extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: usersData.length,
                 itemBuilder: (context, i) {
-                  UserModel userData = usersData[i];
+                  Auth userData = usersData[i];
 
                   return Column(
                     children: [

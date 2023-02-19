@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'hex_color.dart';
 
@@ -58,6 +57,9 @@ class Themes {
       iconTheme: IconThemeData(
         color: AppColors.bgDarkColor,
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.bgLightColor,
+      )
       );
 
   static final dark = ThemeData(
@@ -87,5 +89,8 @@ class Themes {
       iconTheme: IconThemeData(
         color: AppColors.bgLightColor,
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.bgDarkColor,
+      )
       );
 }

@@ -1,10 +1,10 @@
 import 'package:http/http.dart' as http;
-import '../../../../core/utils/app_strings.dart';
 
+import '../../../../core/utils/app_strings.dart';
 import '../../../data/api/api_client.dart';
 
 class SearchRepo {
-  final ApiClient apiClient;
+  final ApiClie apiClient;
   SearchRepo({
     required this.apiClient,
   });

@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../../../core/utils/components/components.dart';
+import 'package:social_app/features/auth/data/models/auth_model.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../core/utils/app_component.dart';
 import '../../../data/models/user_model.dart';
 
 import '../search_repo/search_repo.dart';
 
-import '../../../../core/utils/constants/error_handling.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 
 class SearchCtrl extends GetxController implements GetxService {
   final SearchRepo searchRepo;
@@ -15,7 +17,7 @@ class SearchCtrl extends GetxController implements GetxService {
     required this.searchRepo,
   });
 
-  List<UserModel> users = [];
+  List<Auth> users = [];
 
   void changeSearchStatus(String query) async {
     if (query != '') {
@@ -28,10 +30,10 @@ class SearchCtrl extends GetxController implements GetxService {
     update();
   }
 
-  Future<List<UserModel>> fetchSearchUser({
+  Future<List<Auth>> fetchSearchUser({
     required String searchQuery,
   }) async {
-    List<UserModel> users = [];
+    List<Auth> users = [];
     try {
       http.Response res =
           await searchRepo.fetchSearchUser(searchQuery: searchQuery);
@@ -42,10 +44,8 @@ class SearchCtrl extends GetxController implements GetxService {
           
             for (var i = 0; i < jsonDecode(res.body).length; i++) {
             users.add(
-              UserModel.fromJson(
-                jsonEncode(
+              AuthModel.fromJson(
                   jsonDecode(res.body)[i],
-                ),
               ),
             );
           }
@@ -55,7 +55,7 @@ class SearchCtrl extends GetxController implements GetxService {
       update();
       
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
       
     }
     return users;

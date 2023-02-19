@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
 
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/core/widgets/expandable_text_widget.dart';
-import 'package:social_app/core/widgets/widgets.dart';
-import 'package:social_app/features/data/models/comment_model.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../../../../controller/user_ctrl.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../../../../core/widgets/expandable_text_widget.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../../data/models/comment_model.dart';
+import '../../../data/models/user_model.dart';
+import '../../auth/auth_ctrl/auth_ctrl.dart';
+import '../home_ctrl/home_ctrl.dart';
 
 class CommentWidget extends StatefulWidget {
   final String type;
-  final CommentModel commentData;
-  final UserModel userData;
+  final CommentMode commentData;
+  final Auth userData;
   final String uid;
   const CommentWidget({
     Key? key,
@@ -150,12 +152,12 @@ class _CommentWidgetState extends State<CommentWidget> {
                           widget.commentData.likes.isNotEmpty
                               ? InkWell(
                                   onTap: () async {
-                                    List<UserModel> userLikes = [];
+                                    List<Auth> userLikes = [];
                                     for (var i = 0;
                                         i < widget.commentData.likes.length;
                                         i++) {
-                                      userLikes.add(await Get.find<AuthCtrl>()
-                                          .fetchUserData(
+                                      userLikes.add(await Get.find<AuthController>()
+                                          .getUserData(
                                               widget.commentData.likes[i]));
                                     }
                                     Get.toNamed(

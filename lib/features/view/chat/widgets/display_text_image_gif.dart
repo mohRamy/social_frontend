@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/chat/widgets/hero_image.dart';
+import '../../../../core/utils/dimensions.dart';
+import 'hero_image.dart';
 
 import '../../post/post_widgets/video_card.dart';
 

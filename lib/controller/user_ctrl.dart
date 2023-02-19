@@ -1,32 +1,36 @@
-import '../features/data/models/user_model.dart';
+import 'dart:convert';
+
+import 'package:social_app/features/auth/data/models/auth_model.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+
 import 'package:get/get.dart';
 
-class UserCtrl extends GetxController{
-  UserModel _user = UserModel(
-    id: '', 
-    name: '', 
-    email: '', 
-    bio: '', 
-    followers: [], 
-    following: [], 
-    photo: '', 
-    backgroundImage: '', 
-    phone: '', 
-    password: '', 
-    address: '', 
-    type: '', 
+class UserCtrl extends GetxController {
+  Auth _user = const Auth(
+    id: "",
+    name: "",
+    email: "",
+    bio: "",
+    followers: [],
+    following: [],
+    photo: "",
+    backgroundImage: "",
+    phone: "",
+    password: "",
+    address: "",
+    type: "",
     private: false,
-    token: '',
-    );
+    token: "",
+  );
 
-  UserModel get user => _user;
+  Auth get user => _user;
 
   void setUserFromJson(String user) {
-    _user = UserModel.fromJson(user);
+    _user = AuthModel.fromJson(jsonDecode(user));
     update();
   }
 
-  void setUserFromModel(UserModel user) {
+  void setUserFromModel(Auth user) {
     _user = user;
     update();
   }

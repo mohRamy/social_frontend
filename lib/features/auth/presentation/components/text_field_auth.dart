@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/core/utils/dimensions.dart';
+
+import '../../../../core/utils/dimensions.dart';
 
 class TextFieldAuthCustom extends StatelessWidget {
   final String label;

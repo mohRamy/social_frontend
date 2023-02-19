@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../../home/home_widgets/profile_avatar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../data/models/chat_model.dart';
@@ -18,7 +18,7 @@ class ChatScreen extends StatefulWidget {
     required this.name,
     required this.uid,
     required this.isGroupChat,
-    this.photo = AppString.ASSETS_MOBILES,
+    required this.photo,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -82,9 +82,9 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.name),
-                // !isGroupChat
+                // !widget.isGroupChat
                 //     ? snapshot.data!.isOnline
-                //?
+                // ?
                 Text(
                   'online',
                   style: TextStyle(
@@ -116,19 +116,19 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Stack(
         children: [
-                ChatList(
-                  recieverUserId: widget.uid,
-                  isGroupChat: widget.isGroupChat,
-                  userMessages: userMessages,
-                  username: widget.name,
-                ),
-              // ),
-              // BottomChatField(
-              //   recieverUserId: widget.uid,
-              //   isGroupChat: widget.isGroupChat,
-              //   username: widget.name,
-              // ),
-            // ],
+          ChatList(
+            recieverId: widget.uid,
+            isGroupChat: widget.isGroupChat,
+            userMessages: userMessages,
+            username: widget.name,
+          ),
+          // ),
+          // BottomChatField(
+          //   recieverUserId: widget.uid,
+          //   isGroupChat: widget.isGroupChat,
+          //   username: widget.name,
+          // ),
+          // ],
           // ),
         ],
       ),

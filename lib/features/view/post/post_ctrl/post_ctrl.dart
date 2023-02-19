@@ -7,8 +7,8 @@ import '../../../../core/enums/post_enum.dart';
 import '../post_repo/post_repo.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../core/utils/components/components.dart';
-import '../../../../core/utils/constants/error_handling.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 
 class PostCtrl extends GetxController implements GetxService {
   final PostRepo postRepo;
@@ -37,11 +37,14 @@ class PostCtrl extends GetxController implements GetxService {
 
   void addPost({
     required String description,
-    required List<Map<PostEnum, File>> posts,
+    List<Map<PostEnum, File>>? posts,
   }) async {
     try {
       _isLoading = true;
       update();
+
+      print('dddddddddd');
+      
       http.Response res = await postRepo.addPost(
         description: description,
         posts: posts,
@@ -50,7 +53,7 @@ class PostCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar(
+          AppComponent.showCustomSnackBar(
             title: '',
             'Added Post!',
             color: Colors.green,
@@ -58,7 +61,7 @@ class PostCtrl extends GetxController implements GetxService {
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     _isLoading = false;
     update();

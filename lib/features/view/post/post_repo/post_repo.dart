@@ -3,31 +3,32 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../controller/user_ctrl.dart';
 import '../../../../core/enums/post_enum.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../data/api/api_client.dart';
 
 
 class PostRepo {
-  final ApiClient apiClient;
+  final ApiClie apiClient;
   PostRepo({
     required this.apiClient,
   });
 
   Future<http.Response> addPost({
     required String description,
-    required List<Map<PostEnum, File>> posts,
+    List<Map<PostEnum, File>>? posts,
   }) async {
     List<PostEnum> itemsKey = [];
     List<File> itemsVal = [];
 
     List<String> contactMsg = [];
 
-    posts
+    List<String> postCloudinary = [];
+
+    if (posts!.isNotEmpty) {
+      posts
         .map((e) => e.forEach((key, value) {
               itemsKey.add(key);
             }))
@@ -60,7 +61,7 @@ class PostRepo {
     int random = Random().nextInt(1000);
 
     final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-    List<String> postCloudinary = [];
+    
     for (var i = 0; i < itemsVal.length; i++) {
       CloudinaryResponse res = await cloudinary.uploadFile(
         CloudinaryFile.fromFile(
@@ -69,6 +70,7 @@ class PostRepo {
         ),
       );
       postCloudinary.add(res.secureUrl);
+    }
     }
 
     return await apiClient.postData(

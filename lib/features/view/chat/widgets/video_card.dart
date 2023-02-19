@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/core/utils/dimensions.dart';
+import '../../../../core/utils/dimensions.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../home/home_widgets/video_item.dart';

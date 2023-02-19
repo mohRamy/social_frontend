@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/home/home_widgets/palette.dart';
+import '../../../../core/utils/dimensions.dart';
+import 'palette.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String imageUrl;

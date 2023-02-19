@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:social_app/core/widgets/widgets.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../home/home_widgets/profile_avatar.dart';
 import '../../../data/models/user_model.dart';
 
 import '../../../../core/utils/dimensions.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import '../search_ctrl/search_ctrl.dart';
 
 class SearchedProduct extends GetView<SearchCtrl> {
-  final UserModel user;
+  final Auth user;
   const SearchedProduct({
     Key? key,
     required this.user,

@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:social_app/features/data/models/user_model.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import '../../../data/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../core/utils/app_strings.dart';
-import '../../../../core/utils/components/components.dart';
+import '../../../../core/utils/app_component.dart';
 import '../../../data/api/api_client.dart';
 import '../../../data/models/chat_model.dart';
 
 
 class ChatRepo {
-  final ApiClient apiClient;
+  final ApiClie apiClient;
   ChatRepo({
     required this.apiClient,
   });
@@ -36,7 +37,7 @@ class ChatRepo {
     required Msg msg,
     required RepliedMsg? repliedMsg,
     required String recieverId,
-    required UserModel senderUser,
+    required Auth senderUser,
     required bool isGroupChat,
   }) async {
     if (msg.type == 'image' || msg.type == 'video') {
@@ -87,30 +88,16 @@ class ChatRepo {
     );
   }
 
-  void setChatMessageSeen(
-    String recieverUserId,
-    String messageId,
+  Future<http.Response> setChatMessageSeen(
+    String recieverId,
+    // String messageId,
   ) async {
-    try {
-      // await firestore
-      //     .collection('users')
-      //     .doc(auth.currentUser!.uid)
-      //     .collection('chats')
-      //     .doc(recieverUserId)
-      //     .collection('messages')
-      //     .doc(messageId)
-      //     .update({'isSeen': true});
-
-      // await firestore
-      //     .collection('users')
-      //     .doc(recieverUserId)
-      //     .collection('chats')
-      //     .doc(auth.currentUser!.uid)
-      //     .collection('messages')
-      //     .doc(messageId)
-      //     .update({'isSeen': true});
-    } catch (e) {
-      Components.showCustomSnackBar(e.toString());
-    }
+      return await apiClient.postData(
+      AppString.MESSAGE_SEEN_URL,
+      jsonEncode({
+        'recieverId': recieverId,
+        // 'messageId': messageId,
+      }),
+    );
   }
 }

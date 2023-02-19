@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../utils/dimensions.dart';
-import '../../features/view/post/post_widgets/video_card.dart';
 
+import '../../features/view/post/post_widgets/video_card.dart';
 import '../enums/post_enum.dart';
+import '../utils/dimensions.dart';
 
 class DisplayFilePost extends StatelessWidget {
   final File message;

@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/core/widgets/expandable_text_widget.dart';
-import 'package:social_app/features/data/models/comment_model.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
-import 'package:social_app/features/view/home/home_widgets/comment_widget.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../../../../controller/user_ctrl.dart';
+import '../../../../core/utils/dimensions.dart';
+import '../../../../core/widgets/expandable_text_widget.dart';
+import '../../../data/models/comment_model.dart';
+import '../../../data/models/user_model.dart';
+import '../../auth/auth_ctrl/auth_ctrl.dart';
+import '../home_ctrl/home_ctrl.dart';
+import '../home_widgets/comment_widget.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -61,7 +63,7 @@ class _PostCommentsScreenState extends State<PostCommentsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           itemCount: homeCtrl.postComments.length,
                           itemBuilder: (context, i) {
-                            CommentModel commentData = homeCtrl.postComments[i];
+                            CommentMode commentData = homeCtrl.postComments[i];
                             String timeAgoCustom(DateTime d) {
                               Duration diff = DateTime.now().difference(d);
                               if (diff.inDays > 365) {
@@ -85,13 +87,13 @@ class _PostCommentsScreenState extends State<PostCommentsScreen> {
                               return "just now";
                             }
                             
-                            return FutureBuilder<UserModel>(
-                                future: Get.find<AuthCtrl>()
-                                    .fetchUserData(commentData.userId),
+                            return FutureBuilder<Auth>(
+                                future: Get.find<AuthController>()
+                                    .getUserData(commentData.userId),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
-                                    UserModel userData = snapshot.data!;
+                                    Auth userData = snapshot.data!;
                                     return CommentWidget(
                                       type: "post",
                                       commentData: commentData,

@@ -4,14 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/enums/post_enum.dart';
 
-import 'package:social_app/core/network/network_info.dart';
-import 'package:social_app/features/data/api/local_source.dart';
-import 'package:social_app/features/data/models/story_model.dart';
+import '../../../../core/network/network_info.dart';
+import '../../../data/api/local_source.dart';
+import '../../../data/models/story_model.dart';
 
 import '../../../../core/enums/story_enum.dart';
-import '../../../../core/utils/components/components.dart';
-import '../../../../core/utils/constants/error_handling.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 import '../../../data/models/comment_model.dart';
 import '../../../data/models/post_model.dart';
 import '../home_repo/home_repo.dart';
@@ -30,7 +31,7 @@ class HomeCtrl extends GetxController implements GetxService {
   // List<CommentModel> postComments = [];
 
   List<StoryModel> stories = [];
-  List<CommentModel> storyComments = [];
+  List<CommentMode> storyComments = [];
 
   late List<Map<StoryEnum, File>> imageFileSelected = [];
 
@@ -65,6 +66,7 @@ class HomeCtrl extends GetxController implements GetxService {
         stateHandle(
           res: res,
           onSuccess: () {
+            print('fffffffffffffffffffffffff');
             posts = [];
             for (var i = 0; i < jsonDecode(res.body).length; i++) {
               posts.add(
@@ -79,7 +81,7 @@ class HomeCtrl extends GetxController implements GetxService {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     } else {
       try {
@@ -89,27 +91,27 @@ class HomeCtrl extends GetxController implements GetxService {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     }
   }
 
   void updatePost({
+    required String postId,
     required String description,
-    required String postUrl,
   }) async {
     try {
       _isLoading = true;
       update();
       http.Response res = await homeRepo.updatePost(
         description: description,
-        postUrl: postUrl,
+        postId: postId,
       );
 
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar(
+          AppComponent.showCustomSnackBar(
             title: '',
             'Modified Post!',
             color: Colors.green,
@@ -117,7 +119,7 @@ class HomeCtrl extends GetxController implements GetxService {
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     _isLoading = false;
     update();
@@ -136,7 +138,7 @@ class HomeCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar(
+          AppComponent.showCustomSnackBar(
             title: '',
             'Deleted Post!',
             color: Colors.green,
@@ -144,7 +146,7 @@ class HomeCtrl extends GetxController implements GetxService {
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     _isLoading = false;
     update();
@@ -161,7 +163,7 @@ class HomeCtrl extends GetxController implements GetxService {
         onSuccess: () {},
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -184,10 +186,10 @@ class HomeCtrl extends GetxController implements GetxService {
       _isLoading = false;
       update();
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
-  List<CommentModel> postComments = [];
+  List<CommentMode> postComments = [];
   void fetchAllPostComment(
     String postId,
   ) async {
@@ -203,7 +205,7 @@ class HomeCtrl extends GetxController implements GetxService {
           postComments = [];
           for (var i = 0; i < jsonDecode(res.body).length; i++) {
             postComments.add(
-              CommentModel.fromJson(
+              CommentMode.fromJson(
                 jsonEncode(
                   jsonDecode(
                     res.body,
@@ -217,7 +219,7 @@ class HomeCtrl extends GetxController implements GetxService {
       _isLoading = false;
       update();
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -234,7 +236,7 @@ class HomeCtrl extends GetxController implements GetxService {
         onSuccess: () {},
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -276,7 +278,7 @@ class HomeCtrl extends GetxController implements GetxService {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     } else {
       try {
@@ -286,7 +288,7 @@ class HomeCtrl extends GetxController implements GetxService {
         _isLoading = false;
         update();
       } catch (e) {
-        Components.showCustomSnackBar(e.toString());
+        AppComponent.showCustomSnackBar(e.toString());
       }
     }
   }
@@ -306,7 +308,7 @@ class HomeCtrl extends GetxController implements GetxService {
         onSuccess: () {
           imageFileSelected = [];
           Get.back();
-          Components.showCustomSnackBar(
+          AppComponent.showCustomSnackBar(
             title: '',
             'Added Post!',
             color: Colors.green,
@@ -314,7 +316,7 @@ class HomeCtrl extends GetxController implements GetxService {
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     _isLoading = false;
     update();
@@ -335,7 +337,7 @@ class HomeCtrl extends GetxController implements GetxService {
           storyComments = [];
           for (var i = 0; i < jsonDecode(res.body).length; i++) {
             storyComments.add(
-              CommentModel.fromJson(
+              CommentMode.fromJson(
                 jsonEncode(
                   jsonDecode(
                     res.body,
@@ -349,7 +351,7 @@ class HomeCtrl extends GetxController implements GetxService {
       _isLoading = false;
       update();
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -364,7 +366,7 @@ class HomeCtrl extends GetxController implements GetxService {
         onSuccess: () {},
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -387,7 +389,7 @@ class HomeCtrl extends GetxController implements GetxService {
       _isLoading = false;
       update();
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 
@@ -404,7 +406,7 @@ class HomeCtrl extends GetxController implements GetxService {
         onSuccess: () {},
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
   }
 }

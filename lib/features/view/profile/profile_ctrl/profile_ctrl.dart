@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../data/models/post_model.dart';
 
-import '../../../../core/utils/components/components.dart';
-import '../../../../core/utils/constants/error_handling.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 import '../profile_repo/profile_repo.dart';
 
 class ProfileCtrl extends GetxController implements GetxService {
@@ -29,11 +29,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }
@@ -87,11 +87,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }
@@ -106,11 +106,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }
@@ -125,11 +125,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }
@@ -140,11 +140,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }
@@ -161,11 +161,11 @@ class ProfileCtrl extends GetxController implements GetxService {
       stateHandle(
         res: res,
         onSuccess: () {
-          Components.showCustomSnackBar("Success", color: Colors.green);
+          AppComponent.showCustomSnackBar("Success", color: Colors.green);
         },
       );
     } catch (e) {
-      Components.showCustomSnackBar(e.toString());
+      AppComponent.showCustomSnackBar(e.toString());
     }
     update();
   }

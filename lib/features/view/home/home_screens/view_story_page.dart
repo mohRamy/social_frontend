@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/features/data/models/story_model.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
-import 'package:social_app/features/view/home/home_screens/story_comment_screen.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../../../data/models/story_model.dart';
+import '../home_ctrl/home_ctrl.dart';
+import 'story_comment_screen.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/utils.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -266,13 +266,13 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                                 ? InkWell(
                                     onTap: () async {
                                       if (widget.story.likes.isNotEmpty) {
-                                        List<UserModel> userLikes = [];
+                                        List<Auth> userLikes = [];
                                         for (var i = 0;
                                             i < widget.story.likes.length;
                                             i++) {
                                           userLikes.add(
-                                              await Get.find<AuthCtrl>()
-                                                  .fetchUserData(
+                                              await Get.find<AuthController>()
+                                                  .getUserData(
                                                       widget.story.likes[i]));
                                         }
                                         Get.toNamed(

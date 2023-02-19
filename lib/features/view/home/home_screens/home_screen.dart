@@ -8,12 +8,16 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
 
-import 'package:social_app/config/routes/app_pages.dart';
-import 'package:social_app/config/themes/theme_services.dart';
-import 'package:social_app/core/utils/app_strings.dart';
-import 'package:social_app/features/view/chat/controller/chat_ctrl.dart';
-import 'package:social_app/features/view/home/home_screens/view_story_page.dart';
+import '../../../../config/routes/app_pages.dart';
+import '../../../../config/themes/theme_services.dart';
+import '../../../../core/utils/app_strings.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../chat/controller/chat_ctrl.dart';
+import 'modify_post.dart';
+import 'view_story_page.dart';
 import 'package:social_app/core/displaies/display_image_video_card.dart';
 
 import '../../../../controller/user_ctrl.dart';
@@ -24,8 +28,6 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../data/models/chat_model.dart';
 import '../../../data/models/post_model.dart';
 import '../../../data/models/story_model.dart';
-import '../../../data/models/user_model.dart';
-import '../../auth/auth_ctrl/auth_ctrl.dart';
 import '../home_ctrl/home_ctrl.dart';
 import '../home_widgets/palette.dart';
 import '../home_widgets/profile_avatar.dart';
@@ -78,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
           text: AppString.APP_NAME,
           fontWeight: FontWeight.w600,
           fontSize: Dimensions.font20,
-          
           isTitle: true,
         ),
         elevation: 0,
@@ -98,15 +99,19 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 if (Get.find<ChatCtrl>().chatContacts.contents != null) {
                   ChatModel chatModel = Get.find<ChatCtrl>().chatContacts;
-                  List<UserModel> usersData = [];
+                  List<Auth> usersData = [];
                   for (var i = 0; i < chatModel.contents!.length; i++) {
-                    usersData.add(await Get.find<AuthCtrl>()
-                        .fetchUserData(chatModel.contents![i].recieverId!));
+                    usersData.add(await Get.find<AuthController>()
+                        .getUserData(chatModel.contents![i].recieverId!));
                   }
                   Get.toNamed(Routes.CONTACTS_LIST, arguments: usersData);
                 }
               },
-              icon: SvgPicture.asset('assets/svg/chat-icon.svg', height: 24, color: context.theme.dividerColor,)),
+              icon: SvgPicture.asset(
+                'assets/svg/chat-icon.svg',
+                height: 24,
+                color: context.theme.dividerColor,
+              )),
         ],
       ),
       body: GetBuilder<HomeCtrl>(builder: (homeCtrl) {
@@ -312,7 +317,7 @@ class _ListViewStories extends StatelessWidget {
                                     child: TextCustom(
                                       text: storyData.userData.name,
                                       overflow: TextOverflow.ellipsis,
-                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -412,7 +417,8 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                           text: postData.userData!.name,
                                           fontWeight: FontWeight.w500,
                                         ),
-                                        SizedBox(height: Dimensions.height10 - 5),
+                                        SizedBox(
+                                            height: Dimensions.height10 - 5),
                                         TextCustom(
                                           text: timeAgoCustom(
                                             DateTime.fromMillisecondsSinceEpoch(
@@ -420,7 +426,6 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                             ),
                                           ),
                                           fontSize: 13,
-
                                         ),
                                       ],
                                     )
@@ -430,13 +435,100 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.more_vert_rounded,
-                            size: 25,
-                          ),
-                        ),
+                        userCtrl.user.id == postData.userId
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.bottomSheet(
+                                      SingleChildScrollView(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius15),
+                                            color: Get.isDarkMode
+                                                ? Colors.black
+                                                : Colors.white,
+                                          ),
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                            top: 4,
+                                          ),
+                                          width: Dimensions.screenWidth,
+                                          height: Dimensions.height10 * 15,
+                                          child: Column(
+                                            children: [
+                                              Flexible(
+                                                child: Container(
+                                                  height: 6,
+                                                  width: 120,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    color: Get.isDarkMode
+                                                        ? Colors.grey[600]
+                                                        : Colors.grey[300],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              AppComponent.buildbottomsheet(
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: AppColors.primary,
+                                                ),
+                                                label: "Modify post",
+                                                ontap: () {
+                                                  Get.to(
+                                                    () =>
+                                                        const ModifyPostScreen(),
+                                                    arguments: postData,
+                                                  );
+                                                },
+                                              ),
+                                              Divider(
+                                                color: Get.isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
+                                              AppComponent.buildbottomsheet(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                                label: "Delete post",
+                                                ontap: () {
+                                                  AppComponent.showDialog(
+                                                    title: "delete Post",
+                                                    description:
+                                                        "Are you sure to delete this post ?",
+                                                    onPressed: () {
+                                                      homeCtrl.deletePost(
+                                                        postId: postData.id!,
+                                                      );
+                                                      Get.back();
+                                                      Get.back();
+                                                    },
+                                                    color: Colors.red,
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      elevation: 0.4,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.more_vert_rounded,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ],
@@ -447,177 +539,300 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                     text: postData.description!,
                   ),
                 ),
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    SizedBox(
-                      height: 400,
-                      child: CarouselSlider.builder(
-                          itemCount: postData.posts!.length,
-                          options: CarouselOptions(
-                            viewportFraction: 1.0,
-                            enableInfiniteScroll: false,
-                            height: 400,
-                            scrollPhysics: const BouncingScrollPhysics(),
-                            autoPlay: false,
-                          ),
-                          itemBuilder: (context, i, realIndex) =>
-                              DisplayImageVideoCard(
-                                file: posts[i].post!,
-                                type: posts[i].type!,
-                                isOut: false,
-                              )),
-                    ),
-                    Positioned(
-                      top: Dimensions.height10,
-                      left: Dimensions.height10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                postData.posts!.isNotEmpty
+                    ? Stack(
+                        alignment: Alignment.bottomCenter,
                         children: [
-                          postData.posts!.length > 1
-                              ? const Icon(
-                                  Icons.layers_outlined,
-                                  size: 30,
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        height: 45,
-                        width: Dimensions.screenWidth * .9,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50.0),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          SizedBox(
+                            height: 400,
+                            child: CarouselSlider.builder(
+                                itemCount: postData.posts!.length,
+                                options: CarouselOptions(
+                                  viewportFraction: 1.0,
+                                  enableInfiniteScroll: false,
+                                  height: 400,
+                                  scrollPhysics: const BouncingScrollPhysics(),
+                                  autoPlay: false,
+                                ),
+                                itemBuilder: (context, i, realIndex) =>
+                                    DisplayImageVideoCard(
+                                      file: posts[i].post!,
+                                      type: posts[i].type!,
+                                      isOut: false,
+                                    )),
+                          ),
+                          Positioned(
+                            top: Dimensions.height10,
+                            left: Dimensions.height10,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                postData.posts!.length > 1
+                                    ? const Icon(
+                                        Icons.layers_outlined,
+                                        size: 30,
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
                             child: Container(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              color: Colors.white.withOpacity(0.2),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  isLike = !isLike;
-                                                });
-                                                  homeCtrl.postLike(
-                                                    postData.id!,
-                                                  );
-                                                
-                                              },
-                                              child: Icon(
-                                                (meLike || isLike)
-                                                    ? Icons.favorite_outlined
-                                                    : Icons
-                                                        .favorite_border_outlined,
-                                                color: (meLike || isLike)
-                                                    ? Colors.red
-                                                    : Colors.white,
-                                              )),
-                                          const SizedBox(width: 8.0),
-                                          InkWell(
-                                            onTap: () async {
-                                              if (postData.likes!.isNotEmpty) {
-                                                List<UserModel> userLikes = [];
-                                                for (var i = 0;
-                                                    i < postData.likes!.length;
-                                                    i++) {
-                                                  userLikes.add(
-                                                      await Get.find<AuthCtrl>()
-                                                          .fetchUserData(
-                                                              postData
-                                                                  .likes![i]));
-                                                }
-                                                Get.toNamed(
-                                                  Routes.LIKES,
-                                                  arguments: userLikes,
-                                                );
-                                              }
-                                            },
-                                            child: TextCustom(
-                                              text: postData.likes!.isEmpty
-                                                  ? "Like"
-                                                  : postData.likes!.length
-                                                      .toString(),
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(width: 20.0),
-                                      InkWell(
-                                        onTap: () {
-                                          Get.find<HomeCtrl>()
-                                              .fetchAllPostComment(
-                                                  postData.id!);
-                                          Get.toNamed(
-                                            Routes.POST_COMMENTS,
-                                            arguments: postData.id,
-                                          );
-                                        },
-                                        child: Row(
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              height: 45,
+                              width: Dimensions.screenWidth * .9,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 5.0, sigmaY: 5.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    color: Colors.white.withOpacity(0.2),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
                                           children: [
-                                            SvgPicture.asset(
-                                              'assets/svg/message-icon.svg',
-                                              color: Colors.white,
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isLike = !isLike;
+                                                      });
+                                                      homeCtrl.postLike(
+                                                        postData.id!,
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      (meLike || isLike)
+                                                          ? Icons
+                                                              .favorite_outlined
+                                                          : Icons
+                                                              .favorite_border_outlined,
+                                                      color: (meLike || isLike)
+                                                          ? Colors.red
+                                                          : Colors.white,
+                                                    )),
+                                                const SizedBox(width: 8.0),
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    if (postData
+                                                        .likes!.isNotEmpty) {
+                                                      List<Auth>
+                                                          userLikes = [];
+                                                      for (var i = 0;
+                                                          i <
+                                                              postData.likes!
+                                                                  .length;
+                                                          i++) {
+                                                        userLikes.add(await Get
+                                                                .find<
+                                                                    AuthController>()
+                                                            .getUserData(
+                                                                postData.likes![
+                                                                    i]));
+                                                      }
+                                                      Get.toNamed(
+                                                        Routes.LIKES,
+                                                        arguments: userLikes,
+                                                      );
+                                                    }
+                                                  },
+                                                  child: TextCustom(
+                                                    text: postData
+                                                            .likes!.isEmpty
+                                                        ? "Like"
+                                                        : postData.likes!.length
+                                                            .toString(),
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                            const SizedBox(width: 5.0),
-                                            const TextCustom(
-                                              text: "Comment",
-                                              fontSize: 16,
-                                              color: Colors.white,
+                                            const SizedBox(width: 20.0),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.find<HomeCtrl>()
+                                                    .fetchAllPostComment(
+                                                        postData.id!);
+                                                Get.toNamed(
+                                                  Routes.POST_COMMENTS,
+                                                  arguments: postData.id,
+                                                );
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'assets/svg/message-icon.svg',
+                                                    color: Colors.white,
+                                                  ),
+                                                  const SizedBox(width: 5.0),
+                                                  const TextCustom(
+                                                    text: "Comment",
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () async {
+                                                await Share.share(
+                                                    postData.posts![0].post!);
+                                              },
+                                              icon: SvgPicture.asset(
+                                                'assets/svg/send-icon.svg',
+                                                height: 24,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () async {
+                                                await GallerySaver.saveImage(
+                                                    postData.posts![0].post!);
+                                              },
+                                              icon: const Icon(
+                                                Icons.bookmark_border_rounded,
+                                                size: 27,
+                                                color: Colors.white,
+                                              ),
                                             )
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox(
+                        height: 45,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          color: Colors.grey.withOpacity(0.5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Row(
+                                children: [
                                   Row(
                                     children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await Share.share(
-                                              postData.posts![0].post!);
+                                      GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isLike = !isLike;
+                                            });
+                                            homeCtrl.postLike(
+                                              postData.id!,
+                                            );
+                                          },
+                                          child: Icon(
+                                            (meLike || isLike)
+                                                ? Icons.favorite_outlined
+                                                : Icons
+                                                    .favorite_border_outlined,
+                                            color: (meLike || isLike)
+                                                ? Colors.red
+                                                : context.theme.dividerColor,
+                                          )),
+                                      const SizedBox(width: 8.0),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if (postData.likes!.isNotEmpty) {
+                                            List<Auth> userLikes = [];
+                                            for (var i = 0;
+                                                i < postData.likes!.length;
+                                                i++) {
+                                              userLikes.add(
+                                                  await Get.find<AuthController>()
+                                                      .getUserData(
+                                                          postData.likes![i]));
+                                            }
+                                            Get.toNamed(
+                                              Routes.LIKES,
+                                              arguments: userLikes,
+                                            );
+                                          }
                                         },
-                                        icon: SvgPicture.asset(
-                                          'assets/svg/send-icon.svg',
-                                          height: 24,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          await GallerySaver.saveImage(
-                                              postData.posts![0].post!);
-                                        },
-                                        icon: const Icon(
-                                          Icons.bookmark_border_rounded,
-                                          size: 27,
-                                          color: Colors.white,
+                                        child: TextCustom(
+                                          text: postData.likes!.isEmpty
+                                              ? "Like"
+                                              : postData.likes!.length
+                                                  .toString(),
+                                          fontSize: 16,
                                         ),
                                       )
                                     ],
                                   ),
+                                  const SizedBox(width: 20.0),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.find<HomeCtrl>()
+                                          .fetchAllPostComment(postData.id!);
+                                      Get.toNamed(
+                                        Routes.POST_COMMENTS,
+                                        arguments: postData.id,
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svg/message-icon.svg',
+                                          color: context.theme.dividerColor,
+                                        ),
+                                        const SizedBox(width: 5.0),
+                                        const TextCustom(
+                                          text: "Comment",
+                                          fontSize: 16,
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      await Share.share(
+                                          postData.posts![0].post!);
+                                    },
+                                    icon: SvgPicture.asset(
+                                      'assets/svg/send-icon.svg',
+                                      color: context.theme.dividerColor,
+                                      height: 24,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      await GallerySaver.saveImage(
+                                          postData.posts![0].post!);
+                                    },
+                                    icon: const Icon(
+                                      Icons.bookmark_border_rounded,
+                                      size: 27,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

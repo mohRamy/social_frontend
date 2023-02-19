@@ -9,16 +9,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/core/picker/picker.dart';
-import 'package:social_app/core/provider/message_reply_provider.dart';
-import 'package:social_app/core/utils/app_colors.dart';
-import 'package:social_app/core/utils/components/components.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/view/chat/widgets/message_reply_preview.dart';
+import '../../../../core/picker/picker.dart';
+import '../../../../core/provider/message_reply_provider.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/dimensions.dart';
+import 'message_reply_preview.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/data/models/chat_model.dart';
+import '../../../../controller/user_ctrl.dart';
+import '../../../data/models/chat_model.dart';
 
 import '../../../../core/utils/app_strings.dart';
 import '../controller/chat_ctrl.dart';
@@ -26,13 +26,13 @@ import 'my_message_card.dart';
 import 'sender_message_card.dart';
 
 class ChatList extends ConsumerStatefulWidget {
-  final String recieverUserId;
+  final String recieverId;
   final bool isGroupChat;
   final List<Messages> userMessages;
   final String username;
   const ChatList({
     Key? key,
-    required this.recieverUserId,
+    required this.recieverId,
     required this.isGroupChat,
     required this.userMessages,
     required this.username,
@@ -156,7 +156,6 @@ class _ChatListState extends ConsumerState<ChatList> {
       );
       repliedMsg.repliedMessage = res.secureUrl;
     }
-    print(Get.find<UserCtrl>().user.id);
     _socket.emit('message', {
       'senderId': Get.find<ChatCtrl>().chatContacts.userId ?? Get.find<UserCtrl>().user.id,
       'recieverId': recieverId,
@@ -187,7 +186,7 @@ class _ChatListState extends ConsumerState<ChatList> {
         repliedTo: '',
         isMe: false,
       ),
-      widget.recieverUserId,
+      widget.recieverId,
       widget.isGroupChat,
     );
     setState(() {
@@ -275,14 +274,15 @@ class _ChatListState extends ConsumerState<ChatList> {
               final messageData = usermessages[index];
               var timeSent = DateFormat.jm().format(messageData.createdAt!);
 
-              // if (!messageData.isSeen! &&
-              //     messageData.recieverId ==
-              //         Get.find<UserCtrl>().user.id) {
-              //   Get.find<ChatCtrl>().setChatMessageSeen(
-              //         widget.recieverUserId,
-              //         messageData.sId!,
-              //       );
-              // }
+              if (!messageData.isSeen! &&
+                  messageData.recieverId ==
+                      Get.find<UserCtrl>().user.id) {
+                Get.find<ChatCtrl>().setChatMessageSeen(
+                      widget.recieverId,
+                      // messageData.sId!,
+                    );
+              }
+
               if (messageData.senderId == Get.find<UserCtrl>().user.id) {
                 return MyMessageCard(
                   date: timeSent,
@@ -315,7 +315,7 @@ class _ChatListState extends ConsumerState<ChatList> {
             children: [
               showMessageReply
                   ? MessageReplyPreview(
-                      receiverId: widget.recieverUserId,
+                      receiverId: widget.recieverId,
                     )
                   : const SizedBox(),
               Row(

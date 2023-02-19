@@ -1,16 +1,19 @@
 
 import 'dart:convert';
 
+import 'package:social_app/features/auth/data/models/auth_model.dart';
+
+import '../../auth/domain/entities/auth.dart';
 import 'comment_model.dart';
 import 'user_model.dart';
 
 class StoryModel {
   String id;
-  UserModel userData;
+  Auth userData;
   DateTime createdAt;
   List<Stories> stories;
   List<String> likes;
-  List<CommentModel> comments;
+  List<CommentMode> comments;
 
   StoryModel({
     required this.id,
@@ -24,27 +27,13 @@ class StoryModel {
   factory StoryModel.fromMap(Map<String, dynamic> map) {
     return StoryModel(
     id: map['_id']??map['id'],
-    userData: UserModel.fromMap(map['userData']),
+    userData: AuthModel.fromJson(map['userData']),
     createdAt: DateTime.parse(map["createdAt"]),
     stories : List<Stories>.from(map['stories']?.map((x) => Stories.fromJson(x))??[]),
     likes : List<String>.from(map['likes']),
-    comments: List<CommentModel>.from(map['comments']?.map((x) => CommentModel.fromMap(x))??[]),
+    comments: List<CommentMode>.from(map['comments']?.map((x) => CommentMode.fromMap(x))??[]),
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'userData': userData.toMap(),
-      'comments': comments,
-      'likes': likes,
-      'createdAt': createdAt,
-      'stories': stories.map((v) => v.toJson()).toList(),
-
-    };
-  }
-
-  String toJson() => json.encode(toMap());
 
   factory StoryModel.fromJson(String source) =>
       StoryModel.fromMap(json.decode(source));

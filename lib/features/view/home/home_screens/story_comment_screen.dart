@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/core/utils/dimensions.dart';
-import 'package:social_app/features/data/models/comment_model.dart';
-import 'package:social_app/features/data/models/user_model.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/home/home_ctrl/home_ctrl.dart';
-import 'package:social_app/features/view/home/home_widgets/comment_widget.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
+import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import '../../../data/models/comment_model.dart';
+import '../home_ctrl/home_ctrl.dart';
+import '../home_widgets/comment_widget.dart';
 
-import '../../../../config/routes/app_pages.dart';
-import '../../../../controller/user_ctrl.dart';
 import '../../../../core/widgets/widgets.dart';
 
 class StoryCommentsScreen extends StatefulWidget {
@@ -62,7 +59,7 @@ class _StoryCommentsScreenState extends State<StoryCommentsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     itemCount: homeCtrl.storyComments.length,
                     itemBuilder: (context, i) {
-                      CommentModel commentData = homeCtrl.storyComments[i];
+                      CommentMode commentData = homeCtrl.storyComments[i];
                       String timeAgoCustom(DateTime d) {
                         Duration diff = DateTime.now().difference(d);
                         if (diff.inDays > 365) {
@@ -86,13 +83,13 @@ class _StoryCommentsScreenState extends State<StoryCommentsScreen> {
                         return "just now";
                       }
 
-                      return FutureBuilder<UserModel>(
-                          future: Get.find<AuthCtrl>()
-                              .fetchUserData(commentData.userId),
+                      return FutureBuilder<Auth>(
+                          future: Get.find<AuthController>()
+                              .getUserData(commentData.userId),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              UserModel userData = snapshot.data!;
+                              Auth userData = snapshot.data!;
                               return CommentWidget(
                                 type: "story",
                                 commentData: commentData,

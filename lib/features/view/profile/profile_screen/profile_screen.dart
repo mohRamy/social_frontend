@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:social_app/features/auth/domain/entities/auth.dart';
 
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
-import 'package:social_app/features/view/home/home_widgets/hero_image.dart';
-import 'package:social_app/features/view/home/home_widgets/profile_avatar.dart';
-import 'package:social_app/features/view/profile/profile_screen/followers_screen.dart';
-import 'package:social_app/features/view/profile/profile_screen/following_screen.dart';
-import 'package:social_app/features/view/profile/profile_screen/setting_profile_page.dart';
+import '../../../auth/presentation/controller/auth_controller.dart';
+import '../../home/home_widgets/hero_image.dart';
+import '../../home/home_widgets/profile_avatar.dart';
+import 'followers_screen.dart';
+import 'following_screen.dart';
+import 'setting_profile_page.dart';
 
 import '../../../../config/routes/app_pages.dart';
 import '../../../../controller/user_ctrl.dart';
@@ -16,7 +17,6 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/dimensions.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../data/models/post_model.dart';
-import '../../../data/models/user_model.dart';
 import '../../chat/screens/chat_screen.dart';
 import '../profile_ctrl/profile_ctrl.dart';
 
@@ -31,9 +31,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<UserModel>(
-          future: Get.find<AuthCtrl>()
-              .fetchUserData(Get.arguments ?? Get.find<UserCtrl>().user.id),
+      body: FutureBuilder<Auth>(
+          future: Get.find<AuthController>()
+              .getUserData(Get.arguments ?? Get.find<UserCtrl>().user.id),
           builder: (context, snapshot) {
             return !snapshot.hasData
                 ? const CustomShimmer()
@@ -97,7 +97,7 @@ class _ListFotosProfile extends StatelessWidget {
 }
 
 class _ListUserPost extends StatelessWidget {
-  final UserModel userData;
+  final Auth userData;
   const _ListUserPost({
     Key? key,
     required this.userData,
@@ -162,7 +162,7 @@ class _ListUserPost extends StatelessWidget {
 }
 
 class _PostAndFollow extends StatelessWidget {
-  UserModel userData;
+  Auth userData;
   _PostAndFollow({
     Key? key,
     required this.userData,
@@ -326,7 +326,7 @@ class _PostAndFollow extends StatelessWidget {
 }
 
 class _UsernameAndDescription extends StatelessWidget {
-  UserModel userData;
+  Auth userData;
   _UsernameAndDescription({
     Key? key,
     required this.userData,
@@ -359,7 +359,7 @@ class _UsernameAndDescription extends StatelessWidget {
 }
 
 class _CoverAndProfile extends StatefulWidget {
-  UserModel userData;
+  Auth userData;
 
   _CoverAndProfile({
     Key? key,
@@ -465,6 +465,7 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
                               name: widget.userData.name,
                               uid: widget.userData.id,
                               isGroupChat: false,
+                              photo: widget.userData.photo,
                             ));
                           },
                           child: Container(
