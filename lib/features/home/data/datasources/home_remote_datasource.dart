@@ -14,7 +14,7 @@ import '../../domain/entities/comment.dart';
 import '../../domain/entities/post.dart';
 import '../../domain/entities/story.dart';
 
-abstract class BaseHomeRemoteDataSource {
+abstract class HomeRemoteDataSource {
   // post
   Future<List<Post>> getAllPosts();
   Future<Unit> modifyPost(String postId, String description);
@@ -32,9 +32,9 @@ abstract class BaseHomeRemoteDataSource {
   Future<Unit> storyCommentLike(String storyId, String commentId);
 }
 
-class HomeRemoteDataSource extends BaseHomeRemoteDataSource {
+class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   final ApiClient apiClient;
-  HomeRemoteDataSource(
+  HomeRemoteDataSourceImpl(
     this.apiClient,
   );
 

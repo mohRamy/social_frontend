@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/auth.dart';
 
-abstract class BaseAuthRepository{
+abstract class AuthRepository{
   Future<Either<Failure, Unit>> signUp(Auth auth);
   Future<Either<Failure, Auth>> signIn(String email, String password);
   Future<Either<Failure, bool>> isTokenValid();

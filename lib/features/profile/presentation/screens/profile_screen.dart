@@ -55,48 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// class _ListFotosProfile extends StatelessWidget {
-//   const _ListFotosProfile({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetBuilder<UserController>(builder: (userCtrl) {
-//       var userData = userCtrl.user;
-//       return GridView.builder(
-//         physics: const NeverScrollableScrollPhysics(),
-//         scrollDirection: Axis.vertical,
-//         shrinkWrap: true,
-//         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 3,
-//           crossAxisSpacing: 2,
-//           mainAxisSpacing: 2,
-//           mainAxisExtent: 170,
-//         ),
-//         itemCount: 4,
-//         itemBuilder: (context, i) {
-//           return InkWell(
-//             // onTap: () => Navigator.push(context,
-//             //     routeSlide(page: const ListPhotosProfilePage())),
-//             child: Container(
-//               alignment: Alignment.center,
-//               decoration: BoxDecoration(
-//                 image: DecorationImage(
-//                   fit: BoxFit.cover,
-//                   image: NetworkImage(
-//                     userData.photo,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       );
-//     });
-//   }
-// }
-
 class _ListUserPost extends StatelessWidget {
   final Auth userData;
   const _ListUserPost({

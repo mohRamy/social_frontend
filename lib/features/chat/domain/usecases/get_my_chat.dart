@@ -4,7 +4,7 @@ import '../entities/chat.dart';
 import '../repository/base_chat_repository.dart';
 
 class GetMyChatUseCase {
-  final BaseChatRepository baseChatRepository;
+  final ChatRepository baseChatRepository;
   GetMyChatUseCase(this.baseChatRepository);
 
   Future<Either<Failure, Chat>> call() async {

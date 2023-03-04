@@ -5,7 +5,7 @@ import '../entities/comment.dart';
 import '../repository/base_home_repository.dart';
 
 class GetAllPostCommentUsecase {
-  final BaseHomeRepository baseHomeRepository;
+  final HomeRepository baseHomeRepository;
   GetAllPostCommentUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, List<Comment>>> call(String postId) async {

@@ -12,7 +12,7 @@ import '../../../../core/network/api_constance.dart';
 import '../../domain/entities/auth.dart';
 import '../models/auth_model.dart';
 
-abstract class BaseAuthRemoteDataSource extends GetConnect {
+abstract class AuthRemoteDataSource extends GetConnect {
   Future<Unit> signUp(Auth auth);
   Future<Auth> signIn(String email, String password);
   Future<bool> isTokenValid();
@@ -20,9 +20,9 @@ abstract class BaseAuthRemoteDataSource extends GetConnect {
   Future<Auth> getUserData(String userId);
 }
 
-class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
+class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final ApiClient apiClient;
-  AuthRemoteDataSource(this.apiClient);
+  AuthRemoteDataSourceImpl(this.apiClient);
   @override
   Future<Auth> signIn(String email, String password) async {
     http.Response res = await apiClient.postData(
@@ -45,8 +45,6 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
 
   @override
   Future<Unit> signUp(Auth auth) async {
-    print('sssssssssssss');
-    print(auth.fcmtoken);
     final res = await apiClient.postData(
         ApiConstance.signUp,
         jsonEncode({

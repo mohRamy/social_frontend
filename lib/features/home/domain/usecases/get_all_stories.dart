@@ -5,7 +5,7 @@ import '../entities/story.dart';
 import '../repository/base_home_repository.dart';
 
 class GetAllStoriesUsecase {
-  final BaseHomeRepository baseHomeRepository;
+  final HomeRepository baseHomeRepository;
   GetAllStoriesUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, List<Story>>> call() async {

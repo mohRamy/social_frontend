@@ -8,10 +8,10 @@ import '../datasources/post_remote_datasource.dart';
 
 typedef Future<Unit> GetMessage();
 
-class PostRepository extends BasePostRepository {
-  final BasePostRemoteDataSource basePostRemoteDataSource;
+class PostRepositoryImpl extends PostRepository {
+  final PostRemoteDataSource basePostRemoteDataSource;
   final NetworkInfo networkInfo;
-  PostRepository(this.basePostRemoteDataSource, this.networkInfo);
+  PostRepositoryImpl(this.basePostRemoteDataSource, this.networkInfo);
   @override
   Future<Either<Failure, Unit>> addPost(
       String description, List<String> postsUrl, List<String> postsType) async {

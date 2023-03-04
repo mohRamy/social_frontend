@@ -12,7 +12,7 @@ import '../../../home/data/models/post_model.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../../../home/domain/entities/post.dart';
 
-abstract class BaseProfileRemoteDataSource {
+abstract class ProfileRemoteDataSource {
   Future<Unit> followUser(String userId);
   Future<List<Post>> getUserPost(String userId);
   Future<Unit> modifyMyData(Auth myData);
@@ -20,9 +20,9 @@ abstract class BaseProfileRemoteDataSource {
   Future<Unit> changePassword(String currentPassword, String newPassword);
 }
 
-class ProfileRemoteDataSource extends BaseProfileRemoteDataSource {
+class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
   final ApiClient apiClient;
-  ProfileRemoteDataSource(this.apiClient);
+  ProfileRemoteDataSourceImpl(this.apiClient);
 
   @override
   Future<Unit> changePassword(

@@ -3,7 +3,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_chat_repository.dart';
 
 class MessageNotificationUseCase {
-  final BaseChatRepository baseChatRepository;
+  final ChatRepository baseChatRepository;
   MessageNotificationUseCase(this.baseChatRepository);
 
   Future<Either<Failure, Unit>> call(String userId, String message) async {

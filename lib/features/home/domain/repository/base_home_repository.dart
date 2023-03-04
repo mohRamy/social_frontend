@@ -5,7 +5,7 @@ import '../entities/post.dart';
 import '../entities/story.dart';
 
 
-abstract class BaseHomeRepository {
+abstract class HomeRepository {
   // post
   Future<Either<Failure, List<Post>>> getAllPosts();
   Future<Either<Failure, Unit>> modifyPost(String postId, String description);

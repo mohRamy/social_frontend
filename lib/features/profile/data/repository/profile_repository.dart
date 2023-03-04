@@ -11,10 +11,10 @@ import '../../../../core/error/exceptions.dart';
 
 typedef Future<Unit> GetMessage();
 
-class ProfileRepository extends BaseProfileRepository {
-  final BaseProfileRemoteDataSource baseProfileRemoteDataSource;
+class ProfileRepositoryImpl extends ProfileRepository {
+  final ProfileRemoteDataSource baseProfileRemoteDataSource;
   final NetworkInfo networkInfo;
-  ProfileRepository(this.baseProfileRemoteDataSource, this.networkInfo);
+  ProfileRepositoryImpl(this.baseProfileRemoteDataSource, this.networkInfo);
 
   @override
   Future<Either<Failure, Unit>> changePassword(String currentPassword, String newPassword) async {

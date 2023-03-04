@@ -72,28 +72,28 @@ Future<void> init() async {
   Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
   Get.lazyPut(() => InternetConnectionChecker());
 
-  // base and emlt
-  Get.lazyPut<BaseAuthRemoteDataSource>(() => AuthRemoteDataSource(Get.find()));
-  Get.lazyPut<BaseAuthRepository>(() => AuthRepository(Get.find(), Get.find()));
+  // base and impl
+  Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<AuthRepository>(() => AuthRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<BaseHomeRemoteDataSource>(() => HomeRemoteDataSource(Get.find()));
-  Get.lazyPut<BaseHomeRepository>(() => HomeRepository(Get.find(), Get.find()));
+  Get.lazyPut<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<HomeRepository>(() => HomeRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<BasePostRemoteDataSource>(() => PostRemoteDataSource(Get.find()));
-  Get.lazyPut<BasePostRepository>(() => PostRepository(Get.find(), Get.find()));
+  Get.lazyPut<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<PostRepository>(() => PostRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<BaseSearchRemoteDataSource>(
-      () => SearchRemoteDataSource(Get.find()));
-  Get.lazyPut<BaseSearchRepository>(
-      () => SearchRepository(Get.find(), Get.find()));
+  Get.lazyPut<SearchRemoteDataSource>(
+      () => SearchRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<SearchRepository>(
+      () => SearchRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<BaseProfileRemoteDataSource>(
-      () => ProfileRemoteDataSource(Get.find()));
-  Get.lazyPut<BaseProfileRepository>(
-      () => ProfileRepository(Get.find(), Get.find()));
+  Get.lazyPut<ProfileRemoteDataSource>(
+      () => ProfileRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<ProfileRepository>(
+      () => ProfileRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<BaseChatRemoteDataSource>(() => ChatRemoteDataSource(Get.find()));
-  Get.lazyPut<BaseChatRepository>(() => ChatRepository(Get.find(), Get.find()));
+  Get.lazyPut<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl(Get.find()));
+  Get.lazyPut<ChatRepository>(() => ChatRepositoryImpl(Get.find(), Get.find()));
 
 
   //controllers

@@ -8,10 +8,10 @@ import '../../../../core/error/exceptions.dart';
 import '../../domain/repository/base_search_repository.dart';
 import '../datasources/search_remote_datasource.dart';
 
-class SearchRepository extends BaseSearchRepository {
-  final BaseSearchRemoteDataSource baseSearchRemoteDataSource;
+class SearchRepositoryImpl extends SearchRepository {
+  final SearchRemoteDataSource baseSearchRemoteDataSource;
   final NetworkInfo networkInfo;
-  SearchRepository(this.baseSearchRemoteDataSource, this.networkInfo);
+  SearchRepositoryImpl(this.baseSearchRemoteDataSource, this.networkInfo);
 
   @override
   Future<Either<Failure, List<Auth>>> searchUser(String searchQuery) async {

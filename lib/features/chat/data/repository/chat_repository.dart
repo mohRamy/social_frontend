@@ -10,10 +10,10 @@ import '../datasources/chat_remote_datasource.dart';
 
 typedef Future<Unit> GetMessage();
 
-class ChatRepository extends BaseChatRepository {
-  final BaseChatRemoteDataSource baseChatRemoteDataSource;
+class ChatRepositoryImpl extends ChatRepository {
+  final ChatRemoteDataSource baseChatRemoteDataSource;
   final NetworkInfo networkInfo;
-  ChatRepository(this.baseChatRemoteDataSource, this.networkInfo);
+  ChatRepositoryImpl(this.baseChatRemoteDataSource, this.networkInfo);
 
   @override
   Future<Either<Failure, Chat>> getMyChat() async {

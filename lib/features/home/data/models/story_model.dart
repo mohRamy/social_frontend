@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../domain/entities/story.dart';
 
 import '../../../auth/data/models/auth_model.dart';
-import '../../../data/models/comment_model.dart';
+import 'comment_model.dart';
 
 class StoryModel extends Story {
   const StoryModel({
@@ -23,8 +23,8 @@ class StoryModel extends Story {
       stories: List<StoriesModel>.from(
           map['stories']?.map((x) => StoriesModel.fromMap(x)) ?? []),
       likes: List<String>.from(map['likes']),
-      comments: List<CommentMode>.from(
-          map['comments']?.map((x) => CommentMode.fromMap(x)) ?? []),
+      comments: List<CommentModel>.from(
+          map['comments']?.map((x) => CommentModel.fromMap(x)) ?? []),
     );
   }
 

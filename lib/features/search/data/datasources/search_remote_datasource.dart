@@ -9,13 +9,13 @@ import '../../../auth/domain/entities/auth.dart';
 
 import '../../../../core/utils/constants/state_handle.dart';
 
-abstract class BaseSearchRemoteDataSource {
+abstract class SearchRemoteDataSource {
   Future<List<Auth>> searchUser(String searchQuery);
 }
 
-class SearchRemoteDataSource extends BaseSearchRemoteDataSource {
+class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   final ApiClient apiClient;
-  SearchRemoteDataSource(this.apiClient);
+  SearchRemoteDataSourceImpl(this.apiClient);
 
   @override
   Future<List<Auth>> searchUser(String searchQuery) async {

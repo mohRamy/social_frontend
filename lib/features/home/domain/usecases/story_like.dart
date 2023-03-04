@@ -4,7 +4,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_home_repository.dart';
 
 class StoryLikeUsecase {
-  final BaseHomeRepository baseHomeRepository;
+  final HomeRepository baseHomeRepository;
   StoryLikeUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, Unit>> call(String storyId) async {

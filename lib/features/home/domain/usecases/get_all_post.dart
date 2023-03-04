@@ -5,7 +5,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_home_repository.dart';
 
 class GetAllPostsUsecase {
-  final BaseHomeRepository baseHomeRepository;
+  final HomeRepository baseHomeRepository;
   GetAllPostsUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, List<Post>>> call() async {

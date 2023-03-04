@@ -4,7 +4,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_auth_repository.dart';
 
 class IsTokenValidAuthUsecase {
-  final BaseAuthRepository baseAuthRepository;
+  final AuthRepository baseAuthRepository;
   IsTokenValidAuthUsecase(this.baseAuthRepository);
 
   Future<Either<Failure, bool>> call() async {

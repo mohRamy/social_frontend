@@ -2,7 +2,7 @@ import 'dart:convert';
 import '../../domain/entities/post.dart';
 
 import '../../../auth/data/models/auth_model.dart';
-import '../../../data/models/comment_model.dart';
+import 'comment_model.dart';
 
 class PostModel extends Post {
   const PostModel({
@@ -25,8 +25,8 @@ class PostModel extends Post {
       posts: List<PostsModel>.from(
           map['posts']?.map((x) => PostsModel.fromMap(x)) ?? []),
       likes: List<String>.from(map['likes'] ?? []),
-      comments: List<CommentMode>.from(
-          map['comments']?.map((x) => CommentMode.fromMap(x)) ?? []),
+      comments: List<CommentModel>.from(
+          map['comments']?.map((x) => CommentModel.fromMap(x)) ?? []),
       description: map['description'] ?? "",
     );
   }

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../auth/domain/entities/auth.dart';
-import '../../../data/models/comment_model.dart';
+import '../../data/models/comment_model.dart';
 
 class Story extends Equatable {
   final String id;
@@ -9,7 +9,7 @@ class Story extends Equatable {
   final DateTime createdAt;
   final List<Stories> stories;
   final List<String> likes;
-  final List<CommentMode> comments;
+  final List<CommentModel> comments;
   const Story({
     required this.id,
     required this.userData,

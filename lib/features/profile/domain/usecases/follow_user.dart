@@ -3,7 +3,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_profile_repository.dart';
 
 class FollowUserUseCase {
-  final BaseProfileRepository baseProfileRepository;
+  final ProfileRepository baseProfileRepository;
   FollowUserUseCase(this.baseProfileRepository);
 
   Future<Either<Failure, Unit>> call(String userId) async {

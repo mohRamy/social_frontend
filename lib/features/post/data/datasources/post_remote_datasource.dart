@@ -11,13 +11,13 @@ import '../../../../core/network/api_constance.dart';
 
 import '../../../../core/utils/constants/state_handle.dart';
 
-abstract class BasePostRemoteDataSource {
+abstract class PostRemoteDataSource {
   Future<Unit> addPost(String description, List<String> postsUrl, List<String> postsType);
 }
 
-class PostRemoteDataSource extends BasePostRemoteDataSource {
+class PostRemoteDataSourceImpl extends PostRemoteDataSource {
   final ApiClient apiClient;
-  PostRemoteDataSource(this.apiClient);
+  PostRemoteDataSourceImpl(this.apiClient);
 
   @override
   Future<Unit> addPost(

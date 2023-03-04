@@ -5,7 +5,7 @@ import '../repository/base_profile_repository.dart';
 import '../../../home/domain/entities/post.dart';
 
 class GetUserPostUseCase {
-  final BaseProfileRepository baseProfileRepository;
+  final ProfileRepository baseProfileRepository;
   GetUserPostUseCase(this.baseProfileRepository);
 
   Future<Either<Failure, List<Post>>> call(String userId) async {

@@ -3,7 +3,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_profile_repository.dart';
 
 class ChangepasswordUseCase {
-  final BaseProfileRepository baseProfileRepository;
+  final ProfileRepository baseProfileRepository;
   ChangepasswordUseCase(this.baseProfileRepository);
 
   Future<Either<Failure, Unit>> call(String currentPassword, String newPassword) async {

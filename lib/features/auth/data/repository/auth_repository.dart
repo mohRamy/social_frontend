@@ -9,10 +9,10 @@ import '../datasources/auth_remote_datasource.dart';
 
 typedef Future<Unit> GetMessage();
 
-class AuthRepository extends BaseAuthRepository {
-  final BaseAuthRemoteDataSource baseAuthRemoteDataSource;
+class AuthRepositoryImpl extends AuthRepository {
+  final AuthRemoteDataSource baseAuthRemoteDataSource;
   final NetworkInfo networkInfo;
-  AuthRepository(
+  AuthRepositoryImpl(
     this.baseAuthRemoteDataSource,
     this.networkInfo,
   );

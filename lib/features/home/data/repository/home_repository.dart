@@ -11,10 +11,10 @@ import '../../domain/repository/base_home_repository.dart';
 import '../../../../core/error/exceptions.dart';
 
 typedef Future<Unit> GetMessage();
-class HomeRepository extends BaseHomeRepository {
-  final BaseHomeRemoteDataSource baseHomeRemoteDataSource;
+class HomeRepositoryImpl extends HomeRepository {
+  final HomeRemoteDataSource baseHomeRemoteDataSource;
   final NetworkInfo networkInfo;
-  HomeRepository(this.baseHomeRemoteDataSource, this.networkInfo);
+  HomeRepositoryImpl(this.baseHomeRemoteDataSource, this.networkInfo);
   @override
   Future<Either<Failure, Unit>> addStory(
       List<String> storiesUrl, List<String> storiesType) async { 

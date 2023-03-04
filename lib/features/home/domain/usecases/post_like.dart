@@ -4,7 +4,7 @@ import '../../../../core/error/failures.dart';
 import '../repository/base_home_repository.dart';
 
 class PostLikeUsecase {
-  final BaseHomeRepository baseHomeRepository;
+  final HomeRepository baseHomeRepository;
   PostLikeUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, Unit>> call(String postId) async {

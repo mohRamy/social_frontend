@@ -146,7 +146,6 @@ class HomeController extends GetxController with HandleErrorLoading {
       (l) => AppComponent.showCustomSnackBar(l.message),
       (r) => postCommentList = r,
     );
-
     update();
   }
 
@@ -156,7 +155,6 @@ class HomeController extends GetxController with HandleErrorLoading {
       (l) => AppComponent.showCustomSnackBar(l.message),
       (r) => null,
     );
-
     update();
   }
 
@@ -167,7 +165,6 @@ class HomeController extends GetxController with HandleErrorLoading {
       (l) => AppComponent.showCustomSnackBar(l.message),
       (r) => stories = r,
     );
-
     update();
   }
 

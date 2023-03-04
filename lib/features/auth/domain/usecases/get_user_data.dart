@@ -4,7 +4,7 @@ import '../entities/auth.dart';
 import '../repository/base_auth_repository.dart';
 
 class GetUserDataAuthUsecase {
-  final BaseAuthRepository baseAuthRepository;
+  final AuthRepository baseAuthRepository;
   GetUserDataAuthUsecase(this.baseAuthRepository);
 
   Future<Either<Failure, Auth>> call(String userId) async {

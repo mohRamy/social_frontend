@@ -13,15 +13,15 @@ import '../../domain/entities/chat.dart';
 
 import '../../../../core/utils/constants/state_handle.dart';
 
-abstract class BaseChatRemoteDataSource {
+abstract class ChatRemoteDataSource {
   Future<Chat> getMyChat();
   Future<Unit> chatMessageSeen(String recieverId);
   Future<Unit> messageNotification(String userId, String message);
 }
 
-class ChatRemoteDataSource extends BaseChatRemoteDataSource {
+class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   final ApiClient apiClient;
-  ChatRemoteDataSource(this.apiClient);
+  ChatRemoteDataSourceImpl(this.apiClient);
 
   @override
   Future<Chat> getMyChat() async {

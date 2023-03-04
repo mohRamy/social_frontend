@@ -4,7 +4,7 @@ import '../../../auth/domain/entities/auth.dart';
 import '../repository/base_profile_repository.dart';
 
 class ModifyMyDataUseCase {
-  final BaseProfileRepository baseProfileRepository;
+  final ProfileRepository baseProfileRepository;
   ModifyMyDataUseCase(this.baseProfileRepository);
 
   Future<Either<Failure, Unit>> call(Auth myData) async {

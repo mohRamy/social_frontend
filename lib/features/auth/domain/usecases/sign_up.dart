@@ -5,7 +5,7 @@ import '../entities/auth.dart';
 import '../repository/base_auth_repository.dart';
 
 class SignUpAuthUsecase {
-  final BaseAuthRepository baseAuthRepository;
+  final AuthRepository baseAuthRepository;
   SignUpAuthUsecase(this.baseAuthRepository);
 
   Future<Either<Failure, Unit>> call(Auth auth) async {
