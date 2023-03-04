@@ -8,7 +8,7 @@ class GetMyDataAuthUsecase {
   final BaseAuthRepository baseAuthRepository;
   GetMyDataAuthUsecase(this.baseAuthRepository);
 
-  Future<Either<Failure, Auth>> execute() async {
+  Future<Either<Failure, Auth>> call() async {
     return await baseAuthRepository.getMyData();
   }
 }

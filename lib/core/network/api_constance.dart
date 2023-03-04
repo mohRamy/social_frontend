@@ -1,9 +1,10 @@
 class ApiConstance {
   // base
-  static const String baseUrl = "http://192.168.110.79:8000";
+  static const String baseUrl = "http://192.168.47.79:8000";
   // auth
   static const String signUp = "$baseUrl/api/signup";
   static const String signIn = "$baseUrl/api/signin";
+  static const String addChat = "$baseUrl/add-chat";
   static const String isTokenValid = "$baseUrl/tokenIsValid";
   // get user data
   static const String getMyData = "$baseUrl/get-my-data";
@@ -28,7 +29,7 @@ class ApiConstance {
   static const String addLikeCommentStory = "$baseUrl/story/like-comment";
   // profile
   static const String followUser = "$baseUrl/api/user/follow";
-  static const String getMyPost = "$baseUrl/api/user/get-mypost";
+  static const String getUserPost = "$baseUrl/api/user/get-userpost";
   static const String modifyMyInfo = "$baseUrl/api/user/modify-data";
   static const String private = "$baseUrl/api/user/private";
   static const String changePassword = "$baseUrl/api/user/change-password";
@@ -38,4 +39,5 @@ class ApiConstance {
   static const String addMessage = "$baseUrl/message/add-message";
   static const String getMyChat = "$baseUrl/chat/";
   static const String seenMessage = "$baseUrl/message/seen-message";
+  static const String messageToken = "$baseUrl/send-notification";
 }

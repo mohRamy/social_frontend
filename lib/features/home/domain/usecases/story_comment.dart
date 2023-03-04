@@ -7,7 +7,7 @@ class StoryCommentUsecase {
   final BaseHomeRepository baseHomeRepository;
   StoryCommentUsecase(this.baseHomeRepository);
 
-  Future<Either<Failure, Unit>> execute(String storyId, String comment) async {
+  Future<Either<Failure, Unit>> call(String storyId, String comment) async {
     return await baseHomeRepository.storyComment(storyId, comment);
   }
 }

@@ -8,7 +8,7 @@ class SignUpAuthUsecase {
   final BaseAuthRepository baseAuthRepository;
   SignUpAuthUsecase(this.baseAuthRepository);
 
-  Future<Either<Failure, Unit>> execute(Auth auth) async {
+  Future<Either<Failure, Unit>> call(Auth auth) async {
     return await baseAuthRepository.signUp(auth);
   }
 }

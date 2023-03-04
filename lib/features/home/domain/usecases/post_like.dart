@@ -7,7 +7,7 @@ class PostLikeUsecase {
   final BaseHomeRepository baseHomeRepository;
   PostLikeUsecase(this.baseHomeRepository);
 
-  Future<Either<Failure, Unit>> execute(String postId) async {
+  Future<Either<Failure, Unit>> call(String postId) async {
     return await baseHomeRepository.postLike(postId);
   }
 }

@@ -39,9 +39,11 @@ dependencies:
   bubble: 
   # flutter_icons: 
   badges:
+  firebase_core: ^2.7.0
+  firebase_messaging: ^14.2.5
   flutter_secure_storage: ^6.1.0
   form_field_validator: ^1.1.0
-  google_fonts: ^2.3.1
+  # google_fonts: ^2.3.1
   http: ^0.13.4
   image_picker: ^0.8.4+9
   permission_handler: ^9.2.0

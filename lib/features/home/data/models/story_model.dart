@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-import 'package:social_app/features/home/domain/entities/story.dart';
+import '../../domain/entities/story.dart';
 
 import '../../../auth/data/models/auth_model.dart';
 import '../../../data/models/comment_model.dart';
@@ -19,10 +18,10 @@ class StoryModel extends Story {
   factory StoryModel.fromMap(Map<String, dynamic> map) {
     return StoryModel(
       id: map['_id'] ?? map['id'],
-      userData: AuthModel.fromJson(map['userData']),
+      userData: AuthModel.fromMap(map['userData']),
       createdAt: DateTime.parse(map["createdAt"]),
       stories: List<StoriesModel>.from(
-          map['stories']?.map((x) => StoriesModel.fromJson(x)) ?? []),
+          map['stories']?.map((x) => StoriesModel.fromMap(x)) ?? []),
       likes: List<String>.from(map['likes']),
       comments: List<CommentMode>.from(
           map['comments']?.map((x) => CommentMode.fromMap(x)) ?? []),

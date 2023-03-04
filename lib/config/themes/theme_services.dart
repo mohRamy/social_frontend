@@ -3,13 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ModeTheme {
-  // box
-  // key
-  // save in box
-  // get from box
-  // getter theme
-  //change theme
-
   final GetStorage _box = GetStorage();
   final _key = 'theme';
 
@@ -23,6 +16,4 @@ class ModeTheme {
     Get.changeThemeMode(_readBox() ? ThemeMode.light : ThemeMode.dark);
     _writeBox(!_readBox());
   }
-
-  
 }

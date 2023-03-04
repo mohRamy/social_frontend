@@ -28,8 +28,9 @@ class TextCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: GoogleFonts.getFont(
-        isTitle ? 'Poppins' : 'Roboto',
+      style: TextStyle( 
+      //GoogleFonts.getFont(
+        //isTitle ? 'Poppins' : 'Roboto',
         fontSize: fontSize,
         fontWeight: fontWeight,
         color: context.textTheme.bodyText1!.color,

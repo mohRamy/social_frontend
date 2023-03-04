@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
+import 'package:social_app/core/utils/app_component.dart';
 
-import 'package:social_app/core/network/api_client.dart';
+import '../../../../core/network/api_client.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_app/core/utils/constants/state_handle.dart';
+import '../../../../core/utils/constants/state_handle.dart';
 
 import '../../../../core/network/api_constance.dart';
 import '../../domain/entities/auth.dart';
@@ -36,7 +37,7 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
     stateErrorHandle(
       res: res,
       onSuccess: () {
-        userData = AuthModel.fromJson(json.decode(res.body));
+        userData = AuthModel.fromJson(res.body);
       },
     );
     return userData;
@@ -44,6 +45,8 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
 
   @override
   Future<Unit> signUp(Auth auth) async {
+    print('sssssssssssss');
+    print(auth.fcmtoken);
     final res = await apiClient.postData(
         ApiConstance.signUp,
         jsonEncode({
@@ -51,8 +54,11 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
           "email": auth.email,
           "password": auth.password,
           "photo": auth.photo,
+          "fcmtoken": auth.fcmtoken,
         }));
-    stateErrorHandle(
+        
+        
+      stateErrorHandle(
       res: res,
       onSuccess: () {},
     );
@@ -85,7 +91,7 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
     stateErrorHandle(
       res: res,
       onSuccess: () {
-        userData = AuthModel.fromJson(json.decode(res.body));
+        userData = AuthModel.fromJson(res.body);
       },
     );
     return userData;
@@ -101,7 +107,7 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
     stateErrorHandle(
       res: res,
       onSuccess: () {
-        userData = AuthModel.fromJson(json.decode(res.body));
+        userData = AuthModel.fromJson(res.body);
       },
     );
     return userData;

@@ -1,32 +1,43 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:dartz/dartz.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:social_app/core/network/api_client.dart';
-import 'package:social_app/features/auth/data/models/auth_model.dart';
+import '../../../../core/network/api_client.dart';
+import '../../domain/usecases/get_my_data.dart';
+import '../../domain/usecases/get_user_data.dart';
+import '../../domain/usecases/is_token_valid.dart';
+import '../../domain/usecases/sign_in.dart';
 
 import '../../../../config/routes/app_pages.dart';
-import '../../../../controller/user_ctrl.dart';
+import 'user_controller.dart';
 import '../../../../core/error/handle_error_loading.dart';
+import '../../../../core/utils/app_component.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../helper/dependencies.dart' as dep;
 import '../../domain/entities/auth.dart';
-import '../../domain/repository/base_auth_repository.dart';
+import '../../domain/usecases/sign_up.dart';
 
 class AuthController extends GetxController with HandleErrorLoading {
-  final BaseAuthRepository authRepository;
-  final ApiClient apiClien;
+  final SignInAuthUsecase signInAuthUsecase;
+  final SignUpAuthUsecase signUpAuthUsecase;
+  final IsTokenValidAuthUsecase isTokenValidAuthUsecase;
+  final GetMyDataAuthUsecase getMyDataAuthUsecase;
+  final GetUserDataAuthUsecase getUserDataAuthUsecase;
+  final ApiClient apiClient;
   GetStorage box;
+
   AuthController({
-    required this.authRepository,
-    required this.apiClien,
+    required this.signInAuthUsecase,
+    required this.signUpAuthUsecase,
+    required this.isTokenValidAuthUsecase,
+    required this.getMyDataAuthUsecase,
+    required this.getUserDataAuthUsecase,
+    required this.apiClient,
     required this.box,
   });
 
@@ -56,8 +67,6 @@ class AuthController extends GetxController with HandleErrorLoading {
     required String password,
     required File? photo,
   }) async {
-    showLoading();
-
     String photoCloudinary =
         'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
 
@@ -74,7 +83,10 @@ class AuthController extends GetxController with HandleErrorLoading {
       photoCloudinary = res.secureUrl;
     }
 
-    final auth = Auth(
+    Auth? auth;
+
+    await FirebaseMessaging.instance.getToken().then((value){
+    auth = Auth(
       id: "",
       name: name,
       email: email,
@@ -89,41 +101,40 @@ class AuthController extends GetxController with HandleErrorLoading {
       type: "",
       private: false,
       token: "",
+      fcmtoken: value??"",
     );
+  });
 
-    final result = await authRepository.signUp(auth);
+    final result = await signUpAuthUsecase(auth!);
 
     result.fold(
-      (l) => handleError(l),
-      (r) => unit,
+      (l) => AppComponent.showCustomSnackBar(l.message),
+      (r) => AppComponent.showCustomSnackBar("Logged up Log in now", title: "", color: Colors.green),
     );
-
-    hideLoading();
   }
 
   void signInUser(
     String email,
     String password,
   ) async {
-    showLoading();
-    final result = await authRepository.signIn(email, password);
+    final result = await signInAuthUsecase(email, password);
     result.fold(
-      (l) => handleError(l),
+      (l) { 
+        AppComponent.showCustomSnackBar(l.message);
+        },
       (r) async {
         await dep.init();
         saveUserToken(r.token);
-        Get.find<UserCtrl>().setUserFromModel(r);
+        Get.find<UserController>().setUserFromModel(r);
         box.write(AppString.typeKey, r.type);
 
-        if (Get.find<UserCtrl>().user.type == 'user') {
+        if (Get.find<UserController>().user.type == 'user') {
           Get.offNamedUntil(Routes.NAV_USER_SCREEN, (route) => false);
         } else {
           Get.offNamedUntil(Routes.SIGN_UP, (route) => false);
         }
       },
     );
-
-    hideLoading();
   }
 
   void getMyData() async {
@@ -134,34 +145,41 @@ class AuthController extends GetxController with HandleErrorLoading {
 
     bool response = true;
 
-    final tokenResult = await authRepository.isTokenValid();
-    tokenResult.fold((l) => handleError, (r) => response = r);
+    final tokenResult = await isTokenValidAuthUsecase();
+    tokenResult.fold(
+      (l) => AppComponent.showCustomSnackBar(l.message),
+      (r) => response = r,
+    );
 
     if (response == true) {
-      final result = await authRepository.getMyData();
-      result.fold((l) => handleError, (r) {
-        UserCtrl userController = Get.find<UserCtrl>();
-        userController.setUserFromModel(r);
-      });
+      final result = await getMyDataAuthUsecase();
+      result.fold(
+        (l) => AppComponent.showCustomSnackBar(l.message),
+        (r) {
+          UserController userController = Get.find<UserController>();
+          userController.setUserFromModel(r);
+        },
+      );
     }
   }
 
   Future<Auth> getUserData(String userId) async {
     Auth? userData;
-    showLoading();
 
-    final result = await authRepository.getUserData(userId);
+    final result = await getUserDataAuthUsecase(userId);
 
-    result.fold((l) => handleError, (r) => userData = r);
+    result.fold(
+      (l) => AppComponent.showCustomSnackBar(l.message),
+      (r) => userData = r,
+    );
 
-    hideLoading();
     return userData!;
   }
 
   // save user token
   void saveUserToken(String token) {
-    apiClien.token = token;
-    apiClien.updateHeaders(token);
+    apiClient.token = token;
+    apiClient.updateHeaders(token);
     box.write(AppString.token, token);
   }
 
@@ -179,8 +197,8 @@ class AuthController extends GetxController with HandleErrorLoading {
 
   bool clearSharedData() {
     box.remove(AppString.token);
-    apiClien.token = '';
-    apiClien.updateHeaders('');
+    apiClient.token = '';
+    apiClient.updateHeaders('');
     return true;
   }
 

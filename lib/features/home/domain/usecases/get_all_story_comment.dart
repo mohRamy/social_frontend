@@ -8,7 +8,7 @@ class GetAllStoryCommentUsecase {
   final BaseHomeRepository baseHomeRepository;
   GetAllStoryCommentUsecase(this.baseHomeRepository);
 
-  Future<Either<Failure, List<Comment>>> execute(String storyId) async {
+  Future<Either<Failure, List<Comment>>> call(String storyId) async {
     return await baseHomeRepository.getAllStoryComment(storyId);
   }
 }

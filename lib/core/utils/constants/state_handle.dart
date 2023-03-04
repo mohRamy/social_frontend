@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:social_app/core/error/exceptions.dart';
 
@@ -34,12 +33,12 @@ void stateErrorHandle({
   switch (res.statusCode) {
     case 200:
       onSuccess();
-      break;
+    break;
     case 400:
-      throw ServerException(messageError: jsonDecode(res.body)['msg']);
+    throw ServerException(messageError: jsonDecode(res.body)['msg']);
     case 500:
-      throw ServerException(messageError: jsonDecode(res.body)['error']);
+    throw ServerException(messageError: jsonDecode(res.body)['error']);
     default:
-      throw ServerException(messageError: "Error");
+    throw ServerException(messageError: jsonDecode(res.body)['error']);
   }
 }

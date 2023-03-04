@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../features/view/chat/widgets/video_card.dart';
-import '../../features/view/home/home_widgets/hero_image.dart';
 
-import '../../features/view/home/home_widgets/video_out.dart';
+import '../../features/chat/presentation/components/video_card.dart';
+import '../widgets/hero_image.dart';
+import '../../features/home/presentation/components/video_out.dart';
 
 class DisplayImageVideoCard extends StatelessWidget {
   final String file;

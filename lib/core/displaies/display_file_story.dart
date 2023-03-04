@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../features/view/home/home_widgets/hero_image.dart';
+import '../widgets/hero_image.dart';
 import '../enums/story_enum.dart';
 import '../utils/dimensions.dart';
 
-import '../../features/view/post/post_widgets/video_card.dart';
+import '../../features/post/presentation/components/video_card.dart';
 
 class DisplayFileStory extends StatelessWidget {
   final File message;

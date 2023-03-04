@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../features/view/post/post_widgets/video_card.dart';
+import '../../features/post/presentation/components/video_card.dart';
 import '../enums/post_enum.dart';
 import '../utils/dimensions.dart';
 

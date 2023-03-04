@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controller/auth_controller.dart';
 
 import '../../../../config/routes/app_pages.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/dimensions.dart';
-
 import '../../../../core/picker/picker.dart';
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_component.dart';
+import '../../../../core/utils/dimensions.dart';
 import '../components/painter_custom.dart';
 import '../components/text_custom.dart';
 import '../components/text_field_auth.dart';
+import '../controller/auth_controller.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -74,6 +73,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: password,
         photo: photo,
       );
+      setState(() {
+      authCtrl.emailUC.text = "";
+      authCtrl.passwordUC.text = "";
+      authCtrl.nameUC.text = "";
+      });
     }
   }
 

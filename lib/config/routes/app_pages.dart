@@ -1,17 +1,16 @@
-
 import 'package:get/get.dart';
-import 'package:social_app/features/auth/presentation/screens/sign_in_screen.dart';
-import 'package:social_app/features/auth/presentation/screens/sign_up_screen.dart';
-import '../../features/view/chat/widgets/contacts_list.dart';
-import '../../features/view/home/home_screens/likes_screen.dart';
-import '../../features/view/home/home_screens/post_comments_screen.dart';
-import '../../features/view/profile/profile_screen/account_profile_page.dart';
+import '../../features/auth/presentation/screens/sign_in_screen.dart';
+import '../../features/auth/presentation/screens/sign_up_screen.dart';
+import '../../features/profile/presentation/screens/account_profile_page.dart';
+import '../../features/profile/presentation/screens/list_photos_profile_page.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/chat/presentation/components/contacts_list.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/screens/likes_screen.dart';
+import '../../features/home/presentation/screens/post_comments_screen.dart';
 
-import '../../features/view/home/home_screens/home_screen.dart';
-import '../../features/view/nav/nav_screen/nav_user_screen.dart';
-import '../../features/view/profile/profile_screen/list_photos_profile_page.dart';
-import '../../features/view/profile/profile_screen/profile_screen.dart';
-import '../../features/view/search/search_screens/search_screen.dart';
+import '../../features/nav/screens/nav_user_screen.dart';
+import '../../features/search/presentation/screens/search_screen.dart';
 
 part 'app_routes.dart';
 
@@ -71,7 +70,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ACCOUNT_PROFILE,
-      page: () => const AccountProfilePage(),
+      page: () => const AccountProfileScreen(),
       transition: Transition.fadeIn,
     ),
   ];

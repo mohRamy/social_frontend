@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:social_app/features/home/domain/entities/comment.dart';
+import '../../domain/entities/comment.dart';
 
 class CommentModel extends Comment {
   const CommentModel({

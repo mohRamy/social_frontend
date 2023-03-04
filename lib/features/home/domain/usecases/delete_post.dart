@@ -7,7 +7,7 @@ class DeletePostUsecase {
   final BaseHomeRepository baseHomeRepository;
   DeletePostUsecase(this.baseHomeRepository);
 
-  Future<Either<Failure, Unit>> execute(String postId) async {
+  Future<Either<Failure, Unit>> call(String postId) async {
     return await baseHomeRepository.deletePost(postId);
   }
 }

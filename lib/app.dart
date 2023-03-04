@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/controller/user_ctrl.dart';
-import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
-import 'package:social_app/features/view/auth/auth_ctrl/auth_ctrl.dart';
+import 'features/auth/presentation/controller/auth_controller.dart';
+import 'features/chat/presentation/controller/chat_controller.dart';
 import 'config/themes/theme_services.dart';
-import 'features/view/chat/controller/chat_ctrl.dart';
 import 'config/routes/app_pages.dart';
 import 'core/utils/app_colors.dart';
 import 'core/utils/app_strings.dart';
@@ -27,12 +25,12 @@ class SocialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (Get.find<AuthController>().userLoggedIn()) {
       Get.find<AuthController>().getMyData();
-      Get.find<ChatCtrl>().fetchAllChatContact();
+      Get.find<ChatController>().getMyChat();
     }
     
         return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: AppString.APP_NAME,
+      title: AppString.appName,
       themeMode: ModeTheme().theme,
         theme: Themes.light,
         darkTheme: Themes.dark,

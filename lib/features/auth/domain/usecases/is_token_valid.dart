@@ -7,7 +7,7 @@ class IsTokenValidAuthUsecase {
   final BaseAuthRepository baseAuthRepository;
   IsTokenValidAuthUsecase(this.baseAuthRepository);
 
-  Future<Either<Failure, bool>> execute() async {
+  Future<Either<Failure, bool>> call() async {
     return await baseAuthRepository.isTokenValid();
   }
 }

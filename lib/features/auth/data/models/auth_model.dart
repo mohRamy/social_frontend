@@ -18,6 +18,7 @@ class AuthModel extends Auth {
     required super.type,
     required super.private,
     required super.token,
+    required super.fcmtoken,
   });
 
   factory AuthModel.fromMap(Map<String, dynamic> map) {
@@ -26,8 +27,8 @@ class AuthModel extends Auth {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       bio: map['bio'] ?? '',
-      followers: List<String>.from(map['followers']),
-      following: List<String>.from(map['following']),
+      followers: List<String>.from(map['followers'] ?? []),
+      following: List<String>.from(map['following'] ?? []),
       photo: map['photo'] ?? '',
       backgroundImage: map['backgroundImage'] ?? '',
       phone: map['phone'] ?? '',
@@ -36,6 +37,7 @@ class AuthModel extends Auth {
       type: map['type'] ?? '',
       private: map['private'] ?? false,
       token: map['token'] ?? '',
+      fcmtoken: map['fcmtoken'] ?? '',
     );
   }
 
@@ -55,6 +57,7 @@ class AuthModel extends Auth {
       'type': type,
       'private': private,
       'token': token,
+      'fcmtoken': fcmtoken,
     };
   }
 

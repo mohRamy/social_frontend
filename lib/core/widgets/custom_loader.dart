@@ -17,7 +17,7 @@ class CustomLoader extends StatelessWidget {
           color: AppColors.primary,
         ),
         alignment: Alignment.center,
-        child: const CircularProgressIndicator(color: Colors.white,),
+        child: const CircularProgressIndicator(color: Colors.white),
       ),
     );
   }

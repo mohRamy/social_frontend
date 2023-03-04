@@ -7,6 +7,8 @@ import '../../domain/entities/auth.dart';
 import '../../domain/repository/base_auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 
+typedef Future<Unit> GetMessage();
+
 class AuthRepository extends BaseAuthRepository {
   final BaseAuthRemoteDataSource baseAuthRemoteDataSource;
   final NetworkInfo networkInfo;
@@ -20,28 +22,29 @@ class AuthRepository extends BaseAuthRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseAuthRemoteDataSource.signIn(email, password);
-        return right(result);
+        return Right(result);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(OfflineFailure(message: "Offline failure"));
+      return Left(OfflineFailure(message: "Offline failure"));
     }
   }
 
   @override
   Future<Either<Failure, Unit>> signUp(Auth auth) async {
-    await baseAuthRemoteDataSource.signUp(auth);
-    return await _getMessage();
+    return await _getMessage((){
+      return baseAuthRemoteDataSource.signUp(auth);
+    });
   }
 
   @override
   Future<Either<Failure, bool>> isTokenValid() async {
     try {
         final result = await baseAuthRemoteDataSource.isTokenValid();
-        return right(result);
+        return Right(result);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
   }
 
@@ -50,12 +53,12 @@ class AuthRepository extends BaseAuthRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseAuthRemoteDataSource.getMyData();
-        return right(result);
+        return Right(result);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(OfflineFailure(message: "Offline failure"));
+      return Left(OfflineFailure(message: "Offline failure"));
     }
   }
 
@@ -64,18 +67,19 @@ class AuthRepository extends BaseAuthRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseAuthRemoteDataSource.getUserData(userId);
-        return right(result);
+        return Right(result);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(OfflineFailure(message: "Offline failure"));
+      return Left(OfflineFailure(message: "Offline failure"));
     }
   }
 
-  Future<Either<Failure, Unit>> _getMessage() async {
+  Future<Either<Failure, Unit>> _getMessage(GetMessage getMessage) async {
     if (await networkInfo.isConnected) {
       try {
+        await getMessage();
         return right(unit);
       } on ServerException catch (failure) {
         return left(ServerFailure(message: failure.messageError));
@@ -84,6 +88,4 @@ class AuthRepository extends BaseAuthRepository {
       return left(OfflineFailure(message: "Offline failure"));
     }
   }
-  
-  
 }

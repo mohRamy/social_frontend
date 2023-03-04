@@ -1,79 +1,178 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:social_app/core/network/api_constance.dart';
-import 'package:social_app/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:social_app/features/auth/data/repository/auth_repository.dart';
-import 'package:social_app/features/auth/domain/repository/base_auth_repository.dart';
-import 'package:social_app/features/auth/presentation/controller/auth_controller.dart';
+import 'package:social_app/features/chat/domain/usecases/message_notification.dart';
+import '../core/network/api_constance.dart';
+import '../features/auth/data/datasources/auth_remote_datasource.dart';
+import '../features/auth/data/repository/auth_repository.dart';
+import '../features/auth/domain/repository/base_auth_repository.dart';
+import '../features/auth/domain/usecases/get_my_data.dart';
+import '../features/auth/domain/usecases/get_user_data.dart';
+import '../features/auth/domain/usecases/is_token_valid.dart';
+import '../features/auth/presentation/controller/auth_controller.dart';
+import '../features/chat/data/datasources/chat_remote_datasource.dart';
+import '../features/chat/data/repository/chat_repository.dart';
+import '../features/chat/domain/repository/base_chat_repository.dart';
+import '../features/chat/domain/usecases/chat_message_seen.dart';
+import '../features/chat/domain/usecases/get_my_chat.dart';
+import '../features/home/domain/usecases/add_story.dart';
+import '../features/home/domain/usecases/delete_post.dart';
+import '../features/home/domain/usecases/get_all_post.dart';
+import '../features/home/domain/usecases/get_all_post_comment.dart';
+import '../features/home/domain/usecases/get_all_stories.dart';
+import '../features/home/domain/usecases/get_all_story_comment.dart';
+import '../features/home/domain/usecases/post_comment.dart';
+import '../features/home/domain/usecases/post_comment_like.dart';
+import '../features/home/domain/usecases/post_like.dart';
+import '../features/home/domain/usecases/story_comment.dart';
+import '../features/home/domain/usecases/story_comment_like.dart';
+import '../features/home/domain/usecases/story_like.dart';
+import '../features/home/domain/usecases/update_post.dart';
+import '../features/post/domain/usecases/add_post.dart';
+import '../features/post/presentation/controller/post_controller.dart';
+import '../features/profile/data/datasources/profile_remote_datasource.dart';
+import '../features/profile/data/repository/profile_repository.dart';
+import '../features/profile/domain/repository/base_profile_repository.dart';
+import '../features/profile/domain/usecases/change_password.dart';
+import '../features/profile/domain/usecases/follow_user.dart';
+import '../features/profile/domain/usecases/get_user_post.dart';
+import '../features/profile/domain/usecases/modify_my_data.dart';
+import '../features/profile/domain/usecases/private_account.dart';
+import '../features/profile/presentation/controller/profile_controller.dart';
+import '../features/search/domain/usecases/add_post.dart';
+import '../features/search/presentation/controller/search_controller.dart';
 import '../core/network/api_client.dart';
 import '../core/network/network_info.dart';
-import '../features/view/auth/auth_ctrl/auth_ctrl.dart';
-import '../features/view/auth/auth_repo/auth_repo.dart';
-import '../features/view/chat/controller/chat_ctrl.dart';
-import '../features/view/chat/repo/chat_repo.dart';
-import '../controller/user_ctrl.dart';
+import '../features/auth/domain/usecases/sign_in.dart';
+import '../features/auth/domain/usecases/sign_up.dart';
+import '../features/chat/presentation/controller/chat_controller.dart';
+import '../features/home/data/datasources/home_remote_datasource.dart';
+import '../features/home/data/repository/home_repository.dart';
+import '../features/home/domain/repository/base_home_repository.dart';
+import '../features/home/presentation/controller/home_controller.dart';
+import '../features/post/data/datasources/post_remote_datasource.dart';
+import '../features/post/data/repository/post_repository.dart';
+import '../features/post/domain/repository/base_post_repository.dart';
+import '../features/search/data/datasources/search_remote_datasource.dart';
+import '../features/search/data/repository/search_repository.dart';
+import '../features/search/domain/repository/base_search_repository.dart';
+import '../features/auth/presentation/controller/user_controller.dart';
 
-import '../features/data/api/api_client.dart';
-import '../features/data/api/local_source.dart';
-import '../features/view/home/home_ctrl/home_ctrl.dart';
-import '../features/view/home/home_repo/home_repo.dart';
-import '../features/view/nav/nav_ctrl/nav_user_ctrl.dart';
-import '../features/view/post/post_ctrl/post_ctrl.dart';
-import '../features/view/post/post_repo/post_repo.dart';
-import '../features/view/profile/profile_ctrl/profile_ctrl.dart';
-import '../features/view/profile/profile_repo/profile_repo.dart';
-import '../features/view/search/search_ctrl/search_ctrl.dart';
-import '../features/view/search/search_repo/search_repo.dart';
-
+import '../features/nav/controller/nav_user_ctrl.dart';
 
 Future<void> init() async {
-  final sharedPreferences = await SharedPreferences.getInstance();
+  // get storage
+  Get.lazyPut(() => GetStorage());
 
-  //sharedPreferences
-  Get.lazyPut(() => sharedPreferences);
-  Get.lazyPut(()=> GetStorage());
+  // api client
+  Get.lazyPut(
+      () => ApiClient(box: Get.find(), appBaseUrl: ApiConstance.baseUrl));
 
-  //api client
-  Get.lazyPut(() => ApiClie(sharedPreferences: Get.find()));
-  Get.lazyPut(() => ApiClient(box: Get.find(), appBaseUrl: ApiConstance.baseUrl));
-
-
-  //netInfo
+  // netInfo
   Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
   Get.lazyPut(() => InternetConnectionChecker());
 
-  // localSource
-  Get.lazyPut(() => PostLocalSource(sharedPreferences: Get.find()));
-  // Get.lazyPut(() => StoryLocalSource(sharedPreferences: Get.find()));
-
+  // base and emlt
   Get.lazyPut<BaseAuthRemoteDataSource>(() => AuthRemoteDataSource(Get.find()));
   Get.lazyPut<BaseAuthRepository>(() => AuthRepository(Get.find(), Get.find()));
 
-  //repos
-  // Get.lazyPut(
-  //     () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
-  Get.lazyPut(() => HomeRepo(apiClient: Get.find()));
-  Get.lazyPut(() => PostRepo(apiClient: Get.find()));
-  Get.lazyPut(() => SearchRepo(apiClient: Get.find()));
-  Get.lazyPut(() => ProfileRepo(apiClient: Get.find()));
-  Get.lazyPut(() => ChatRepo(apiClient: Get.find()));
+  Get.lazyPut<BaseHomeRemoteDataSource>(() => HomeRemoteDataSource(Get.find()));
+  Get.lazyPut<BaseHomeRepository>(() => HomeRepository(Get.find(), Get.find()));
+
+  Get.lazyPut<BasePostRemoteDataSource>(() => PostRemoteDataSource(Get.find()));
+  Get.lazyPut<BasePostRepository>(() => PostRepository(Get.find(), Get.find()));
+
+  Get.lazyPut<BaseSearchRemoteDataSource>(
+      () => SearchRemoteDataSource(Get.find()));
+  Get.lazyPut<BaseSearchRepository>(
+      () => SearchRepository(Get.find(), Get.find()));
+
+  Get.lazyPut<BaseProfileRemoteDataSource>(
+      () => ProfileRemoteDataSource(Get.find()));
+  Get.lazyPut<BaseProfileRepository>(
+      () => ProfileRepository(Get.find(), Get.find()));
+
+  Get.lazyPut<BaseChatRemoteDataSource>(() => ChatRemoteDataSource(Get.find()));
+  Get.lazyPut<BaseChatRepository>(() => ChatRepository(Get.find(), Get.find()));
+
 
   //controllers
-  Get.lazyPut(() => UserCtrl());
-  Get.lazyPut(() => HomeCtrl(
-      homeRepo: Get.find(),
-      networkInfo: Get.find(),
-      postLocalSource: Get.find()));
-      Get.lazyPut(()=> AuthController(authRepository: Get.find(), apiClien: Get.find(), box: Get.find()));
-  // Get.lazyPut(() => AuthCtrl(
-  //     apiClient: Get.find(),
-  //     authRepo: Get.find(),
-  //     sharedPreferences: sharedPreferences));
-  Get.lazyPut(() => NavUserCtrl());
-  Get.lazyPut(() => PostCtrl(postRepo: Get.find()));
-  Get.lazyPut(() => SearchCtrl(searchRepo: Get.find()));
-  Get.lazyPut(() => ProfileCtrl(profileRepo: Get.find()));
-  Get.lazyPut(() => ChatCtrl(chatRepo: Get.find(), networkInfo: Get.find()));
+  Get.lazyPut(() => UserController());
+
+  Get.lazyPut(()=>GetAllPostsUsecase(Get.find()));
+  Get.lazyPut(()=>ModifyPostUsecase(Get.find()));
+  Get.lazyPut(()=>DeletePostUsecase(Get.find()));
+  Get.lazyPut(()=>PostLikeUsecase(Get.find()));
+  Get.lazyPut(()=>PostCommentUsecase(Get.find()));
+  Get.lazyPut(()=>GetAllPostCommentUsecase(Get.find()));
+  Get.lazyPut(()=>PostCommentLikeUsecase(Get.find()));
+  Get.lazyPut(()=>GetAllStoriesUsecase(Get.find()));
+  Get.lazyPut(()=>AddStoryUsecase(Get.find()));
+  Get.lazyPut(()=>StoryLikeUsecase(Get.find()));
+  Get.lazyPut(()=>StoryCommentUsecase(Get.find()));
+  Get.lazyPut(()=>GetAllStoryCommentUsecase(Get.find()));
+  Get.lazyPut(()=>StoryCommentLikeUsecase(Get.find()));
+  Get.lazyPut(() => HomeController(
+        getAllPostsUsecase: Get.find(),
+        modifyPostUsecase: Get.find(),
+        deletePostUsecase: Get.find(),
+        postLikeUsecase: Get.find(),
+        postCommentUsecase: Get.find(),
+        getAllPostCommentUsecase: Get.find(),
+        postCommentLikeUsecase: Get.find(),
+        getAllStoriesUsecase: Get.find(),
+        addStoryUsecase: Get.find(),
+        storyLikeUsecase: Get.find(),
+        storyCommentUsecase: Get.find(),
+        getAllStoryCommentUsecase: Get.find(),
+        storyCommentLikeUsecase: Get.find(),
+      ));
+
+  Get.lazyPut(()=>SignInAuthUsecase(Get.find()));
+  Get.lazyPut(()=>SignUpAuthUsecase(Get.find()));
+  Get.lazyPut(()=>IsTokenValidAuthUsecase(Get.find()));
+  Get.lazyPut(()=>GetMyDataAuthUsecase(Get.find()));
+  Get.lazyPut(()=>GetUserDataAuthUsecase(Get.find()));
+  Get.lazyPut(() => AuthController(
+        signInAuthUsecase: Get.find(),
+        signUpAuthUsecase: Get.find(),
+        isTokenValidAuthUsecase: Get.find(),
+        getMyDataAuthUsecase: Get.find(),
+        getUserDataAuthUsecase: Get.find(),
+        apiClient: Get.find(),
+        box: Get.find(),
+      ));
+      
+  Get.lazyPut(() => NavUserController());
+
+  Get.lazyPut(()=>AddPostUseCase(Get.find()));
+  Get.lazyPut(() => PostController(addPostUseCase: Get.find()));
+  
+  Get.lazyPut(()=>SearchUserUseCase(Get.find()));
+  Get.lazyPut(() => SearchController(
+        apiClient: Get.find(),
+        searchUserUseCase: Get.find(),
+      ));
+  
+  Get.lazyPut(()=>FollowUserUseCase(Get.find()));
+  Get.lazyPut(()=>GetUserPostUseCase(Get.find()));
+  Get.lazyPut(()=>ModifyMyDataUseCase(Get.find()));
+  Get.lazyPut(()=>PrivateAccountUseCase(Get.find()));
+  Get.lazyPut(()=>ChangepasswordUseCase(Get.find()));
+  Get.lazyPut(() => ProfileController(
+        followUserUseCase: Get.find(),
+        getUserPostUseCase: Get.find(),
+        modifyMyDataUseCase: Get.find(),
+        privateAccountUseCase: Get.find(),
+        changepasswordUseCase: Get.find(),
+      ));
+
+  Get.lazyPut(()=>GetMyChatUseCase(Get.find()));
+  Get.lazyPut(()=>ChatMessageSeenUseCase(Get.find()));
+  Get.lazyPut(()=>MessageNotificationUseCase(Get.find()));
+  Get.lazyPut(() => ChatController(
+        getMyChatUseCase: Get.find(),
+        chatMessageSeenUseCase: Get.find(),
+        messageNotificationUseCase: Get.find(),
+      ));
 }

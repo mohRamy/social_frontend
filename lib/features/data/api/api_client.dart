@@ -16,14 +16,14 @@ class ApiClie extends GetConnect implements GetxService {
     token = sharedPreferences.getString(AppString.token) ?? '';
     _mainHeaders = {
       'Content-Type': 'application/json; charset=UTF-8',
-      AppString.TOKEN_KEY: token,
+      AppString.tokenKey: token,
     };
   }
 
   void updateHeaders(String token) {
     _mainHeaders = {
       'Content-Type': 'application/json; charset=UTF-8',
-      AppString.TOKEN_KEY: token,
+      AppString.tokenKey: token,
     };
   }
 

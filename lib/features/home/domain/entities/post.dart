@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import '../../../auth/domain/entities/auth.dart';
 import '../../../data/models/comment_model.dart';
 

@@ -7,7 +7,7 @@ class StoryLikeUsecase {
   final BaseHomeRepository baseHomeRepository;
   StoryLikeUsecase(this.baseHomeRepository);
 
-  Future<Either<Failure, Unit>> execute(String storyId) async {
+  Future<Either<Failure, Unit>> call(String storyId) async {
     return await baseHomeRepository.storyLike(storyId);
   }
 }

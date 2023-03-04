@@ -15,6 +15,7 @@ class Auth extends Equatable {
   final String type;
   final bool private;
   final String token;
+  final String fcmtoken;
   const Auth({
     required this.id,
     required this.name,
@@ -30,6 +31,7 @@ class Auth extends Equatable {
     required this.type,
     required this.private,
     required this.token,
+    required this.fcmtoken,
 });
 
   @override
@@ -48,5 +50,6 @@ class Auth extends Equatable {
         type,
         private,
         token,
+        fcmtoken,
       ];
 }

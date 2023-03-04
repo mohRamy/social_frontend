@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:social_app/features/home/domain/entities/post.dart';
+import '../../domain/entities/post.dart';
 
 import '../../../auth/data/models/auth_model.dart';
 import '../../../data/models/comment_model.dart';
@@ -19,11 +19,11 @@ class PostModel extends Post {
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
       id: map['_id'] ?? map['id'],
-      userData: AuthModel.fromJson(map['userData']),
+      userData: AuthModel.fromMap(map['userData']),
       userId: map['userId'] ?? '',
       time: map['time'] ?? 0,
       posts: List<PostsModel>.from(
-          map['posts']?.map((x) => PostsModel.fromJson(x)) ?? []),
+          map['posts']?.map((x) => PostsModel.fromMap(x)) ?? []),
       likes: List<String>.from(map['likes'] ?? []),
       comments: List<CommentMode>.from(
           map['comments']?.map((x) => CommentMode.fromMap(x)) ?? []),
