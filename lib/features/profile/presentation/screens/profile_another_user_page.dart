@@ -175,7 +175,7 @@ class _BtnFollowAndMessage extends StatelessWidget {
           height: 43,
           width: size.width * .5,
           decoration: BoxDecoration(
-            color: isFriend == 1 || isPendingFollowers == 1 ? Colors.white : AppColors.primary,
+            color: isFriend == 1 || isPendingFollowers == 1 ? Colors.white : AppColors.origin,
             border: Border.all(color:  isFriend == 1 || isPendingFollowers == 1 ? Colors.grey : Colors.white),
             borderRadius: BorderRadius.circular(50.0)
           ),

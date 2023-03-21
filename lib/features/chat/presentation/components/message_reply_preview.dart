@@ -48,7 +48,7 @@ class MessageReplyPreview extends ConsumerWidget {
         //356,
         padding:  EdgeInsets.all(Dimensions.height10 -8),
         decoration:  BoxDecoration(
-          color: AppColors.bgDarkColor,
+          color: AppColors.backgroundDark,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(Dimensions.radius15 - 3),
             topRight: Radius.circular(Dimensions.radius15 - 3),
@@ -57,7 +57,7 @@ class MessageReplyPreview extends ConsumerWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Dimensions.radius15 - 3),
-            color: AppColors.bgLightColor,
+            color: AppColors.backgroundLight,
           ),
           padding: messageReply!.type == "text"
               ?  EdgeInsets.all(Dimensions.height10 - 5)
@@ -77,7 +77,7 @@ class MessageReplyPreview extends ConsumerWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:
-                                  messageReply.isMe ? AppColors.bgLightColor : Colors.orange,
+                                  messageReply.isMe ? AppColors.backgroundLight : Colors.orange,
                             ),
                           ),
                           Text(messageReply.message),
@@ -110,7 +110,7 @@ class MessageReplyPreview extends ConsumerWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:
-                                  messageReply.isMe ? AppColors.bgLightColor : Colors.orange,
+                                  messageReply.isMe ? AppColors.backgroundLight : Colors.orange,
                             ),
                           ),
                           Text(typeIcon()),

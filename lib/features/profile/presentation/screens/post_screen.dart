@@ -293,7 +293,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         return TextButton(
             style: TextButton.styleFrom(
                 padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColors.origin,
                 primary: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0))),

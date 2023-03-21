@@ -40,7 +40,7 @@ class ThemeProfilePage extends StatelessWidget {
                   children: [
                     // Icon(CupertinoIcons.sun_dust),
                     const TextCustom(text: 'Day'),
-                    Icon(Icons.radio_button_checked, color: AppColors.primary)
+                    Icon(Icons.radio_button_checked, color: AppColors.origin)
                   ],
                 ),
               ),

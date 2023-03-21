@@ -24,7 +24,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void getMyChat() async {
     final result = await getMyChatUseCase();
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => myChat = r,
     );
   }
@@ -32,7 +32,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void chatMessageSeen(String recieverId) async {
     final result = await chatMessageSeenUseCase(recieverId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
   }
@@ -40,7 +40,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void messageNotification(String userId, String message) async {
     final result = await messageNotificationUseCase(userId, message);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
   }

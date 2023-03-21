@@ -45,7 +45,7 @@ class SearchController extends GetxController with HandleErrorLoading {
     );
       update();
     } catch (e) {
-      AppComponent.showCustomSnackBar(e.toString());
+      AppComponents.showCustomSnackBar(e.toString());
     }
     return users;
   }

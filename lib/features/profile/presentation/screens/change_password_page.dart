@@ -67,7 +67,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         );
                     }
                   }, 
-                  child: TextCustom(text: 'Keep', fontSize: 15, color: AppColors.primary)
+                  child: TextCustom(text: 'Keep', fontSize: 15, color: AppColors.origin)
                 );
               }
             )

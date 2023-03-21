@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
       style: const TextStyle( 
       //GoogleFonts.getFont('Roboto', 
       fontSize: 18),
-      cursorColor: AppColors.canvas,
+      cursorColor: AppColors.branch,
       obscureText: isPassword,
       keyboardType: keyboardType,
       decoration: InputDecoration(
@@ -31,7 +31,7 @@ class CustomTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: BorderSide(color: AppColors.origin),
         ),
         hintText: hintText,
       ),

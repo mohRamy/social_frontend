@@ -34,7 +34,7 @@ class PostRemoteDataSourceImpl extends PostRemoteDataSource {
     stateErrorHandle(
       res: res,
       onSuccess: () {
-        AppComponent.showCustomSnackBar("added your post", color: AppColors.bgLightColor);
+        AppComponents.showCustomSnackBar("added your post", color: AppColors.backgroundLight);
       },
     );
     return Future.value(unit);

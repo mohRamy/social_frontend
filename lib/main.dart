@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:social_app/features/chat/presentation/components/chat_list.dart';
 import 'package:social_app/features/chat/presentation/screens/chat_screen.dart';
-import 'package:social_app/features/notification_message.dart';
 
 import 'app.dart';
 import 'helper/dependencies.dart' as dep;

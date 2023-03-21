@@ -1,6 +1,6 @@
 class ApiConstance {
   // base
-  static const String baseUrl = "http://192.168.47.79:8000";
+  static const String baseUrl = "http://192.168.93.79:8000";
   // auth
   static const String signUp = "$baseUrl/api/signup";
   static const String signIn = "$baseUrl/api/signin";

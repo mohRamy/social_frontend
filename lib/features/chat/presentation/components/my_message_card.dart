@@ -98,7 +98,7 @@ class MyMessageCard extends StatelessWidget {
                                                 padding: EdgeInsets.all(
                                                     Dimensions.height10 - 5),
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.bgLightColor
+                                                  color: AppColors.backgroundLight
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
@@ -158,7 +158,7 @@ class MyMessageCard extends StatelessWidget {
                                               Container(
                                                 width: double.infinity,
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.bgLightColor
+                                                  color: AppColors.backgroundLight
                                                       .withOpacity(0.5),
                                                   borderRadius:
                                                       BorderRadius.circular(5),

@@ -144,13 +144,13 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                 homeCtrl.addStory(homeCtrl.imageFileSelected);
                 setState(() {});
               } else {
-                AppComponent.showCustomSnackBar('error');
+                AppComponents.showCustomSnackBar('error');
               }
             },
             child: TextCustom(
               text: 'puplic',
               fontSize: 17,
-              color: AppColors.primary,
+              color: AppColors.origin,
             ),
           ),
         ],

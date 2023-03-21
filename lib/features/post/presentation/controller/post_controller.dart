@@ -91,7 +91,7 @@ class PostController extends GetxController with HandleErrorLoading {
 
     final result = await addPostUseCase(description, postsUrl, postsType);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 

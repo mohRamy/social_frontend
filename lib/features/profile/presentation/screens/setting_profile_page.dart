@@ -41,7 +41,7 @@ class SettingProfilePage extends StatelessWidget {
                       // GoogleFonts.getFont('Roboto',
                       color: Colors.grey[400],
                     ),
-                    prefixIcon: Icon(Icons.search, color: AppColors.primary)),
+                    prefixIcon: Icon(Icons.search, color: AppColors.origin)),
               ),
             ),
             const SizedBox(height: 15.0),

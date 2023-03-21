@@ -6,7 +6,7 @@ import '../widgets/widgets.dart';
 import '../widgets/big_text.dart';
 import 'app_colors.dart';
 
-class AppComponent {
+class AppComponents {
   //show error dialog
   static void showDialog({
     String title = 'Error',
@@ -112,7 +112,7 @@ class AppComponent {
       child: Container(
         padding: EdgeInsets.all(Dimensions.height10),
         height: Dimensions.height45,
-        color: Get.isDarkMode ? AppColors.bgDarkColor : AppColors.bgLightColor,
+        color: Get.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight,
         child: Row(
           children: [
             icon,

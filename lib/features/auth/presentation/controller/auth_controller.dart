@@ -108,8 +108,8 @@ class AuthController extends GetxController with HandleErrorLoading {
     final result = await signUpAuthUsecase(auth!);
 
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
-      (r) => AppComponent.showCustomSnackBar("Logged up Log in now", title: "", color: Colors.green),
+      (l) => AppComponents.showCustomSnackBar(l.message),
+      (r) => AppComponents.showCustomSnackBar("Logged up Log in now", title: "", color: Colors.green),
     );
   }
 
@@ -120,7 +120,7 @@ class AuthController extends GetxController with HandleErrorLoading {
     final result = await signInAuthUsecase(email, password);
     result.fold(
       (l) { 
-        AppComponent.showCustomSnackBar(l.message);
+        AppComponents.showCustomSnackBar(l.message);
         },
       (r) async {
         await dep.init();
@@ -147,14 +147,14 @@ class AuthController extends GetxController with HandleErrorLoading {
 
     final tokenResult = await isTokenValidAuthUsecase();
     tokenResult.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => response = r,
     );
 
     if (response == true) {
       final result = await getMyDataAuthUsecase();
       result.fold(
-        (l) => AppComponent.showCustomSnackBar(l.message),
+        (l) => AppComponents.showCustomSnackBar(l.message),
         (r) {
           UserController userController = Get.find<UserController>();
           userController.setUserFromModel(r);
@@ -169,7 +169,7 @@ class AuthController extends GetxController with HandleErrorLoading {
     final result = await getUserDataAuthUsecase(userId);
 
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => userData = r,
     );
 

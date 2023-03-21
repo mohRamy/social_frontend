@@ -35,19 +35,19 @@ class SearchScreen extends GetView<SearchController> {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Users ...",
-                    hintStyle: TextStyle( 
-                    //GoogleFonts.roboto(
-                      fontSize: 17, 
+                    hintStyle: TextStyle(
+                      fontSize: 17,
                       color: Colors.grey[700],
-                      ),
-                    suffixIcon: Icon(Icons.search_rounded, color: AppColors.primary,)),
+                    ),
+                    suffixIcon: Icon(
+                      Icons.search_rounded,
+                      color: AppColors.origin,
+                    )),
               ),
             ),
           );
         }),
-
         const SizedBox(height: 10.0),
-
         GetBuilder<SearchController>(
           builder: (searchCtrl) => searchCtrl.users.isEmpty
               ? Container()
@@ -80,49 +80,7 @@ class SearchScreen extends GetView<SearchController> {
                   ),
                 ),
         ),
-
-        // const _GridPostSearch(),
       ])),
     );
   }
 }
-
-// class _GridPostSearch extends StatelessWidget {
-
-//   const _GridPostSearch({Key? key, }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-    
-//     return GridView.builder(
-//         physics: const NeverScrollableScrollPhysics(),
-//         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 3,
-//           crossAxisSpacing: 2,
-//           mainAxisSpacing: 2,
-//           mainAxisExtent: 170
-//         ),
-//         scrollDirection: Axis.vertical,
-//         shrinkWrap: true,
-//         itemCount: 9,
-//         itemBuilder: (context, i) {
-
-//           // final List<String> listImages =posts[i].images.split(',');
-
-//           return GestureDetector(
-//               onTap: () {},
-//               // onLongPress: () => modalShowPost(context, post: posts[i]),
-//               child: Container(
-//                 alignment: Alignment.center,
-//                 decoration:const  BoxDecoration(
-//                   // image: DecorationImage(
-//                   //   fit: BoxFit.cover,
-//                   //   image: NetworkImage(Environment.baseUrl + listImages.first)
-//                   // )
-//                 )
-//               ),
-//             );
-//         }
-//       );
-//   }
-// }

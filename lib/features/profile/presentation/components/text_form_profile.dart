@@ -29,14 +29,14 @@ class TextFormProfile extends StatelessWidget {
       style: const TextStyle( 
       //GoogleFonts.getFont('Roboto', 
       fontSize: 18),
-      cursorColor: AppColors.canvas,
+      cursorColor: AppColors.branch,
       keyboardType: keyboardType,
       readOnly: isReadOnly,
       minLines: 1,
       maxLines: maxLines,
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Get.isDarkMode ? Colors.white : Colors.black)), 
-        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)), 
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.origin)), 
         labelText: labelText,
         labelStyle: TextStyle(
           color: context.textTheme.bodyText1!.color,

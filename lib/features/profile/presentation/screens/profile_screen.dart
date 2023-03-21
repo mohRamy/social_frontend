@@ -314,10 +314,10 @@ class _CoverAndProfile extends StatefulWidget {
 }
 
 class _CoverAndProfileState extends State<_CoverAndProfile> {
-  bool private = false;
   @override
   Widget build(BuildContext context) {
     bool isMe = widget.userData.id == Get.find<UserController>().user.id;
+    bool private = false;
     bool isFriend =
         Get.find<UserController>().user.following.contains(widget.userData.id);
     return SizedBox(
@@ -339,7 +339,7 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
               height: 170,
               width: Dimensions.screenWidth,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(.7),
+                color: AppColors.origin.withOpacity(.7),
               ),
               child: widget.userData.backgroundImage.isNotEmpty
                   ? Image.network(
@@ -359,8 +359,8 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
               width: Dimensions.screenWidth,
               decoration: BoxDecoration(
                   color: Get.isDarkMode
-                      ? AppColors.bgDarkColor
-                      : AppColors.bgLightColor,
+                      ? AppColors.backgroundDark
+                      : AppColors.backgroundLight,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(20.0))),
             ),
@@ -451,9 +451,9 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
                             BorderRadius.circular(Dimensions.radius30),
                         border: Border.all(width: 0.4, color: Colors.grey),
                         color: isMe
-                            ? AppColors.bgLightColor
+                            ? AppColors.backgroundLight
                             : (isFriend || private)
-                                ? AppColors.bgLightColor
+                                ? AppColors.backgroundLight
                                 : Colors.black,
                       ),
                       child: Text(

@@ -52,7 +52,7 @@ class _PrivacyProfilePageState extends State<PrivacyProfilePage> {
                             const TextCustom(text: 'private account', fontSize: 17 ),
                             const Spacer(),
                             (Get.find<UserController>().user.private || private)
-                              ? Icon(Icons.radio_button_checked_rounded, color: AppColors.primary)
+                              ? Icon(Icons.radio_button_checked_rounded, color: AppColors.origin)
                               : const Icon(Icons.radio_button_unchecked_rounded),
                             const SizedBox(width: 10),
                           ],

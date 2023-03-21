@@ -27,7 +27,7 @@ class NavUserScreen extends GetView<NavUserController> {
           onTap: (index) {
             controller.changePage(index);
           },
-          selectedItemColor: AppColors.primary,
+          selectedItemColor: AppColors.origin,
           unselectedItemColor: Colors.grey,
           showSelectedLabels: false,
           showUnselectedLabels: false,

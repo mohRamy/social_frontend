@@ -17,7 +17,7 @@ class AppTextButton extends StatelessWidget {
     return TextButton(
       onPressed: onTap,
       style: TextButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.origin,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               Dimensions.radius15 - 5,

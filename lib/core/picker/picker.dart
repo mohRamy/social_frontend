@@ -13,7 +13,7 @@ Future<File?> pickImageFromGallery() async {
       image = File(pickedImage.path);
     }
   } catch (e) {
-    AppComponent.showCustomSnackBar(e.toString());
+    AppComponents.showCustomSnackBar(e.toString());
   }
   return image;
 }
@@ -27,7 +27,7 @@ Future<File?> pickImageFromCamera() async {
       image = File(pickedImage.path);
     }
   } catch (e) {
-    AppComponent.showCustomSnackBar(e.toString());
+    AppComponents.showCustomSnackBar(e.toString());
   }
   return image;
 }
@@ -41,7 +41,7 @@ Future<File?> pickVideoFromGallery() async {
       video = File(pickedVideo.path);
     }
   } catch (e) {
-    AppComponent.showCustomSnackBar(e.toString());
+    AppComponents.showCustomSnackBar(e.toString());
   }
   return video;
 }
@@ -55,7 +55,7 @@ Future<File?> pickVideoFromCamera() async {
       video = File(pickedVideo.path);
     }
   } catch (e) {
-    AppComponent.showCustomSnackBar(e.toString());
+    AppComponents.showCustomSnackBar(e.toString());
   }
   return video;
 }

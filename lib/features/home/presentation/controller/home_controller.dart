@@ -85,7 +85,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> getAllPosts() async {
     final result = await getAllPostsUsecase();
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => posts = r,
     );
 
@@ -97,7 +97,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await modifyPostUsecase(postId, description);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -110,7 +110,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await deletePostUsecase(postId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -121,7 +121,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> postLike(String postId) async {
     final result = await postLikeUsecase(postId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -131,7 +131,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> postComment(String postId, String comment) async {
     final result = await postCommentUsecase(postId, comment);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
     
@@ -143,7 +143,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> getAllPostComment(String postId) async {
     final result = await getAllPostCommentUsecase(postId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => postCommentList = r,
     );
     update();
@@ -152,7 +152,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> postCommentLike(String postId, String commentId) async {
     final result = await postCommentLikeUsecase(postId, commentId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
     update();
@@ -162,7 +162,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> getAllStories() async {
     final result = await getAllStoriesUsecase();
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => stories = r,
     );
     update();
@@ -217,7 +217,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await addStoryUsecase(storiesUrl, storiesType);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -231,7 +231,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await getAllStoryCommentUsecase(storyId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => storyCommentList = r,
     );
 
@@ -242,7 +242,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> storyLike(String storyId) async {
     final result = await storyLikeUsecase(storyId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -252,7 +252,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> storyComment(String storyId, String comment) async {
     final result = await storyCommentUsecase(storyId, comment);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -264,7 +264,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await storyCommentLikeUsecase(storyId, commentId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 

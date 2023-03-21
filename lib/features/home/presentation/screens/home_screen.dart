@@ -337,7 +337,7 @@ class _ListViewPosts extends StatefulWidget {
 class _ListViewPostsState extends State<_ListViewPosts> {
   UserController userCtrl = Get.find<UserController>();
 
-  bool isLike = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -371,6 +371,7 @@ class _ListViewPostsState extends State<_ListViewPosts> {
               itemBuilder: (context, index) {
                 Post postData = homeCtrl.posts[index];
                 List<Posts> posts = postData.posts;
+                bool isLike = false;
                 bool meLike =
                     postData.likes.contains(Get.find<UserController>().user.id);
                 return Padding(
@@ -481,12 +482,12 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
-                                                      AppComponent
+                                                      AppComponents
                                                           .buildbottomsheet(
                                                         icon: Icon(
                                                           Icons.edit,
                                                           color:
-                                                              AppColors.primary,
+                                                              AppColors.origin,
                                                         ),
                                                         label: "Modify post",
                                                         ontap: () {
@@ -502,7 +503,7 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                                             ? Colors.white
                                                             : Colors.black,
                                                       ),
-                                                      AppComponent
+                                                      AppComponents
                                                           .buildbottomsheet(
                                                         icon: const Icon(
                                                           Icons.delete,
@@ -510,7 +511,7 @@ class _ListViewPostsState extends State<_ListViewPosts> {
                                                         ),
                                                         label: "Delete post",
                                                         ontap: () {
-                                                          AppComponent
+                                                          AppComponents
                                                               .showDialog(
                                                             title:
                                                                 "delete Post",

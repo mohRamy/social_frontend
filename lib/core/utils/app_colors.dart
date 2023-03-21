@@ -6,10 +6,10 @@ import 'hex_color.dart';
 class AppColors {
   
 
-  static Color primary = HexColor("FF0088CC");
-  static Color canvas = HexColor("FF34495E");
-  static Color bgLightColor = HexColor("FFECF9FF");
-  static Color bgDarkColor = Colors.black;
+  static Color origin = HexColor("FF0088CC");
+  static Color branch = HexColor("FF34495E");
+  static Color backgroundLight = HexColor("FFECF9FF");
+  static Color backgroundDark = Colors.black;
   static Color blackColor = HexColor("FF34495E");
   static Color white = HexColor("FFFFFFFF");
   static Color textfieldColor = HexColor("FF1c1d1f");
@@ -21,29 +21,27 @@ class AppColors {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
-      // Color(0xFF0088CC),
-      // Color(0xFF34495E),
-      primary,
-      canvas,
+      origin,
+      branch,
     ],
   );
 }
 
 class Themes {
   static final light = ThemeData(
-      scaffoldBackgroundColor: AppColors.bgLightColor,
-      dividerColor: AppColors.bgDarkColor,
+      scaffoldBackgroundColor: AppColors.backgroundLight,
+      dividerColor: AppColors.backgroundDark,
       brightness: Brightness.light,
-      primaryColor: AppColors.primary,
-      canvasColor: AppColors.canvas,
+      primaryColor: AppColors.origin,
+      canvasColor: AppColors.branch,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColors.bgLightColor,
+          statusBarColor: AppColors.backgroundLight,
           statusBarIconBrightness: Brightness.dark,
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.bgLightColor,
+        backgroundColor: AppColors.backgroundLight,
       ),
       textTheme: const TextTheme(
         bodyText1: TextStyle(
@@ -55,28 +53,28 @@ class Themes {
       
       ),
       iconTheme: IconThemeData(
-        color: AppColors.bgDarkColor,
+        color: AppColors.backgroundDark,
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColors.bgLightColor,
+        backgroundColor: AppColors.backgroundLight,
       )
       );
 
   static final dark = ThemeData(
-      scaffoldBackgroundColor: AppColors.bgDarkColor,
+      scaffoldBackgroundColor: AppColors.backgroundDark,
       dividerColor: Colors.white,
       brightness: Brightness.dark,
       primaryColor: AppColors.blackColor,
-      canvasColor: AppColors.canvas,
-      backgroundColor: AppColors.greyColor,
+      canvasColor: AppColors.branch,
+      // backgroundColor: AppColors.greyColor,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColors.bgDarkColor,
+          statusBarColor: AppColors.backgroundDark,
           statusBarIconBrightness: Brightness.dark,
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.bgDarkColor,
+        backgroundColor: AppColors.backgroundDark,
       ),
       textTheme: const TextTheme(
         bodyText1: TextStyle(
@@ -87,10 +85,10 @@ class Themes {
         ),
       ),
       iconTheme: IconThemeData(
-        color: AppColors.bgLightColor,
+        color: AppColors.backgroundLight,
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColors.bgDarkColor,
+        backgroundColor: AppColors.backgroundDark,
       )
       );
 }

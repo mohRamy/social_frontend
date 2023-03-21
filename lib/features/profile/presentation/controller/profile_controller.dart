@@ -34,7 +34,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
   FutureOr<void> followUser(String userId) async {
     final result = await followUserUseCase(userId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -45,7 +45,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
   FutureOr<void> getUserPost(String userId) async {
     final result = await getUserPostUseCase(userId);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => userPosts = r,
     );
     update();
@@ -115,7 +115,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
 
     final result = await modifyMyDataUseCase(myData);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -126,7 +126,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
   FutureOr<void> privateAccount() async {
     final result = await privateAccountUseCase();
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 
@@ -139,7 +139,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
 
     final result = await changepasswordUseCase(currentPassword, newPassword);
     result.fold(
-      (l) => AppComponent.showCustomSnackBar(l.message),
+      (l) => AppComponents.showCustomSnackBar(l.message),
       (r) => null,
     );
 

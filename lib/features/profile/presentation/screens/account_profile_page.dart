@@ -124,7 +124,7 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                   height: 170,
                   width: Dimensions.screenWidth,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(.7),
+                    color: AppColors.origin.withOpacity(.7),
                   ),
                   child: image != null
                       ? Image.file(image!, fit: BoxFit.cover)
@@ -170,10 +170,10 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                 icon: Icon(
                                   Icons.camera,
-                                  color: AppColors.primary,
+                                  color: AppColors.origin,
                                 ),
                                 label: "From camera",
                                 ontap: pickImageCamera,
@@ -183,10 +183,10 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                                     ? Colors.white
                                     : Colors.black,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                 icon: Icon(
                                   Icons.photo,
-                                  color: AppColors.primary,
+                                  color: AppColors.origin,
                                 ),
                                 label: "From Gallery",
                                 ontap: pickImageGallery,
@@ -213,8 +213,8 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                     width: Dimensions.screenWidth,
                     decoration: BoxDecoration(
                         color: Get.isDarkMode
-                            ? AppColors.bgDarkColor
-                            : AppColors.bgLightColor,
+                            ? AppColors.backgroundDark
+                            : AppColors.backgroundLight,
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(20.0))),
                   ),
@@ -265,10 +265,10 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                 icon: Icon(
                                   Icons.camera,
-                                  color: AppColors.primary,
+                                  color: AppColors.origin,
                                 ),
                                 label: "From camera",
                                 ontap: pickImageCameraP,
@@ -278,10 +278,10 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                                     ? Colors.white
                                     : Colors.black,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                 icon: Icon(
                                   Icons.photo,
-                                  color: AppColors.primary,
+                                  color: AppColors.origin,
                                 ),
                                 label: "From Gallery",
                                 ontap: pickImageGalleryP,

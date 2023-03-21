@@ -42,27 +42,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String name = authCtrl.nameUC.text.trim();
 
     if (email.isEmpty) {
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
         'Type in your email address',
         title: 'Email address',
       );
     } else if (!GetUtils.isEmail(email)) {
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
         'Type in a valid email address',
         title: 'Valid email address',
       );
     } else if (password.isEmpty) {
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
         'Type in your password',
         title: 'password',
       );
     } else if (password.length < 6) {
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
         'Password can not less than six characters',
         title: 'password',
       );
     } else if (name.isEmpty) {
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
         'Type in your name',
         title: 'Name',
       );
@@ -147,10 +147,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                   icon: Icon(
                                     Icons.camera,
-                                    color: AppColors.primary,
+                                    color: AppColors.origin,
                                   ),
                                   label: "From camera",
                                   ontap: pickImageCamera),
@@ -159,10 +159,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ? Colors.white
                                     : Colors.black,
                               ),
-                              AppComponent.buildbottomsheet(
+                              AppComponents.buildbottomsheet(
                                   icon: Icon(
                                     Icons.photo,
-                                    color: AppColors.primary,
+                                    color: AppColors.origin,
                                   ),
                                   label: "From Gallery",
                                   ontap: pickImageGallery),
@@ -221,7 +221,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         authCtrl.isObscure
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: AppColors.primary,
+                        color: AppColors.origin,
                       ),
                     ),
                     isPass: authCtrl.isObscure,

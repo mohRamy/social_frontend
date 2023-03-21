@@ -15,13 +15,13 @@ void stateHandle({
       onSuccess();
       break;
     case 400:
-      AppComponent.showCustomSnackBar(jsonDecode(res.body)['msg']);
+      AppComponents.showCustomSnackBar(jsonDecode(res.body)['msg']);
       break;
     case 500:
-      AppComponent.showCustomSnackBar(jsonDecode(res.body)['error']);
+      AppComponents.showCustomSnackBar(jsonDecode(res.body)['error']);
       break;
     default:
-      AppComponent.showCustomSnackBar(
+      AppComponents.showCustomSnackBar(
           title: 'successfull', jsonDecode(res.body)['error']);
   }
 }

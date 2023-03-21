@@ -67,7 +67,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
                           children: [
                             CircleAvatar(
                               radius: 25,
-                              backgroundColor: AppColors.primary,
+                              backgroundColor: AppColors.origin,
                               backgroundImage: NetworkImage(userData.photo),
                             ),
                             const SizedBox(width: 10.0),
