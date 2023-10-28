@@ -1,0 +1,14 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failures.dart';
+import '../entities/auth.dart';
+import '../repository/base_auth_repository.dart';
+
+class SignUpAuthUsecase {
+  final AuthRepository baseAuthRepository;
+  SignUpAuthUsecase(this.baseAuthRepository);
+
+  Future<Either<Failure, Unit>> call(Auth auth) async {
+    return await baseAuthRepository.register(auth);
+  }
+}
