@@ -4,8 +4,8 @@ import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../../../resources/local/user_local.dart';
+import '../../../../themes/app_colors.dart';
 
 import '../../../../core/error/handle_error_loading.dart';
 import '../../../../public/components.dart';

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/displaies/display_image_video_card.dart';
+import '../../../../core/widgets/widgets.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../../../home/domain/entities/post.dart';
 import '../controller/profile_controller.dart';
-import '../../../../core/displaies/display_image_video_card.dart';
-
-import '../../../../core/widgets/widgets.dart';
 
 class ListPhotosProfileScreen extends StatefulWidget {
   const ListPhotosProfileScreen({Key? key}) : super(key: key);

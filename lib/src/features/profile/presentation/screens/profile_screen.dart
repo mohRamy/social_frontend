@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/core/widgets/app_text.dart';
-import 'package:social_app/src/core/widgets/post_widget.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import '../../../../core/widgets/app_text.dart';
+import '../../../../core/widgets/post_widget.dart';
+import '../../../../resources/local/user_local.dart';
+import '../../../../utils/sizer_custom/sizer.dart';
 import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';

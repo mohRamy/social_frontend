@@ -1,5 +1,5 @@
-import 'package:social_app/src/controller/app_controller.dart';
-import 'package:social_app/src/public/socket_gateway.dart';
+import '../../controller/app_controller.dart';
+import '../../public/socket_gateway.dart';
 
 import '../../config/application.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;

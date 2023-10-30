@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import '../../utils/sizer_custom/sizer.dart';
 
 import '../../core/dialogs/dialog_confirm.dart';
 import '../../core/dialogs/dialog_loading.dart';

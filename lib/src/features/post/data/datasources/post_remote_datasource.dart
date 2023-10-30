@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as diox;
-import 'package:social_app/src/public/api_gateway.dart';
+import '../../../../public/api_gateway.dart';
 
 import '../../../../public/constants.dart';
 import '../../../../resources/base_repository.dart';

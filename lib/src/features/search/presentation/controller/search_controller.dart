@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../../../../core/error/handle_error_loading.dart';
 
+import '../../../../core/error/handle_error_loading.dart';
 import '../../../../public/components.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../../domain/usecases/add_post.dart';

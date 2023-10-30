@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/public/components.dart';
+import '../../public/components.dart';
 
 import '../utils/app_component.dart';
 import 'exceptions.dart';

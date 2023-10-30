@@ -7,23 +7,20 @@ import 'package:get/get.dart';
 import 'package:social_app/src/controller/app_controller.dart';
 import 'package:social_app/src/core/widgets/post_widget.dart';
 import 'package:social_app/src/resources/local/user_local.dart';
+
+import '../../../../core/displaies/display_image_video_card.dart';
+import '../../../../core/utils/app_strings.dart';
+import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/theme_service.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../domain/entities/post.dart';
 import '../../domain/entities/story.dart';
-
-import '../../../../core/utils/app_strings.dart';
-import '../../../chat/domain/entities/chat.dart';
 import '../components/palette.dart';
 import '../components/profile_avatar.dart';
 import '../controller/home_controller.dart';
-import 'view_story_page.dart';
-import '../../../../core/displaies/display_image_video_card.dart';
-
-import '../../../../core/widgets/widgets.dart';
 import 'add_story_screen.dart';
+import 'view_story_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -77,38 +74,31 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         actions: [
           IconButton(
-              splashRadius: 20,
-              onPressed: () {
-                themeService.changeTheme();
-              },
-              icon: Icon(
-                  Get.isDarkMode
-                      ? Icons.wb_sunny_outlined
-                      : Icons.nightlight_round_outlined,
-                  color: context.theme.dividerColor)),
+            splashRadius: 20,
+            onPressed: () {
+              themeService.changeTheme();
+            },
+            icon: Icon(
+              Get.isDarkMode
+                  ? Icons.wb_sunny_outlined
+                  : Icons.nightlight_round_outlined,
+              color: context.theme.dividerColor,
+            ),
+          ),
           IconButton(
-              splashRadius: 20,
-              onPressed: () async {
-                // if (AppGet.ChatGet.myChat != null) {
-                Chat chatModel = AppGet.chatGet.userChat!;
-                List<Auth> usersData = [];
-                for (var i = 0; i < chatModel.contents.length; i++) {
-                  usersData.add(await AppGet.authGet
-                      .fetchInfoUserById(chatModel.contents[i].recieverId));
-                }
-                AppNavigator.push(
-                  AppRoutes.chat,
-                  arguments: {
-                    'usersData': usersData,
-                  },
-                );
-              },
-              // },
-              icon: SvgPicture.asset(
-                'assets/svg/chat-icon.svg',
-                height: 24,
-                color: context.theme.dividerColor,
-              )),
+            splashRadius: 20,
+            onPressed: () {
+              AppNavigator.push(
+                AppRoutes.chatHome,
+              );
+            },
+            // },
+            icon: SvgPicture.asset(
+              'assets/svg/chat-icon.svg',
+              height: 24,
+              color: context.theme.dividerColor,
+            ),
+          ),
         ],
       ),
       body: SafeArea(

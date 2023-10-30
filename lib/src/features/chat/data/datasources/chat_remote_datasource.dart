@@ -1,25 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as diox;
-import 'package:social_app/src/resources/base_repository.dart';
-import 'package:social_app/src/services/socket/socket_emit.dart';
+import '../../../../resources/base_repository.dart';
+import '../../../../services/socket/socket_emit.dart';
 
 import '../../../../public/api_gateway.dart';
 import '../../../../public/constants.dart';
 import '../models/chat_model.dart';
-import '../../domain/entities/chat.dart';
 
 abstract class ChatRemoteDataSource {
-  Future<Chat> getUserChat();
+  Future<ChatModel> getUserChat();
   Future<Unit> addMessage(
-    String senderId,
-    String recieverId,
-    String message,
-    String type,
-    String repliedMessage,
-    String repliedType,
-    String repliedTo,
-    bool repliedIsMe,
-    );
+    String idConversation,
+    MessageModel message,
+  );
   Future<Unit> chatMessageSeen(String recieverId);
   Future<Unit> messageNotification(String userId, String message);
 }
@@ -29,18 +22,16 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   ChatRemoteDataSourceImpl(this.baseRepository);
 
   @override
-  Future<Chat> getUserChat() async {
+  Future<ChatModel> getUserChat() async {
     diox.Response response = await baseRepository.getRoute(
       ApiGateway.getUserChat,
     );
 
-    late Chat userChat;
+    late ChatModel userChat;
     AppConstants().handleApi(
       response: response,
       onSuccess: () {
-        userChat = ChatModel.fromMap(
-          response.data,
-        );
+        userChat = ChatModel.fromMap(response.data);
       },
     );
 
@@ -49,24 +40,12 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
   @override
   Future<Unit> addMessage(
-    String senderId,
-    String recieverId,
-    String message,
-    String type,
-    String repliedMessage,
-    String repliedType,
-    String repliedTo,
-    bool repliedIsMe,
+    String idConversation,
+    MessageModel message,
   ) {
     SocketEmit().addMessage(
-      senderId,
-      recieverId,
+      idConversation,
       message,
-      type,
-      repliedMessage,
-      repliedType,
-      repliedTo,
-      repliedIsMe,
     );
     return Future.value(unit);
   }

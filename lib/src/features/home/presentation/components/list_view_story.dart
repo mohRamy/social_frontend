@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:photo_manager/photo_manager.dart';
 import 'package:social_app/src/resources/local/user_local.dart';
+
+import '../../../../core/displaies/display_image_video_card.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../domain/entities/story.dart';
-
 import '../controller/home_controller.dart';
 import '../screens/add_story_screen.dart';
 import '../screens/view_story_page.dart';
 import 'palette.dart';
 import 'profile_avatar.dart';
-import '../../../../core/displaies/display_image_video_card.dart';
 
 class ListViewStory extends StatefulWidget {
   const ListViewStory({

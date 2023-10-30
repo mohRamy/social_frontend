@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import '../../../../utils/sizer_custom/sizer.dart';
 
 import '../../../../themes/app_colors.dart';
 

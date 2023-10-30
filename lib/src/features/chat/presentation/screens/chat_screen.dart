@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/src/controller/app_controller.dart';
-import 'package:social_app/src/themes/app_colors.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import 'package:get/get.dart';
+import '../../../../controller/app_controller.dart';
+
+import '../../data/models/chat_model.dart';
+import '../controller/chat_controller.dart';
+import '../../../../services/socket/socket_emit.dart';
+import '../../../../themes/app_colors.dart';
+import '../../../../utils/sizer_custom/sizer.dart';
+
 import '../../../../routes/app_pages.dart';
-import '../../domain/entities/chat.dart';
+import '../../../auth/domain/entities/auth.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 import '../components/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String userId;
-  final String name;
-  final String photo;
+  final Auth userData;
   final bool isGroupChat;
   const ChatScreen({
     Key? key,
-    required this.userId,
-    required this.name,
-    required this.photo,
+    required this.userData,
     required this.isGroupChat,
   }) : super(key: key);
 
@@ -27,6 +29,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
+    SocketEmit().joinRoomChat(idConversation: 'id-conversation');
     super.initState();
   }
 
@@ -37,14 +40,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Chat chatModel = AppGet.chatGet.userChat!;
-    List<Message> userMessages = [];
-    if (chatModel.contents.isNotEmpty) {
-      for (var i = 0; i < chatModel.contents.length; i++) {
-        if (chatModel.contents[i].recieverId == widget.userId) {
-          for (var j = 0; j < chatModel.contents[i].messages.length; j++) {
-            userMessages.add(chatModel.contents[i].messages[j]);
-          }
+    final Auth userData = widget.userData;
+    final List<MessageModel> messages = [];
+    for (var i = 0; i < AppGet.chatGet.contentList.length; i++) {
+      if (AppGet.chatGet.contentList[i].recieverId == userData.id) {
+        for (var j = 0;
+            j < AppGet.chatGet.contentList[i].messages.length;
+            j++) {
+          messages.add(
+            AppGet.chatGet.contentList[i].messages[j],
+          );
         }
       }
     }
@@ -69,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Icons.arrow_back_ios,
                       ),
                       ProfileAvatar(
-                        imageUrl: widget.photo,
+                        imageUrl: userData.photo,
                         sizeImage: Dimensions.size30,
                       ),
                     ],
@@ -79,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.name),
+                Text(userData.name),
                 // !widget.isGroupChat
                 //     ? snapshot.data!.isOnline
                 // ?
@@ -112,24 +117,25 @@ class _ChatScreenState extends State<ChatScreen> {
           )
         ],
       ),
-      body: Stack(
-        children: [
-          ChatList(
-            recieverId: widget.userId,
-            isGroupChat: widget.isGroupChat,
-            userMessages: userMessages,
-            username: widget.name,
-          ),
-          // ),
-          // BottomChatField(
-          //   recieverUserId: widget.uid,
-          //   isGroupChat: widget.isGroupChat,
-          //   username: widget.name,
-          // ),
-          // ],
-          // ),
-        ],
-      ),
+      body: GetBuilder<ChatController>(builder: (chatCtrl) {
+        return Stack(
+          children: [
+            ChatList(
+              userData: userData,
+              isGroupChat: widget.isGroupChat,
+              messages: messages,
+            ),
+            // ),
+            // BottomChatField(
+            //   recieverUserId: widget.uid,
+            //   isGroupChat: widget.isGroupChat,
+            //   username: widget.name,
+            // ),
+            // ],
+            // ),
+          ],
+        );
+      }),
     );
   }
 }

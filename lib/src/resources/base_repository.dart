@@ -1,6 +1,7 @@
-import 'package:dio/dio.dart' as diox;
-import 'dart:convert' as convert;
 import 'dart:async';
+import 'dart:convert' as convert;
+
+import 'package:dio/dio.dart' as diox;
 
 import '../config/application.dart';
 import 'local/user_local.dart';

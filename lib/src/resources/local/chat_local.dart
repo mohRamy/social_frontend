@@ -1,26 +1,27 @@
 import 'dart:convert';
 
-import 'package:get_storage/get_storage.dart';
-import 'package:social_app/src/features/chat/data/models/chat_model.dart';
-import 'package:social_app/src/features/chat/domain/entities/chat.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/chat/data/models/chat_model.dart';
 
 class ChatLocal {
-  final _getStorage = GetStorage();
-  final chatKey = 'chat';
-  
-  void saveChat(Chat chat) async {
-    _getStorage.write(chatKey, chat);
+  final SharedPreferences sharedPreferences = Get.find();
+  final chatKey = 'chat-key';
+  final chatUsersKey = 'chat-users-key';
+
+  void saveChat(ChatModel chat) async {
+    await sharedPreferences.setString(chatKey, json.encode(chat.toJson()));
   }
 
-  Chat? getChat() {
-    var rawData = _getStorage.read(chatKey);    
+  ChatModel? getChat() {
+    var rawData = sharedPreferences.getString(chatKey);
     if (rawData != null) {
-      return ChatModel.fromJson(json.decode(rawData));
+      return ChatModel.fromJson(rawData);
     }
     return null;
   }
 
   void clearChat() async {
-    _getStorage.remove(chatKey);
+    sharedPreferences.remove(chatKey);
   }
 }

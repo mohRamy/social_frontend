@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../../../themes/app_colors.dart';
 import '../../../../core/enums/post_enum.dart';
 
 import '../../../../core/error/handle_error_loading.dart';

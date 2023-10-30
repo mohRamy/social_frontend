@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../../../themes/app_colors.dart';
 import '../../../../core/provider/message_reply_provider.dart';
 
 import '../../../../utils/sizer_custom/sizer.dart';

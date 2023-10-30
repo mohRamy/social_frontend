@@ -3,12 +3,10 @@ import 'dart:math';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/features/chat/domain/usecases/add_message.dart';
-import 'package:social_app/src/resources/local/chat_local.dart';
+import '../../data/models/chat_model.dart';
+import '../../domain/usecases/add_message.dart';
 
 import '../../../../core/error/handle_error_loading.dart';
-import '../../../../public/components.dart';
-import '../../domain/entities/chat.dart';
 import '../../domain/usecases/chat_message_seen.dart';
 import '../../domain/usecases/get_user_chat.dart';
 
@@ -27,18 +25,28 @@ class ChatController extends GetxController with HandleErrorLoading {
     required this.messageNotificationUseCase,
   });
 
-  Chat? userChat;
-  Rx<RxMap<String, List<Message>>> messages = Rx(<String, List<Message>>{}.obs);
+  // Map<String, ContentModel> content = {};
+  List<ContentModel> contentList = [];
+
+  Map<String, String> idConversation = {};
 
   void getUserChat() async {
     final result = await getUserChatUseCase();
     result.fold(
-      (l) => Components.showSnackBar(l.message),
-      (r) {
-        userChat = r;
-        ChatLocal().saveChat(r);
-        print('yyyyyyyyyyyyyyyyyyyyyyyyy');
-        print(ChatLocal().getChat());
+      (l) => handleError(l),
+      (r) async {
+
+        // for (var i = 0; i < r.contents.length; i++) {
+        //   content[r.contents[i].recieverId] = r.contents[i];
+        // }
+
+        for (var i = 0; i < r.contents.length; i++) {
+          contentList.add(r.contents[i]);
+        }
+
+        // for (var content in r.contents) {
+        //   messages[content.recieverId] = content.messages;
+        // }
       },
     );
   }
@@ -46,10 +54,10 @@ class ChatController extends GetxController with HandleErrorLoading {
   FutureOr<void> addMessage(
     String senderId,
     String recieverId,
-    Msg msg,
-    RepliedMsg? repliedMsg,
+    MsgModel msg,
+    RepliedMsgModel? repliedMsg,
   ) async {
-        if (msg.type == 'image' || msg.type == 'video') {
+    if (msg.type == 'image' || msg.type == 'video') {
       int random = Random().nextInt(1000);
       final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
       CloudinaryResponse res = await cloudinary.uploadFile(
@@ -74,32 +82,48 @@ class ChatController extends GetxController with HandleErrorLoading {
       );
       repliedMsg.repliedMessage = res.secureUrl;
     }
-    final result = await addMessageUseCase(
-      senderId,
-      recieverId,
-      msg.message,
-      msg.type,
-      repliedMsg.repliedMessage,
-      repliedMsg.type,
-      repliedMsg.repliedTo,
-      repliedMsg.isMe,
+
+    MessageModel message = MessageModel(
+      senderId: senderId,
+      recieverId: recieverId,
+      msg: msg,
+      repliedMsg: repliedMsg,
     );
+
+    for (var i = 0; i < contentList.length; i++) {
+      if (contentList[i].recieverId == recieverId) {
+        contentList[i].messages.add(message);
+      }
+    }
+
+    final result = await addMessageUseCase(
+      "id",
+      message,
+    );
+
     result.fold(
-      (l) => Components.showSnackBar(l.message),
+      (l) => handleError(l),
       (r) => null,
     );
+
+    update();
   }
 
-    void addedMessage(dynamic data) async {
-    print('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
-    print(data);
+  void addedMessage(dynamic data) async {
+    MessageModel message = MessageModel.fromMap(data);
+
+    for (var i = 0; i < contentList.length; i++) {
+      if (contentList[i].recieverId == message.senderId) {
+        contentList[i].messages.add(message);
+      }
+    }
     update();
   }
 
   void chatMessageSeen(String recieverId) async {
     final result = await chatMessageSeenUseCase(recieverId);
     result.fold(
-      (l) => Components.showSnackBar(l.message),
+      (l) => handleError(l),
       (r) => null,
     );
   }
@@ -107,7 +131,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void messageNotification(String userId, String message) async {
     final result = await messageNotificationUseCase(userId, message);
     result.fold(
-      (l) => Components.showSnackBar(l.message),
+      (l) => handleError(l),
       (r) => null,
     );
   }

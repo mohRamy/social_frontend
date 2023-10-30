@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/themes/app_decorations.dart';
+import '../../themes/app_decorations.dart';
 
 import '../../features/chat/presentation/components/video_card.dart';
 import '../widgets/hero_image.dart';

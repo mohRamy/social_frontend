@@ -4,7 +4,7 @@ part of 'app_pages.dart';
 abstract class AppRoutes {
   AppRoutes._();
 
-    static const root = '/';
+  static const root = '/';
 
   // Navigation
   static const navigation = '/navigation';
@@ -29,7 +29,7 @@ abstract class AppRoutes {
 
   // Language
   static const language = '/language';
-  
+
   static const home = '/home';
 
   // Profile
@@ -42,7 +42,7 @@ abstract class AppRoutes {
   static const likes = '/likes';
   static const postComments = '/post-comments';
 
-
+  static const chatHome = '/chat-home';
   static const chat = '/chat';
   static const contacts = '/contacts';
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
 
 import '../../themes/app_colors.dart';
+import '../../utils/sizer_custom/sizer.dart';
 
 class DialogNotice extends StatelessWidget {
   final String title;

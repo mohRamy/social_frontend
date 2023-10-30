@@ -1,12 +1,13 @@
 import 'package:dartz/dartz.dart';
+import '../../../../resources/local/chat_local.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/chat.dart';
 import '../../domain/repository/base_chat_repository.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../datasources/chat_remote_datasource.dart';
+import '../models/chat_model.dart';
 
 typedef GetMessage = Future<Unit> Function();
 
@@ -16,41 +17,31 @@ class ChatRepositoryImpl extends ChatRepository {
   ChatRepositoryImpl(this.baseChatRemoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, Chat>> getUserChat() async {
+  Future<Either<Failure, ChatModel>> getUserChat() async {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseChatRemoteDataSource.getUserChat();
+        ChatLocal().saveChat(result);
         return right(result);
       } on ServerException catch (failure) {
         return left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(const OfflineFailure(message: "Offline failure"));
+      final result = ChatLocal().getChat();
+      return right(result!);
     }
   }
 
   @override
   Future<Either<Failure, Unit>> addMessage(
-    String senderId,
-    String recieverId,
-    String message,
-    String type,
-    String repliedMessage,
-    String repliedType,
-    String repliedTo,
-    bool repliedIsMe,
+    String idConversation,
+    MessageModel message,
   ) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseChatRemoteDataSource.addMessage(
-          senderId,
-          recieverId,
+          idConversation,
           message,
-          type,
-          repliedMessage,
-          repliedType,
-          repliedTo,
-          repliedIsMe,
         );
         return right(result);
       } on ServerException catch (failure) {

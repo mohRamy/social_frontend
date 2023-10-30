@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../../home/domain/entities/post.dart';
 import '../../../auth/domain/entities/auth.dart';
-import '../datasources/profile_remote_datasource.dart';
+import '../../../home/domain/entities/post.dart';
 import '../../domain/repository/base_profile_repository.dart';
-
-import '../../../../core/error/exceptions.dart';
+import '../datasources/profile_remote_datasource.dart';
 
 typedef Future<Unit> GetMessage();
 

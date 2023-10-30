@@ -1,4 +1,5 @@
-import 'package:social_app/src/resources/local/user_local.dart';
+import '../../features/chat/data/models/chat_model.dart';
+import '../../resources/local/user_local.dart';
 
 import 'socket.dart';
 import '../../public/socket_gateway.dart';
@@ -60,29 +61,33 @@ class SocketEmit {
     );
   }
 
+  // Join Room Chat
+  joinRoomChat({required String idConversation}) {
+    socket!.emit(SocketGateway.joinRoomChat, {
+      'idConversation': idConversation,
+    });
+  }
+
+  // Leave Room Chat
+  leaveRoomChat({required String idConversation}) {
+    socket!.emit(SocketGateway.leaveRoomChat, {
+      'idConversation': idConversation,
+    });
+  }
+
   // Add Message
   addMessage(
-    String senderId,
-    String recieverId,
-    String message,
-    String type,
-    String repliedMessage,
-    String repliedType,
-    String repliedTo,
-    bool repliedIsMe,
+    String idConversation,
+    MessageModel message,
   ) {
+    var body = {
+      "idConversation": idConversation,
+      "message": message.toJson(),
+    };
+    
     socket!.emit(
       SocketGateway.addMessage,
-      {
-        'senderId': senderId,
-        'recieverId': recieverId,
-        'message': message,
-        'type': type,
-        'repliedMessage': repliedMessage,
-        'repliedType': repliedType,
-        'repliedTo': repliedTo,
-        'repliedIsMe': repliedIsMe,
-      },
+      body,
     );
   }
 }

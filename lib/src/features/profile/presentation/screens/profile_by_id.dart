@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:social_app/src/resources/local/user_local.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import '../../../../resources/local/user_local.dart';
+import '../../../../utils/sizer_custom/sizer.dart';
 
 import '../../../../controller/app_controller.dart';
 import '../../../../core/widgets/hero_image.dart';
@@ -13,7 +13,6 @@ import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../../../auth/presentation/controller/auth_controller.dart';
-import '../../../chat/presentation/screens/chat_screen.dart';
 import '../../../home/domain/entities/post.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 import '../controller/profile_controller.dart';
@@ -164,64 +163,15 @@ class _PostAndFollow extends StatelessWidget {
                   ),
                   SizedBox(height: Dimensions.size30),
                   ListView.builder(
-              reverse: true,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: posts.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Post postData = posts[index];
-                return PostWidget(postData: postData);
-              },
-            ),
-                  //PostWidget(posts: posts),
-                  // Padding(
-                  //   padding: EdgeInsets.all(Dimensions.size10),
-                  //   child: GridView.builder(
-                  //       itemCount: profileCtrl.userPostsById.length,
-                  //       physics: const NeverScrollableScrollPhysics(),
-                  //       gridDelegate:
-                  //           const SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 3,
-                  //         crossAxisSpacing: 2,
-                  //         mainAxisExtent: 170,
-                  //       ),
-                  //       // scrollDirection: Axis.vertical,
-                  //       shrinkWrap: true,
-                  //       itemBuilder: (context, i) {
-                  //         Post postData = profileCtrl.userPostsById[i];
-                  //         return InkWell(
-                  //             onTap: () {
-                  //               AppNavigator.push(
-                  //                 AppRoutes.listPhotoProfile,
-                  //                 arguments: profileCtrl.userPostsById,
-                  //               );
-                  //             },
-                  //             child: Stack(
-                  //               children: [
-                  //                 InkWell(
-                  //                   onTap: () {
-                  //                     AppNavigator.push(
-                  //                       AppRoutes.listPhotoProfile,
-                  //                       arguments: profileCtrl.userPostsById,
-                  //                     );
-                  //                   },
-                  //                   child: DisplayImageVideoCard(
-                  //                     file: postData.posts[0].post,
-                  //                     type: postData.posts[0].type,
-                  //                     isOut: true,
-                  //                   ),
-                  //                 ),
-                  //                 postData.posts.length == 1
-                  //                     ? Container()
-                  //                     : Positioned(
-                  //                         top: Dimensions.size10,
-                  //                         right: Dimensions.size10,
-                  //                         child: const Icon(Icons.layers),
-                  //                       ),
-                  //               ],
-                  //             ));
-                  //       }),
-                  // ),
+                    reverse: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: posts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Post postData = posts[index];
+                      return PostWidget(postData: postData);
+                    },
+                  ),
                 ],
               );
             } else {
@@ -360,13 +310,12 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(
-                          ChatScreen(
-                            userId: widget.userData.id,
-                            name: widget.userData.name,
-                            photo: widget.userData.photo,
-                            isGroupChat: false,
-                          ),
+                        AppNavigator.push(
+                          AppRoutes.chat,
+                          arguments: {
+                            "userData": widget.userData,
+                            "is-group-chat": false,
+                          },
                         );
                       },
                       child: Container(
@@ -461,7 +410,7 @@ class _CoverAndProfileState extends State<_CoverAndProfile> {
 }
 
 class _PrivateAccount extends StatelessWidget {
-  const _PrivateAccount({super.key});
+  const _PrivateAccount();
 
   @override
   Widget build(BuildContext context) {

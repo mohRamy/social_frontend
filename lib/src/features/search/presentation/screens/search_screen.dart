@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
+import '../../../../resources/local/user_local.dart';
 
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';

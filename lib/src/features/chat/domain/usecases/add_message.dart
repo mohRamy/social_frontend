@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+
 import '../../../../core/error/failures.dart';
+import '../../data/models/chat_model.dart';
 import '../repository/base_chat_repository.dart';
 
 class AddMessageUseCase {
@@ -7,24 +9,12 @@ class AddMessageUseCase {
   AddMessageUseCase(this.baseChatRepository);
 
   Future<Either<Failure, Unit>> call(
-    String senderId,
-    String recieverId,
-    String message,
-    String type,
-    String repliedMessage,
-    String repliedType,
-    String repliedTo,
-    bool repliedIsMe,
+    String idConversation,
+    MessageModel message,
   ) async {
     return await baseChatRepository.addMessage(
-      senderId,
-      recieverId,
+      idConversation,
       message,
-      type,
-      repliedMessage,
-      repliedType,
-      repliedTo,
-      repliedIsMe,
     );
   }
 }

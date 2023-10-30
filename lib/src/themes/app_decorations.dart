@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
 
 import '../utils/sizer_custom/sizer.dart';
+import 'app_colors.dart';
 
 class AppDecoration {
   final BoxDecoration decoration;

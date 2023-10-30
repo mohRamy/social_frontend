@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as diox;
-import 'package:social_app/src/services/socket/socket_emit.dart';
+import '../../../../services/socket/socket_emit.dart';
 
 import '../../../../public/api_gateway.dart';
 import '../../../../public/constants.dart';

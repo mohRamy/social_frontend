@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
-import '../../../../themes/app_colors.dart';
-import '../controller/profile_controller.dart';
 
 import '../../../../core/widgets/widgets.dart';
+import '../../../../themes/app_colors.dart';
 import '../components/text_form_profile.dart';
+import '../controller/profile_controller.dart';
 
 
 

@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/widgets/widgets.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../../../auth/domain/entities/auth.dart';
-import '../../../../core/widgets/widgets.dart';
-
-import 'package:flutter/material.dart';
-
 import '../../../home/presentation/components/profile_avatar.dart';
 
 class SearchedProduct extends GetView<SearchController> {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/widgets/widgets.dart';
 import '../../../../resources/local/user_local.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../controller/profile_controller.dart';
-
-import '../../../../core/widgets/widgets.dart';
 
 class FollowingScreen extends StatefulWidget {
   const FollowingScreen({

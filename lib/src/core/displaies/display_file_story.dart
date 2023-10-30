@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../themes/app_decorations.dart';
-import '../../utils/sizer_custom/sizer.dart';
-import '../widgets/hero_image.dart';
-import '../enums/story_enum.dart';
 
 import '../../features/post/presentation/components/video_card.dart';
+import '../../themes/app_decorations.dart';
+import '../../utils/sizer_custom/sizer.dart';
+import '../enums/story_enum.dart';
+import '../widgets/hero_image.dart';
 
 class DisplayFileStory extends StatelessWidget {
   final File message;

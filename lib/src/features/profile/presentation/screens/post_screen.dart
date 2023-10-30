@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+
 // import 'package:photo_manager/photo_manager.dart';
 import '../../../../controller/app_controller.dart';
-import '../../../../resources/local/user_local.dart';
-import '../../../../themes/app_colors.dart';
-import '../../../post/presentation/controller/post_controller.dart';
-import '../../../../core/enums/post_enum.dart';
-import '../../../home/presentation/components/profile_avatar.dart';
 import '../../../../core/displaies/display_file_post.dart';
-
+import '../../../../core/enums/post_enum.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../resources/local/user_local.dart';
+import '../../../../themes/app_colors.dart';
+import '../../../home/presentation/components/profile_avatar.dart';
+import '../../../post/presentation/controller/post_controller.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);

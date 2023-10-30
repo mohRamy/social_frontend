@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
+import '../../../../resources/local/user_local.dart';
 import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../utils/sizer_custom/sizer.dart';

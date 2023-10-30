@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import '../../domain/entities/story.dart';
-
 import '../../../auth/data/models/auth_model.dart';
+import '../../domain/entities/story.dart';
 import 'comment_model.dart';
 
 class StoryModel extends Story {

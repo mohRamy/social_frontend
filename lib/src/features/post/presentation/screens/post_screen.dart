@@ -8,13 +8,13 @@ import 'package:get/get.dart';
 import 'package:social_app/src/controller/app_controller.dart';
 import 'package:social_app/src/resources/local/user_local.dart';
 import 'package:social_app/src/themes/app_colors.dart';
-import '../controller/post_controller.dart';
-import '../../../../core/enums/post_enum.dart';
-import '../../../home/presentation/components/profile_avatar.dart';
-import '../../../../core/displaies/display_file_post.dart';
 
+import '../../../../core/displaies/display_file_post.dart';
+import '../../../../core/enums/post_enum.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../home/presentation/components/profile_avatar.dart';
+import '../controller/post_controller.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);

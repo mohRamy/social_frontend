@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../controller/app_controller.dart';
+import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../../domain/entities/comment.dart';
 import '../components/comment_widget.dart';
-
-import '../../../../core/widgets/widgets.dart';
 import '../controller/home_controller.dart';
 
 class StoryCommentsScreen extends StatefulWidget {

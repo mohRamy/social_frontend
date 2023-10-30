@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../../home/domain/entities/post.dart';
 
+import '../../../../core/error/failures.dart';
 import '../../../auth/domain/entities/auth.dart';
+import '../../../home/domain/entities/post.dart';
 
 abstract class ProfileRepository {
   Future<Either<Failure, Unit>> followUser(String userId);

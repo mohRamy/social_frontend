@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-
-import '../core/error/exceptions.dart';
-import '../models/language_model.dart';
-
 // import 'package:lottie/lottie.dart';
 
 import 'package:dio/dio.dart' as diox;
+
+import '../core/error/exceptions.dart';
+import '../models/language_model.dart';
 
 class AppConstants {
   static const INCH_TO_DP = 160;

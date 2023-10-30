@@ -6,31 +6,29 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/src/controller/app_controller.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
+import '../../../../controller/app_controller.dart';
+import '../../../auth/domain/entities/auth.dart';
+import '../../data/models/chat_model.dart';
+import '../../../../resources/local/user_local.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../controller/chat_controller.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/provider/message_reply_provider.dart';
-import '../../domain/entities/chat.dart';
 import 'message_reply_preview.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'my_message_card.dart';
 import 'sender_message_card.dart';
 
 class ChatList extends ConsumerStatefulWidget {
-  final String recieverId;
+  final Auth userData;
   final bool isGroupChat;
-  final List<Message> userMessages;
-  final String username;
+  final List<MessageModel> messages;
   const ChatList({
     Key? key,
-    required this.recieverId,
+    required this.userData,
     required this.isGroupChat,
-    required this.userMessages,
-    required this.username,
+    required this.messages,
   }) : super(key: key);
 
   @override
@@ -48,8 +46,6 @@ class _ChatListState extends ConsumerState<ChatList> {
   FocusNode focusNode = FocusNode();
   @override
   void initState() {
-    usermessages = widget.userMessages;
-    initSocketChat();
     _soundRecorder = FlutterSoundRecorder();
     super.initState();
   }
@@ -61,63 +57,6 @@ class _ChatListState extends ConsumerState<ChatList> {
     _messageC.dispose();
     _soundRecorder!.closeRecorder();
     isRecorderInit = false;
-    disconnectSocket();
-  }
-
-  List<Message> usermessages = [];
-
-  ///////////////////////////////
-  late IO.Socket _socket;
-
-  void initSocketChat() {
-    _socket = IO
-        .io('http://192.168.239.79:8000/socket-chat-message', <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    });
-    _socket.connect();
-    _socket.emit("signin", AppGet.chatGet.userChat!.userId);
-    _socket.onConnect((_) {
-      _socket.on("message", (msg) {
-        setMessage(msg);
-        messageController.animateTo(messageController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-      });
-    });
-    _socket.onDisconnect((_) => print('Connection Disconnection'));
-    _socket.onConnectError((err) => print(err));
-    _socket.onError((err) => print(err));
-  }
-
-  void setMessage(Map msg) {
-    Message messageModel = Message(
-      id: "",
-      msg: Msg(
-        message: msg["message"],
-        type: msg["type"],
-      ),
-      repliedMsg: RepliedMsg(
-        isMe: msg["repliedIsMe"],
-        repliedMessage: msg["repliedMessage"],
-        type: msg["repliedType"],
-        repliedTo: msg["repliedTo"],
-      ),
-      createdAt: DateTime.now(),
-      senderId: msg["senderId"],
-      recieverId: msg["recieverId"],
-      isSeen: false,
-      like: false,
-    );
-    usermessages.add(messageModel);
-    setState(() {});
-  }
-
-  void disconnectSocketMessagePersonal() {
-    _socket.off('message-personal');
-  }
-
-  void disconnectSocket() {
-    _socket.disconnect();
   }
 
   void sendMsg({
@@ -128,25 +67,28 @@ class _ChatListState extends ConsumerState<ChatList> {
   }) {
     AppGet.chatGet.addMessage(
       UserLocal().getUserId(),
-      widget.recieverId,
-      Msg(
+      widget.userData.id,
+      MsgModel(
         message: message,
         type: type,
       ),
-      RepliedMsg(
+      RepliedMsgModel(
         repliedMessage: repliedMessage,
         type: repliedType,
         repliedTo: '',
         isMe: false,
       ),
     );
+    messageController.animateTo(messageController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     setState(() {
       isFieldEmpty = true;
     });
-    ref.read(messageReplyProvider.state).update((state) => null);
+    // ref.read(messageReplyProvider.state).update((state) => null);
   }
 
   /////////////////////////////////////////
+  ///
   void selectImage() async {
     File? image = await pickImageFromGallery();
     if (image != null) {
@@ -197,13 +139,13 @@ class _ChatListState extends ConsumerState<ChatList> {
     bool isMe,
     String type,
   ) {
-    ref.read(messageReplyProvider.state).update(
-          (state) => MessageReply(
-            message,
-            isMe,
-            type,
-          ),
-        );
+    // ref.read(messageReplyProvider.state).update(
+    //       (state) => MessageReply(
+    //         message,
+    //         isMe,
+    //         type,
+    //       ),
+    //     );
   }
 
   @override
@@ -221,13 +163,13 @@ class _ChatListState extends ConsumerState<ChatList> {
         Expanded(
           child: ListView.builder(
             controller: messageController,
-            itemCount: usermessages.length,
+            itemCount: widget.messages.length,
             itemBuilder: (context, index) {
-              final messageData = usermessages[index];
-              var timeSent = DateFormat.jm().format(messageData.createdAt);
+              final messageData = widget.messages[index];
+              var timeSent = DateFormat.jm().format(messageData.createdAt!);
 
               if (!messageData.isSeen && messageData.recieverId == userId) {
-                chatController.chatMessageSeen(widget.recieverId);
+                chatController.chatMessageSeen(widget.userData.id);
               }
 
               if (messageData.senderId == userId) {
@@ -262,7 +204,7 @@ class _ChatListState extends ConsumerState<ChatList> {
             children: [
               showMessageReply
                   ? MessageReplyPreview(
-                      receiverId: widget.recieverId,
+                      receiverId: widget.userData.id,
                     )
                   : const SizedBox(),
               Row(
@@ -353,7 +295,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                         );
                         chatController.messageNotification(
                           _messageC.text.trim(),
-                          widget.recieverId,
+                          widget.userData.id,
                         );
                         setState(() {
                           _messageC.text = "";

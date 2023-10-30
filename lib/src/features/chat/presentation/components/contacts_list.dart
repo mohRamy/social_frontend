@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../data/models/chat_model.dart';
+import '../controller/chat_controller.dart';
+import '../../../../routes/app_pages.dart';
 
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
-import '../screens/chat_screen.dart';
 
 class ContactsScreen extends StatelessWidget {
-  final List<Auth> usersData;
   const ContactsScreen({
     Key? key,
-    required this.usersData,
   }) : super(key: key);
 
   @override
@@ -79,71 +80,63 @@ class ContactsScreen extends StatelessWidget {
               //   },
               // ),
 
-              ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                itemCount: usersData.length,
-                itemBuilder: (context, i) {
-                  Auth userData = usersData[i];
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.to(
-                            ChatScreen(
-                              userId: userData.id,
-                              name: userData.name,
-                              photo: userData.photo,
-                              isGroupChat: false,
-                            ),
-                          );
-                          // Components.navigateTo(
-                          //   context,
-                          //   Routes.chatScreen,
-                          //   {
-                          //     AppString.argumentName: chatContactData.name,
-                          //     AppString.argumentUid:
-                          //         chatContactData.contactId,
-                          //     AppString.argumentisGroupChat: false,
-                          //     AppString.argumentImage:
-                          //         chatContactData.profilePic,
-                          //   },
-                          // );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 8.sp),
-                          child: ListTile(
-                            title: Text(
-                              userData.name,
-                              style: TextStyle(
-                                fontSize: 14.sp,
+              GetBuilder<ChatController>(
+                builder: (chatCtrl) {
+                  return ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    itemCount: chatCtrl.contentList.length,
+                    itemBuilder: (context, i) {
+                      Auth userData = chatCtrl.contentList[i].recieverData;
+                      MessageModel lastMessage = chatCtrl.contentList[i].lastMessage;
+                      DateTime createdAt = chatCtrl.contentList[i].createdAt;
+                      
+                      return Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              AppNavigator.push(
+                                AppRoutes.chat,
+                                arguments: {
+                                  'content': chatCtrl.contentList[i],
+                                  'isGroupChat': false,
+                                },
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 8.sp),
+                              child: ListTile(
+                                title: Text(
+                                  userData.name,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  lastMessage.msg.message,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                leading: ProfileAvatar(
+                                  imageUrl: userData.photo,
+                                  sizeImage: 50,
+                                ),
+                                trailing: Text(
+                                  DateFormat.jm().format(createdAt),
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: Dimensions.size15,
+                                  ),
+                                ),
                               ),
                             ),
-                            subtitle: Padding(
-                              padding: EdgeInsets.only(top: 6.sp),
-                              child: Text(
-                                userData.email,
-                                style: TextStyle(fontSize: 15.sp),
-                              ),
-                            ),
-                            leading: ProfileAvatar(
-                              imageUrl: userData.photo,
-                              sizeImage: 50,
-                            ),
-                            // trailing: Text(
-                            //   DateFormat.jm()
-                            //       .format(chatContactData.timeSent),
-                            //   style: TextStyle(
-                            //     color: Colors.grey,
-                            //     fontSize: Dimensions.font16 - 3,
-                            //   ),
-                            // ),
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   );
-                },
+                }
               )
             ],
           ),

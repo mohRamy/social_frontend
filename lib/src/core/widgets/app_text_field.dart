@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/src/themes/app_colors.dart';
-import 'package:social_app/src/themes/app_decorations.dart';
 
+import '../../themes/app_colors.dart';
+import '../../themes/app_decorations.dart';
 import '../../utils/sizer_custom/sizer.dart';
 
 class AppTextField extends StatelessWidget {

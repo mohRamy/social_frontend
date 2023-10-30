@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/src/app.dart';
-import 'package:social_app/src/features/chat/presentation/screens/chat_home_screen.dart';
-import 'package:social_app/src/features/navigation/screens/navigation.dart';
-import 'package:social_app/src/features/profile/presentation/screens/profile_by_id.dart';
+import '../app.dart';
+import '../features/chat/presentation/screens/chat_home_screen.dart';
+import '../features/navigation/screens/navigation.dart';
+import '../features/profile/presentation/screens/profile_by_id.dart';
 
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
 import '../features/chat/presentation/components/contacts_list.dart';
+import '../features/chat/presentation/screens/chat_screen.dart';
 import '../features/home/presentation/screens/likes_screen.dart';
 import '../features/home/presentation/screens/post_comments_screen.dart';
 import '../features/profile/presentation/screens/account_profile_page.dart';
@@ -44,14 +45,14 @@ class AppNavigator {
           _getSlideMode(arguments),
         );
 
-        // Authintication
-        case AppRoutes.login:
+      // Authintication
+      case AppRoutes.login:
         return _buildRoute(
           settings,
           const LoginScreen(),
           _getSlideMode(arguments),
         );
-        case AppRoutes.register:
+      case AppRoutes.register:
         return _buildRoute(
           settings,
           const RegisterScreen(),
@@ -66,18 +67,18 @@ class AppNavigator {
           _getSlideMode(arguments),
         );
 
-        // Profile
+      // Profile
       case AppRoutes.profile:
         return _buildRoute(
           settings,
           const ProfileScreen(),
           _getSlideMode(arguments),
         );
-        case AppRoutes.profileById:
+      case AppRoutes.profileById:
         return _buildRoute(
           settings,
           ProfileByIdScreen(
-            userId: arguments!['userId'],
+            userId: arguments!["userId"],
           ),
           _getSlideMode(arguments),
         );
@@ -85,7 +86,7 @@ class AppNavigator {
         return _buildRoute(
           settings,
           AccountProfileScreen(
-            userInfo: arguments!["userInfo"],
+            userInfo: arguments!["user-info"],
           ),
           _getSlideMode(arguments),
         );
@@ -96,43 +97,48 @@ class AppNavigator {
           _getSlideMode(arguments),
         );
 
-        // Post
-        case AppRoutes.likes:
+      // Post
+      case AppRoutes.likes:
         return _buildRoute(
           settings,
-          LikesScreen(usersId: arguments!["usersId"]),
+          LikesScreen(usersId: arguments!["users-id"]),
           _getSlideMode(arguments),
         );
-        case AppRoutes.postComments:
+      case AppRoutes.postComments:
         return _buildRoute(
           settings,
           PostCommentsScreen(
-            postId: arguments!["postId"],
+            postId: arguments!["post-id"],
           ),
           _getSlideMode(arguments),
         );
 
-        case AppRoutes.settings:
+      case AppRoutes.settings:
         return _buildRoute(
           settings,
           const SettingProfileScreen(),
           _getSlideMode(arguments),
         );
 
+      case AppRoutes.chatHome:
+        return _buildRoute(
+          settings,
+          const ChatHomeScreen(),
+          _getSlideMode(arguments),
+        );
       case AppRoutes.chat:
         return _buildRoute(
           settings,
-          ChatHomeScreen(
-          usersData: arguments!['usersData'],
+          ChatScreen(
+            userData: arguments!["userData"], 
+            isGroupChat: arguments["is-group-chat"],
           ),
           _getSlideMode(arguments),
         );
       case AppRoutes.contacts:
         return _buildRoute(
           settings,
-          ContactsScreen(
-          usersData: arguments!['usersData'],
-          ),
+          const ContactsScreen(),
           _getSlideMode(arguments),
         );
 

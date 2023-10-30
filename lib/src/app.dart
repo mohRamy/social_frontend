@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i18n_extension/i18n_widget.dart';
-import 'package:social_app/src/controller/app_controller.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import 'controller/app_controller.dart';
+import 'utils/sizer_custom/sizer.dart';
 import 'routes/app_pages.dart';
 import 'themes/theme_service.dart';
 import 'themes/themes.dart';

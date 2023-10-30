@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
-import 'package:social_app/src/features/home/data/models/post_model.dart';
-import 'package:social_app/src/features/home/domain/entities/post.dart';
+import '../../features/home/data/models/post_model.dart';
+import '../../features/home/domain/entities/post.dart';
 
 class PostLocal {
   final _getStorage = GetStorage();

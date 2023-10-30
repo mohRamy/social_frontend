@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:social_app/src/public/api_gateway.dart';
+import '../../../../public/api_gateway.dart';
 
 import 'package:dio/dio.dart' as diox;
 

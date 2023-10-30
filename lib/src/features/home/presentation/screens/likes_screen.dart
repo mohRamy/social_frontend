@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/src/core/widgets/app_text.dart';
-import 'package:social_app/src/features/home/presentation/components/shimmer_like.dart';
+import '../../../../core/widgets/app_text.dart';
+import '../components/shimmer_like.dart';
 
 import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';

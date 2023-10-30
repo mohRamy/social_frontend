@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
+import '../../utils/sizer_custom/sizer.dart';
 
 import '../../routes/app_pages.dart';
 import '../../themes/app_colors.dart';

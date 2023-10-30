@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:social_app/src/themes/app_decorations.dart';
+import '../../themes/app_decorations.dart';
 
 import '../../features/post/presentation/components/video_card.dart';
 import '../../utils/sizer_custom/sizer.dart';

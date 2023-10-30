@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:social_app/src/utils/sizer_custom/sizer.dart';
 
 import '../../core/widgets/app_text.dart';
 import '../../routes/app_pages.dart';
+import '../../utils/sizer_custom/sizer.dart';
 
 class CustomImagePicker {
   final _picker = ImagePicker();

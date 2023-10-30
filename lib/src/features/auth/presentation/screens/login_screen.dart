@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../../../themes/app_colors.dart';
 import '../../../../public/components.dart';
 import '../../../../routes/app_pages.dart';
 import '../controller/auth_controller.dart';

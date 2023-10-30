@@ -27,6 +27,11 @@ class SocketGateway {
   static const changedFollowingUser = 'changed-following-user';
   static const changeFollowingUserError = 'change-following-user-error';
 
+  // Rooms
+  static const joinRoomChat = 'join-room-chat';
+  static const leaveRoomChat = 'leave-room-chat';
+  
+
   // Add Message
   static const addMessage = 'add-message';
   static const addedMessage = 'added-message';

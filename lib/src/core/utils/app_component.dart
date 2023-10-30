@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../themes/app_colors.dart';
 import '../../utils/sizer_custom/sizer.dart';
 import '../widgets/widgets.dart';
 

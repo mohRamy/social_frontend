@@ -70,9 +70,9 @@ class Message extends Equatable {
 }
 
 class Msg extends Equatable {
-  String message;
+  final String message;
   final String type;
-  Msg({
+  const Msg({
     required this.message,
     required this.type,
   });
@@ -85,11 +85,11 @@ class Msg extends Equatable {
 }
 
 class RepliedMsg extends Equatable {
-  String repliedMessage;
+  final String repliedMessage;
   final String type;
   final String repliedTo;
   final bool isMe;
-  RepliedMsg({
+  const RepliedMsg({
     required this.repliedMessage,
     required this.type,
     required this.repliedTo,

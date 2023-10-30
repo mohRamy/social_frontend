@@ -2,13 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:social_app/src/controller/app_controller.dart';
+import '../../controller/app_controller.dart';
 
-import 'package:social_app/src/core/widgets/app_text.dart';
-import 'package:social_app/src/core/widgets/widgets.dart';
-import 'package:social_app/src/features/home/presentation/controller/home_controller.dart';
-import 'package:social_app/src/public/constants.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import 'app_text.dart';
+import 'widgets.dart';
+import '../../features/home/presentation/controller/home_controller.dart';
+import '../../public/constants.dart';
+import '../../themes/app_colors.dart';
 
 import '../../features/home/domain/entities/post.dart';
 import '../../features/home/presentation/components/profile_avatar.dart';

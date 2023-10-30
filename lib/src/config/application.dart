@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_storage/get_storage.dart';
+
 import '../services/firebase_messaging/handle_messaging.dart';
 import '../services/stripe_payment/stripe_keys.dart';
 
@@ -16,9 +17,9 @@ class Application {
   Future<void> initialAppLication() async {
   try {
     await GetStorage.init();
-    baseUrl = 'http://192.168.223.79:8000/';
+    baseUrl = 'http://192.168.86.79:8000/';
     imageUrl = '${baseUrl}api/up-load-file/';
-    socketUrl = 'http://192.168.223.79:8000/';
+    socketUrl = 'http://192.168.86.79:8000/';
     mode = 'PRODUCTION';
     requestPermission();
     handleReceiveNotification();

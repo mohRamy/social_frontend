@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:social_app/src/features/chat/domain/usecases/add_message.dart';
+import '../features/chat/domain/usecases/add_message.dart';
+import '../resources/local/chat_local.dart';
 
 import '../core/network/network_info.dart';
 import '../features/auth/data/datasources/auth_remote_datasource.dart';
@@ -93,6 +94,8 @@ class AppGet {
     Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
     Get.lazyPut(() => InternetConnectionChecker());
 
+    Get.lazyPut(()=>ChatLocal());
+
     // Language
     // Get.lazyPut(() => LocalizationController(sharedPreferences: Get.find()));
 
@@ -121,8 +124,6 @@ class AppGet {
 
 
   //controllers
-  // Get.lazyPut(() => UserController());
-
   Get.lazyPut(()=>GetAllPostsUsecase(Get.find()));
   Get.lazyPut(()=>ModifyPostUsecase(Get.find()));
   Get.lazyPut(()=>DeletePostUsecase(Get.find()));

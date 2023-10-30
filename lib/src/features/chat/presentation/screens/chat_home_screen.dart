@@ -2,18 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../../../themes/app_colors.dart';
 
 import '../../../../core/picker/picker.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../components/contacts_list.dart';
 
 class ChatHomeScreen extends StatefulWidget {
-  final List<Auth> usersData; 
   const ChatHomeScreen({
     Key? key,
-    required this.usersData,
   }) : super(key: key);
 
   @override
@@ -107,7 +104,7 @@ class _MobileLayoutScreenState extends State<ChatHomeScreen>
                     'Create Group',
                   ),
                   onTap: () => Future(
-                    (){},
+                    () {},
                     // () => Navigator.pushNamed(
                     //   context,
                     //   Routes.createGroupScreen,
@@ -141,10 +138,10 @@ class _MobileLayoutScreenState extends State<ChatHomeScreen>
         ),
         body: TabBarView(
           controller: tabBarController,
-          children: [
-            ContactsScreen(usersData: widget.usersData),
-            const Text('chhc'),
-            const Text('Calls'),
+          children: const [
+            ContactsScreen(),
+            Text('chhc'),
+            Text('Calls'),
           ],
         ),
         floatingActionButton: FloatingActionButton(

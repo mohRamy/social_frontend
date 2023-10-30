@@ -1,18 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
-import 'package:social_app/src/themes/app_colors.dart';
+import '../../data/models/chat_model.dart';
+import '../../../../resources/local/user_local.dart';
+import '../../../../themes/app_colors.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../domain/entities/chat.dart';
 import 'display_text_image_gif.dart';
 
 class MyMessageCard extends StatelessWidget {
-  final Msg msg;
+  final MsgModel msg;
   final String date;
   final VoidCallback onLeftSwipe;
-  final RepliedMsg repliedMsg;
+  final RepliedMsgModel repliedMsg;
   final bool isSeen;
 
   const MyMessageCard({
