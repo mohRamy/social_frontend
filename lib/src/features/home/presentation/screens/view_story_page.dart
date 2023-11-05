@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../../../resources/local/user_local.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
+import 'package:social_app/src/features/home/data/models/story_model.dart';
 import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
-import '../../domain/entities/story.dart';
 import '../controller/home_controller.dart';
 import 'story_comment_screen.dart';
 // import 'package:story_view/controller/story_controller.dart';
@@ -17,7 +16,7 @@ import 'story_comment_screen.dart';
 import '../../../../core/widgets/widgets.dart';
 
 class ViewStoryScreen extends StatefulWidget {
-  final Story story;
+  final StoryModel story;
 
   const ViewStoryScreen({Key? key, required this.story}) : super(key: key);
 
@@ -170,7 +169,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                     InkWell(
                       onTap: () {
                         if (widget.story.userData.id !=
-                            UserLocal().getUserId()) {
+                            AppGet.authGet.userData!.id) {
                           AppNavigator.push(
                             AppRoutes.profileById,
                             arguments: {
@@ -230,7 +229,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                 child: GetBuilder<HomeController>(
                   builder: (homeCtrl) {
                     bool meLike = widget.story.likes
-                        .contains(UserLocal().getUserId());
+                        .contains(AppGet.authGet.userData!.id);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -266,7 +265,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen>
                                 ? InkWell(
                                     onTap: () async {
                                       if (widget.story.likes.isNotEmpty) {
-                                        List<Auth> userLikes = [];
+                                        List<AuthModel> userLikes = [];
                                         for (var i = 0;
                                             i < widget.story.likes.length;
                                             i++) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/src/features/home/data/models/story_model.dart';
 // import 'package:photo_manager/photo_manager.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
 
+import '../../../../controller/app_controller.dart';
 import '../../../../core/displaies/display_image_video_card.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../domain/entities/story.dart';
 import '../controller/home_controller.dart';
 import '../screens/add_story_screen.dart';
 import '../screens/view_story_page.dart';
@@ -123,7 +123,7 @@ class _ListViewStoryState extends State<ListViewStory> {
                         top: 8.0,
                         left: 8.0,
                         child: ProfileAvatar(
-                          imageUrl: UserLocal().getUser()!.photo,
+                          imageUrl: AppGet.authGet.userData?.photo??'',
                           hasBorder: false,
                         ),
                       ),
@@ -146,7 +146,7 @@ class _ListViewStoryState extends State<ListViewStory> {
               ),
             ),
           GetBuilder<HomeController>(builder: (homeCtrl) {
-            return FutureBuilder<List<Story>>(
+            return FutureBuilder<List<StoryModel>>(
               future: homeCtrl.getAllStories(),
               builder: (context, snapshot) {
               return !snapshot.hasData
@@ -162,7 +162,7 @@ class _ListViewStoryState extends State<ListViewStory> {
                       ),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Story story = snapshot.data![index];
+                        final StoryModel story = snapshot.data![index];
                         return InkWell(
                           onTap: () {
                             Get.to(
@@ -188,7 +188,7 @@ class _ListViewStoryState extends State<ListViewStory> {
 }
 
 class _StoryCard extends StatelessWidget {
-  final Story story;
+  final StoryModel story;
 
   const _StoryCard({
     Key? key,

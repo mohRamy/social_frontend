@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../controller/app_controller.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../themes/app_colors.dart';
 import '../components/item_profile.dart';
 import '../controller/profile_controller.dart';
@@ -51,7 +51,7 @@ class _PrivacyProfilePageState extends State<PrivacyProfilePage> {
                             const SizedBox(width: 10),
                             const TextCustom(text: 'private account', fontSize: 17 ),
                             const Spacer(),
-                            (UserLocal().getUser()!.private || private)
+                            (AppGet.authGet.userData!.private || private)
                               ? Icon(Icons.radio_button_checked_rounded, color: colorPrimary)
                               : const Icon(Icons.radio_button_unchecked_rounded),
                             const SizedBox(width: 10),

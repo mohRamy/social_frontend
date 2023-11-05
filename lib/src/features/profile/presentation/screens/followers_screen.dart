@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../resources/local/user_local.dart';
+import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../auth/domain/entities/auth.dart';
@@ -46,7 +46,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
               itemCount: followers.length,
               itemBuilder: (context, index) {
                 Auth userData = followers[index];
-                bool isFriend = UserLocal().getUser()!
+                bool isFriend = AppGet.authGet.userData!
                     .following
                     .contains(userData.id);
                 return InkWell(

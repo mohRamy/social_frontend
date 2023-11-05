@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
 import '../../controller/app_controller.dart';
 
 import 'app_text.dart';
@@ -10,17 +11,15 @@ import '../../features/home/presentation/controller/home_controller.dart';
 import '../../public/constants.dart';
 import '../../themes/app_colors.dart';
 
-import '../../features/home/domain/entities/post.dart';
 import '../../features/home/presentation/components/profile_avatar.dart';
 import '../../helper/date_time_helper.dart';
-import '../../resources/local/user_local.dart';
 import '../../routes/app_pages.dart';
 import '../../utils/sizer_custom/sizer.dart';
 import '../displaies/display_image_video_card.dart';
 import 'expandable_text_widget.dart';
 
 class PostWidget extends StatelessWidget {
-  final Post postData;
+  final PostModel postData;
   const PostWidget({
     Key? key,
     required this.postData,
@@ -28,7 +27,6 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeCtrl = AppGet.homeGet;
     return Container(
             margin: EdgeInsets.only(bottom: 10.sp),
             child: Column(
@@ -46,7 +44,7 @@ class PostWidget extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   postData.userData.id !=
-                                          UserLocal().getUserId()
+                                          AppGet.authGet.userData!.id
                                       ? AppNavigator.push(
                                           AppRoutes.profile,
                                           arguments: {
@@ -136,14 +134,14 @@ class PostWidget extends StatelessWidget {
                             GestureDetector(
                                 onTap: () {
                                   AppNavigator.push(
-                                    AppRoutes.likes,
+                                    AppRoutes.postComments,
                                     arguments: {
-                                      "usersId": postData.likes,
+                                      "post-id": postData.id,
                                     },
                                   );
                                 },
                                 child: TextCustom(
-                                  text: 
+                                  text:
                                   postData.comments.length.toString(),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -167,24 +165,26 @@ class PostWidget extends StatelessWidget {
                         const SizedBox(width: 3),
                         // homeCtrl.countLikePost.containsKey(postData.id)
                             // ? 
-                            GestureDetector(
-                                onTap: () {
-                                  AppNavigator.push(
-                                    AppRoutes.likes,
-                                    arguments: {
-                                      "usersId": postData.likes,
+                            GetBuilder<HomeController>(
+                              builder: (homeCtrl) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      AppNavigator.push(
+                                        AppRoutes.likes,
+                                        arguments: {
+                                          "users-id": postData.likes,
+                                        },
+                                      );
                                     },
+                                    child: TextCustom(
+                                      text: homeCtrl.countLikePost.containsKey(postData.id) ? homeCtrl.countLikePost[postData.id].toString() : "0",
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Get.isDarkMode ? mCL : fCL,
+                                    ),
                                   );
-                                },
-                                child: TextCustom(
-                                  text: postData.likes.length.toString(),
-                                  //homeCtrl.countLikePost[postData.id]
-                                      //.toString(),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Get.isDarkMode ? mCL : fCL,
-                                ),
-                              ),
+                              }
+                            ),
                             //: Container(),
                         const SizedBox(width: 3),
                         TextCustom(
@@ -223,39 +223,45 @@ class PostWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (homeCtrl.likesPost.contains(postData.id)) {
-                                  homeCtrl.removelike(postData.id);
-                                  homeCtrl.addLikePost(
-                                    postData.id,
-                                  );
-                                } else {
-                                  homeCtrl.addLike(postData.id);
-                                  homeCtrl.addLikePost(
-                                    postData.id,
-                                  );
-                                }
-                              },
-                              child: homeCtrl.likesPost.contains(postData.id)
-                                  ? Image.asset(
-                                      AppConstants.liked32Asset,
-                                      height: 23,
-                                    )
-                                  : Image.asset(
-                                      AppConstants.like32Asset,
-                                      height: 23,
-                                    ),
-                            ),
-                            TextCustom(
-                              text: "Like",
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ],
-                        ),
+                      GetBuilder<HomeController>(
+                        builder: (homeCtrl) {
+                          return Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (homeCtrl.likesPost.contains(postData.id)) {
+                                      homeCtrl.removelike(postData.id);
+                                      homeCtrl.removeCountLike(postData.id);
+                                      homeCtrl.addLikePost(
+                                        postData.id,
+                                      );
+                                    } else {
+                                      homeCtrl.addLike(postData.id);
+                                      homeCtrl.addCountLike(postData.id);
+                                      homeCtrl.addLikePost(
+                                        postData.id,
+                                      );
+                                    }
+                                  },
+                                  child: homeCtrl.likesPost.contains(postData.id)
+                                      ? Image.asset(
+                                          AppConstants.liked32Asset,
+                                          height: 23,
+                                        )
+                                      : Image.asset(
+                                          AppConstants.like32Asset,
+                                          height: 23,
+                                        ),
+                                ),
+                                TextCustom(
+                                  text: "Like",
+                                  fontSize: 10.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ],
+                            );
+                        }
+                      ),
                       Column(
                         children: [
                           InkWell(
@@ -263,7 +269,7 @@ class PostWidget extends StatelessWidget {
                               AppNavigator.push(
                                 AppRoutes.postComments,
                                 arguments: {
-                                  "postId": postData.id,
+                                  "post-id": postData.id,
                                 },
                               );
                             },

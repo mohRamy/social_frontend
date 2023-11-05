@@ -2,6 +2,8 @@ class SocketGateway {
   static const ping = 'ping';
   static const pong = 'pong';
 
+  static const sendFCMTokenCSS = 'sned-fcm-token-css';
+
   // Get All Posts
   static const getAllPosts = 'get-all-posts';
   static const goneAllPosts = 'gone-all-posts';
@@ -30,7 +32,6 @@ class SocketGateway {
   // Rooms
   static const joinRoomChat = 'join-room-chat';
   static const leaveRoomChat = 'leave-room-chat';
-  
 
   // Add Message
   static const addMessage = 'add-message';

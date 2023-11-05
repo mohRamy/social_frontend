@@ -6,7 +6,6 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 // import 'package:photo_manager/photo_manager.dart';
 import 'package:social_app/src/controller/app_controller.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
 import 'package:social_app/src/themes/app_colors.dart';
 
 import '../../../../core/displaies/display_file_post.dart';
@@ -116,7 +115,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           Container(
                             alignment: Alignment.topLeft,
                             child: ProfileAvatar(
-                              imageUrl: UserLocal().getUser()!.photo,
+                              imageUrl: AppGet.authGet.userData!.photo,
                               sizeImage: 50,
                             ),
                           ),

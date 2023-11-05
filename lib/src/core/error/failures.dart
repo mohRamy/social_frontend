@@ -13,8 +13,8 @@ class ServerFailure extends Failure{
   const ServerFailure({required super.message});
 }
 
-class EmptyCacheFailure extends Failure {
-  const EmptyCacheFailure({required super.message});
+class LocalFailure extends Failure {
+  const LocalFailure({required super.message});
 }
 
 class OfflineFailure extends Failure {

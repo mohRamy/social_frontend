@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 import '../../data/models/chat_model.dart';
 import '../controller/chat_controller.dart';
 import '../../../../routes/app_pages.dart';
 
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 
 class ContactsScreen extends StatelessWidget {
@@ -87,7 +87,7 @@ class ContactsScreen extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: chatCtrl.contentList.length,
                     itemBuilder: (context, i) {
-                      Auth userData = chatCtrl.contentList[i].recieverData;
+                      AuthModel userData = chatCtrl.contentList[i].recieverData;
                       MessageModel lastMessage = chatCtrl.contentList[i].lastMessage;
                       DateTime createdAt = chatCtrl.contentList[i].createdAt;
                       

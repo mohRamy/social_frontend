@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as diox;
 import '../../../../resources/base_repository.dart';
+import '../../../../resources/local/user_local.dart';
 import '../../../../services/socket/socket_emit.dart';
 
 import '../../../../public/api_gateway.dart';
@@ -72,7 +73,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   @override
   Future<Unit> messageNotification(String userId, String message) async {
     var body = {
-      "userId": userId,
+      "userId": UserLocal().getUserId(),
       "message": message,
     };
 

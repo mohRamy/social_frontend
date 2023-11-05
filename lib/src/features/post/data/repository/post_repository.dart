@@ -6,7 +6,7 @@ import '../../../../core/network/network_info.dart';
 import '../../domain/repository/base_post_repository.dart';
 import '../datasources/post_remote_datasource.dart';
 
-typedef Future<Unit> GetMessage();
+typedef GetMessage = Future<Unit> Function();
 
 class PostRepositoryImpl extends PostRepository {
   final PostRemoteDataSource basePostRemoteDataSource;
@@ -24,12 +24,12 @@ class PostRepositoryImpl extends PostRepository {
     if (await networkInfo.isConnected) {
       try {
         await getMessage();
-        return right(unit);
+        return const Right(unit);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(OfflineFailure(message: "Offline failure"));
+      return const Left(OfflineFailure(message: "Offline failure"));
     }
   }
 }

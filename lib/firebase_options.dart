@@ -44,39 +44,37 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCJREqnLmO_zXitLrc6aoyYsbKKadtLiz0',
-    appId: '1:774350209960:web:3ff9400a5a26c9f2ddd39d',
-    messagingSenderId: '774350209960',
-    projectId: 'shop-app-1e566',
-    authDomain: 'shop-app-1e566.firebaseapp.com',
-    storageBucket: 'shop-app-1e566.appspot.com',
+    apiKey: 'AIzaSyBK263wht4uQjAGdOrLZOoEdQ7IWt2bqJU',
+    appId: '1:324903671024:web:632ebf07e153e672479e35',
+    messagingSenderId: '324903671024',
+    projectId: 'social-app-300c9',
+    authDomain: 'social-app-300c9.firebaseapp.com',
+    storageBucket: 'social-app-300c9.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCIm6EBars-KWGJf6NFYfJp6JRZoVg-U1o',
-    appId: '1:774350209960:android:320d36cafdb5c21dddd39d',
-    messagingSenderId: '774350209960',
-    projectId: 'shop-app-1e566',
-    storageBucket: 'shop-app-1e566.appspot.com',
+    apiKey: 'AIzaSyDSVw-5g4qyJ8LOMojPTvE8d11SJzaCtjQ',
+    appId: '1:324903671024:android:60d753d83262c812479e35',
+    messagingSenderId: '324903671024',
+    projectId: 'social-app-300c9',
+    storageBucket: 'social-app-300c9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDPo6AsSbBTQoejSEMzs_ycHZJ8GUGGYFY',
-    appId: '1:774350209960:ios:63e465cc50124b6dddd39d',
-    messagingSenderId: '774350209960',
-    projectId: 'shop-app-1e566',
-    storageBucket: 'shop-app-1e566.appspot.com',
-    iosClientId: '774350209960-5h29ueqkihbaapkfahpjg8e9qdgk2l5l.apps.googleusercontent.com',
-    iosBundleId: 'com.mohammedrdaly.shopApp',
+    apiKey: 'AIzaSyAssXIgGnEAE21uYIKlzc8yro_R2Z6GDiM',
+    appId: '1:324903671024:ios:1c606a48b48035ac479e35',
+    messagingSenderId: '324903671024',
+    projectId: 'social-app-300c9',
+    storageBucket: 'social-app-300c9.appspot.com',
+    iosBundleId: 'com.example.socialApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDPo6AsSbBTQoejSEMzs_ycHZJ8GUGGYFY',
-    appId: '1:774350209960:ios:6a51df375756c681ddd39d',
-    messagingSenderId: '774350209960',
-    projectId: 'shop-app-1e566',
-    storageBucket: 'shop-app-1e566.appspot.com',
-    iosClientId: '774350209960-vk6hq7maabml7bsmhnm28fthouv7fujf.apps.googleusercontent.com',
-    iosBundleId: 'com.mohammedrdaly.shopApp.RunnerTests',
+    apiKey: 'AIzaSyAssXIgGnEAE21uYIKlzc8yro_R2Z6GDiM',
+    appId: '1:324903671024:ios:1c606a48b48035ac479e35',
+    messagingSenderId: '324903671024',
+    projectId: 'social-app-300c9',
+    storageBucket: 'social-app-300c9.appspot.com',
+    iosBundleId: 'com.example.socialApp',
   );
 }

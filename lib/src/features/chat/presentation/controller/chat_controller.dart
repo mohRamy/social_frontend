@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
+import '../../../../core/widgets/app_clouding.dart';
 import '../../data/models/chat_model.dart';
 import '../../domain/usecases/add_message.dart';
 
@@ -12,7 +11,7 @@ import '../../domain/usecases/get_user_chat.dart';
 
 import '../../domain/usecases/message_notification.dart';
 
-class ChatController extends GetxController with HandleErrorLoading {
+class ChatController extends GetxController with HandleLoading {
   final GetUserChatUseCase getUserChatUseCase;
   final AddMessageUseCase addMessageUseCase;
   final ChatMessageSeenUseCase chatMessageSeenUseCase;
@@ -25,7 +24,6 @@ class ChatController extends GetxController with HandleErrorLoading {
     required this.messageNotificationUseCase,
   });
 
-  // Map<String, ContentModel> content = {};
   List<ContentModel> contentList = [];
 
   Map<String, String> idConversation = {};
@@ -33,20 +31,11 @@ class ChatController extends GetxController with HandleErrorLoading {
   void getUserChat() async {
     final result = await getUserChatUseCase();
     result.fold(
-      (l) => handleError(l),
-      (r) async {
-
-        // for (var i = 0; i < r.contents.length; i++) {
-        //   content[r.contents[i].recieverId] = r.contents[i];
-        // }
-
+      (l) => handleLoading(l),
+      (r) {
         for (var i = 0; i < r.contents.length; i++) {
           contentList.add(r.contents[i]);
         }
-
-        // for (var content in r.contents) {
-        //   messages[content.recieverId] = content.messages;
-        // }
       },
     );
   }
@@ -58,29 +47,11 @@ class ChatController extends GetxController with HandleErrorLoading {
     RepliedMsgModel? repliedMsg,
   ) async {
     if (msg.type == 'image' || msg.type == 'video') {
-      int random = Random().nextInt(1000);
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-      CloudinaryResponse res = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          msg.message,
-          folder: "$random",
-        ),
-      );
-      msg.message = res.secureUrl;
+      cloudinaryPuplic(msg.message);
     }
 
     if (repliedMsg!.type == 'image' || repliedMsg.type == 'video') {
-      int random = Random().nextInt(1000);
-
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-
-      CloudinaryResponse res = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          repliedMsg.repliedMessage,
-          folder: "$random",
-        ),
-      );
-      repliedMsg.repliedMessage = res.secureUrl;
+      cloudinaryPuplic(repliedMsg.repliedMessage);
     }
 
     MessageModel message = MessageModel(
@@ -97,12 +68,12 @@ class ChatController extends GetxController with HandleErrorLoading {
     }
 
     final result = await addMessageUseCase(
-      "id",
+      "id-conversation",
       message,
     );
 
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
@@ -123,7 +94,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void chatMessageSeen(String recieverId) async {
     final result = await chatMessageSeenUseCase(recieverId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
   }
@@ -131,7 +102,7 @@ class ChatController extends GetxController with HandleErrorLoading {
   void messageNotification(String userId, String message) async {
     final result = await messageNotificationUseCase(userId, message);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
   }

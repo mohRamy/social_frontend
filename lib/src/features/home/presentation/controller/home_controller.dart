@@ -1,40 +1,40 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../auth/domain/entities/auth.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
+import 'package:social_app/src/features/home/data/models/story_model.dart';
+import 'package:social_app/src/resources/local/user_local.dart';
+
+import '../../../../controller/app_controller.dart';
+import '../../../../core/enums/story_enum.dart';
+import '../../../../core/error/handle_error_loading.dart';
+import '../../../../core/widgets/app_clouding.dart';
+import '../../../../public/components.dart';
+import '../../../../resources/local/favorite_local.dart';
 import '../../data/models/comment_model.dart';
 import '../../data/models/post_model.dart';
-import '../../../../resources/local/favorite_local.dart';
-import '../../../../resources/local/user_local.dart';
-import '../../../../controller/app_controller.dart';
-import '../../../../public/components.dart';
-import '../../../../core/error/handle_error_loading.dart';
 import '../../domain/entities/comment.dart';
-import '../../domain/entities/post.dart';
-import '../../domain/usecases/add_story.dart';
-import '../../domain/usecases/delete_post.dart';
-import '../../domain/usecases/get_all_posts.dart';
-import '../../domain/usecases/get_all_post_comment.dart';
-import '../../domain/usecases/get_all_stories.dart';
-import '../../domain/usecases/get_all_story_comment.dart';
+import '../../domain/usecases/add_comment_Story.dart';
 import '../../domain/usecases/add_comment_post.dart';
 import '../../domain/usecases/add_like_comment_post.dart';
 import '../../domain/usecases/add_like_post.dart';
+import '../../domain/usecases/add_story.dart';
+import '../../domain/usecases/delete_post.dart';
+import '../../domain/usecases/get_all_post_comment.dart';
+import '../../domain/usecases/get_all_posts.dart';
+import '../../domain/usecases/get_all_posts_socket.dart';
+import '../../domain/usecases/get_all_stories.dart';
+import '../../domain/usecases/get_all_story_comment.dart';
 import '../../domain/usecases/story_comment_like.dart';
+import '../../domain/usecases/story_like.dart';
 import '../../domain/usecases/update_post.dart';
 
-import '../../../../core/enums/story_enum.dart';
-import '../../domain/entities/story.dart';
-import '../../domain/usecases/add_comment_Story.dart';
-import '../../domain/usecases/story_like.dart';
-
-class HomeController extends GetxController with HandleErrorLoading {
+class HomeController extends GetxController with HandleLoading {
   // post
   final GetAllPostsUsecase getAllPostsUsecase;
+  final GetAllPostsSocketUsecase getAllPostsSocketUsecase;
   final ModifyPostUsecase modifyPostUsecase;
   final DeletePostUsecase deletePostUsecase;
   final AddLikePostUsecase addLikePostUsecase;
@@ -50,6 +50,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   final StoryCommentLikeUsecase storyCommentLikeUsecase;
   HomeController({
     required this.getAllPostsUsecase,
+    required this.getAllPostsSocketUsecase,
     required this.modifyPostUsecase,
     required this.deletePostUsecase,
     required this.addLikePostUsecase,
@@ -78,6 +79,18 @@ class HomeController extends GetxController with HandleErrorLoading {
     update();
   }
 
+  Map<String, int> countLikePost = {};
+
+  addCountLike(String id) {
+    countLikePost[id] = countLikePost[id] !+ 1;
+    update();
+  }
+
+  removeCountLike(String id) {
+    countLikePost[id] = countLikePost[id] !- 1;
+    update();
+  }
+
   List<String> likesCommentPost = [];
 
   setLikeCommentPost(String id) {
@@ -93,14 +106,14 @@ class HomeController extends GetxController with HandleErrorLoading {
   late TextEditingController postCommentController;
   late TextEditingController storyCommentController;
 
-    Timer? fetchPostsTimer;
-  
+  Timer? fetchPostsTimer;
+
   @override
   void onInit() {
     getAllPosts();
-    fetchPostsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      getAllPosts();
-    });
+    // fetchPostsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    //   getAllPostsSocket();
+    // });
     super.onInit();
   }
 
@@ -110,46 +123,38 @@ class HomeController extends GetxController with HandleErrorLoading {
     super.onClose();
   }
 
-  // @override
-  // void onInit() {
-  //   getAllStories();
-  //   getAllPosts();
-  //   postCommentController = TextEditingController();
-  //   storyCommentController = TextEditingController();
-  //   super.onInit();
-  // }
-
-  // @override
-  // void onClose() {
-  //   postCommentController.dispose();
-  //   storyCommentController.dispose();
-  //   super.onClose();
-  // }
-
-  
+  RxList<PostModel> posts = <PostModel>[].obs;
   FutureOr<void> getAllPosts() async {
     final result = await getAllPostsUsecase();
     result.fold(
-      (l) => Components.showSnackBar(l.message),
+      (l) => handleLoading(l),
+      (r) {
+        posts.value = r;
+        for (var i = 0; i < r.length; i++) {
+        if (r[i].likes.contains(UserLocal().getUserId())) {
+          likesPost.add(r[i].id);
+        }
+        for (var i = 0; i < r.length; i++) {
+          countLikePost[r[i].id] = r[i].likes.length;
+        }
+      }
+      },
+    );
+    update();
+  }
+
+  FutureOr<void> getAllPostsSocket() async {
+    final result = await getAllPostsSocketUsecase();
+    result.fold(
+      (l) => handleLoading(l),
       (r) => null,
     );
     update();
   }
 
-    RxList<Post> posts = <Post>[].obs;
-    void goneAllPosts (dynamic data){
-        List rawData = data;
-        posts.value = rawData.map((e) => PostModel.fromMap(e)).toList();
-        // if (posts.isNotEmpty) {
-        //   for (var i = 0; i < data.length; i++) {
-        //   if (data[i].likes.contains(UserLocal().getUserId())) {
-        //     likesPost.add(data[i].id);
-        //   }
-        // for (var i = 0; i < data.length; i++) {
-        //   countLikePost[data[i].id] = data[i].likes.length;
-        // }
-        // }
-        // }
+  void goneAllPosts(dynamic data) {
+    List rawData = data;
+    posts.value = rawData.map((e) => PostModel.fromMap(e)).toList();
     update();
   }
 
@@ -158,7 +163,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await modifyPostUsecase(postId, description);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
     hideLoading();
@@ -170,7 +175,7 @@ class HomeController extends GetxController with HandleErrorLoading {
 
     final result = await deletePostUsecase(postId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
@@ -181,7 +186,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> addLikePost(String postId) async {
     final result = await addLikePostUsecase(postId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) {
         FavoriteLocal().saveFavorites(likesPost);
       },
@@ -190,26 +195,27 @@ class HomeController extends GetxController with HandleErrorLoading {
     update();
   }
 
-    Map<String, int> countLikePost = {};
-    void addedLikePost (dynamic data){
-    Post post = PostModel.fromMap(data);
-    countLikePost[post.id] = post.likes.length;
+  
+  void addedLikePost(dynamic data) {
+    // PostModel post = PostModel.fromMap(data);
+    // countLikePost[post.id] = post.likes.length;
     update();
   }
 
   FutureOr<void> addCommentPost(String postId, String comment) async {
     final result = await addCommentPostUsecase(postId, comment);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
     update();
   }
 
-  void addedCommentPost (dynamic data){
+  void addedCommentPost(dynamic data) {
     List rawData = data;
-    List<Comment> postsComment = rawData.map((e) => CommentModel.fromMap(e)).toList();
+    List<Comment> postsComment =
+        rawData.map((e) => CommentModel.fromMap(e)).toList();
     for (var i = 0; i < postsComment.length; i++) {
       if (!postComments.contains(postsComment[i])) {
         postComments.add(postsComment[i]);
@@ -221,44 +227,41 @@ class HomeController extends GetxController with HandleErrorLoading {
   List<Comment> postComments = [];
   FutureOr<void> getAllPostComment(String postId) async {
     final result = await getAllPostCommentUsecase(postId);
-    result.fold(
-      (l) => handleError(l),
-      (r) {
-        for (var i = 0; i < r.length; i++) {
-          if (r[i].likes.contains(UserLocal().getUserId())) {
-            likesCommentPost.add(r[i].id);
-          }
+    result.fold((l) => handleLoading(l), (r) {
+      for (var i = 0; i < r.length; i++) {
+        if (r[i].likes.contains(AppGet.authGet.userData!.id)) {
+          likesCommentPost.add(r[i].id);
         }
-        for (var i = 0; i < r.length; i++) {
-          countLikeCommentPost[r[i].id] = r[i].likes.length;
-        }
-        postComments = r;
-        }
-    );
+      }
+      for (var i = 0; i < r.length; i++) {
+        countLikeCommentPost[r[i].id] = r[i].likes.length;
+      }
+      postComments = r;
+    });
     update();
   }
 
   FutureOr<void> addLikeCommentPost(String postId, String commentId) async {
     final result = await addLikeCommentPostUsecase(postId, commentId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
     update();
   }
-    
-    Map<String, int> countLikeCommentPost = {};
-    void addedLikeCommentPost(dynamic data) async {
+
+  Map<String, int> countLikeCommentPost = {};
+  void addedLikeCommentPost(dynamic data) async {
     Comment comment = CommentModel.fromMap(data);
     countLikeCommentPost[comment.id] = comment.likes.length;
     update();
   }
 
-  List<Story> stories = [];
-  Future<List<Story>> getAllStories() async {
+  List<StoryModel> stories = [];
+  Future<List<StoryModel>> getAllStories() async {
     final result = await getAllStoriesUsecase();
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => stories = r,
     );
     update();
@@ -299,23 +302,13 @@ class HomeController extends GetxController with HandleErrorLoading {
         }
       }
 
-      int random = Random().nextInt(1000);
-
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-
-      for (var i = 0; i < itemsVal.length; i++) {
-        CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(
-            itemsVal[i].path,
-            folder: "$random",
-          ),
-        );
-        storiesUrl.add(res.secureUrl);
+      for (var i = 0; i < itemsVal.length; i++) {        
+          storiesUrl.add(await cloudinaryPuplic(itemsVal[i].path));
       }
 
       final result = await addStoryUsecase(storiesUrl, storiesType);
       result.fold(
-        (l) => handleError(l),
+        (l) => handleLoading(l),
         (r) => null,
       );
 
@@ -332,7 +325,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> getAllStoryComment(String storyId) async {
     final result = await getAllStoryCommentUsecase(storyId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => storyCommentList = r,
     );
 
@@ -342,7 +335,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> storyLike(String storyId) async {
     final result = await storyLikeUsecase(storyId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
@@ -352,7 +345,7 @@ class HomeController extends GetxController with HandleErrorLoading {
   FutureOr<void> storyComment(String storyId, String comment) async {
     final result = await storyCommentUsecase(storyId, comment);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
@@ -362,15 +355,15 @@ class HomeController extends GetxController with HandleErrorLoading {
   void storyCommentLike(String storyId, String commentId) async {
     final result = await storyCommentLikeUsecase(storyId, commentId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
     update();
   }
 
-  Future<List<Auth>> likesUser(List<String> usersId) async {
-    List<Auth> users = [];
+  Future<List<AuthModel>> likesUser(List<String> usersId) async {
+    List<AuthModel> users = [];
     for (var i = 0; i < usersId.length; i++) {
       users.add(
         await AppGet.authGet.fetchInfoUserById(

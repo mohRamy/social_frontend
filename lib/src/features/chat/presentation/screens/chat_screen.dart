@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../controller/app_controller.dart';
 
+import '../../../auth/data/models/auth_model.dart';
 import '../../data/models/chat_model.dart';
 import '../controller/chat_controller.dart';
 import '../../../../services/socket/socket_emit.dart';
@@ -9,12 +10,11 @@ import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 
 import '../../../../routes/app_pages.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 import '../components/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
-  final Auth userData;
+  final AuthModel userData;
   final bool isGroupChat;
   const ChatScreen({
     Key? key,
@@ -40,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Auth userData = widget.userData;
+    final AuthModel userData = widget.userData;
     final List<MessageModel> messages = [];
     for (var i = 0; i < AppGet.chatGet.contentList.length; i++) {
       if (AppGet.chatGet.contentList[i].recieverId == userData.id) {

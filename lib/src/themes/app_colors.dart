@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/utils/hex_color.dart';
+import '../helper/hex_color.dart';
 
 
 var colorPrimary = HexColor("FF0088CC");

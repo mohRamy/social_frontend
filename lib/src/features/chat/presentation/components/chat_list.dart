@@ -6,10 +6,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
+import 'package:social_app/src/resources/local/user_local.dart';
 import '../../../../controller/app_controller.dart';
-import '../../../auth/domain/entities/auth.dart';
+import '../../../auth/data/models/auth_model.dart';
 import '../../data/models/chat_model.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../controller/chat_controller.dart';
@@ -21,7 +21,7 @@ import 'my_message_card.dart';
 import 'sender_message_card.dart';
 
 class ChatList extends ConsumerStatefulWidget {
-  final Auth userData;
+  final AuthModel userData;
   final bool isGroupChat;
   final List<MessageModel> messages;
   const ChatList({
@@ -150,7 +150,7 @@ class _ChatListState extends ConsumerState<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    String userId = UserLocal().getUserId();
+    String userId = AppGet.authGet.userData?.id??'';
     ChatController chatController = AppGet.chatGet;
     final messageReply = ref.watch(messageReplyProvider);
     final showMessageReply = messageReply != null;
@@ -294,8 +294,8 @@ class _ChatListState extends ConsumerState<ChatList> {
                           repliedType: messageReply?.type ?? "",
                         );
                         chatController.messageNotification(
-                          _messageC.text.trim(),
                           widget.userData.id,
+                          _messageC.text.trim(),
                         );
                         setState(() {
                           _messageC.text = "";

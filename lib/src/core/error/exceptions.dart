@@ -5,9 +5,9 @@ class ServerException implements Exception {
   });
 }
 
-class EmptyCacheException implements Exception {
+class LocalException implements Exception {
   final String messageError;
-  EmptyCacheException({
+  LocalException({
     required this.messageError,
   });
 }

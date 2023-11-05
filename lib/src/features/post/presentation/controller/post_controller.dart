@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/widgets/app_clouding.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../core/enums/post_enum.dart';
 
@@ -12,7 +11,7 @@ import '../../../../core/error/handle_error_loading.dart';
 import '../../../../public/components.dart';
 import '../../domain/usecases/add_post.dart';
 
-class PostController extends GetxController with HandleErrorLoading {
+class PostController extends GetxController with HandleLoading {
   final AddPostUseCase addPostUseCase;
   PostController({
     required this.addPostUseCase,
@@ -76,24 +75,14 @@ class PostController extends GetxController with HandleErrorLoading {
         }
       }
 
-      int random = Random().nextInt(1000);
-
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-
-      for (var i = 0; i < itemsVal.length; i++) {
-        CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(
-            itemsVal[i].path,
-            folder: "$random",
-          ),
-        );
-        postsUrl.add(res.secureUrl);
+      for (var i = 0; i < itemsVal.length; i++) {        
+          postsUrl.add(await cloudinaryPuplic(itemsVal[i].path));
       }
     }
 
     final result = await addPostUseCase(description, postsUrl, postsType);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) {
         descriptionC.text = '';
         imageFileSelected.clear();

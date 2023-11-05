@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
 
-import '../../../../resources/local/user_local.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 
 import '../../../../controller/app_controller.dart';
@@ -11,9 +12,7 @@ import '../../../../core/widgets/post_widget.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../../auth/presentation/controller/auth_controller.dart';
-import '../../../home/domain/entities/post.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 import '../controller/profile_controller.dart';
 import 'followers_screen.dart';
@@ -33,13 +32,13 @@ class ProfileByIdScreen extends GetView<ProfileController> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(),
       body: GetBuilder<AuthController>(builder: (authController) {
-        return FutureBuilder<Auth>(
+        return FutureBuilder<AuthModel>(
             future: authController.fetchInfoUserById(userId),
             builder: (context, snapshot) {
-              Auth? userInfo = snapshot.data;
+              AuthModel? userInfo = snapshot.data;
               if (snapshot.connectionState == ConnectionState.done) {
                 AppGet.profileGet.isFriend =
-                    userInfo!.followers.contains(UserLocal().getUserId());
+                    userInfo!.followers.contains(AppGet.authGet.userData!.id);
                 return ListView(
                   children: [
                     _CoverAndProfile(
@@ -48,7 +47,7 @@ class ProfileByIdScreen extends GetView<ProfileController> {
                     const SizedBox(height: 10.0),
                     _UsernameAndDescription(userData: userInfo),
                     const SizedBox(height: 30.0),
-                    (userInfo.private && userInfo.id != UserLocal().getUserId())
+                    (userInfo.private && userInfo.id != AppGet.authGet.userData!.id)
                         ? const _PrivateAccount()
                         : _PostAndFollow(
                             userData: userInfo,
@@ -65,7 +64,7 @@ class ProfileByIdScreen extends GetView<ProfileController> {
 }
 
 class _PostAndFollow extends StatelessWidget {
-  final Auth userData;
+  final AuthModel userData;
   const _PostAndFollow({
     Key? key,
     required this.userData,
@@ -74,11 +73,11 @@ class _PostAndFollow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileController>(builder: (profileCtrl) {
-      return FutureBuilder<List<Post>>(
+      return FutureBuilder<List<PostModel>>(
           future: profileCtrl.getUserPostsById(userData.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              List<Post> posts = snapshot.data!;
+              List<PostModel> posts = snapshot.data!;
               return Column(
                 children: [
                   Container(
@@ -104,7 +103,7 @@ class _PostAndFollow extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () async {
-                            List<Auth> followers = [];
+                            List<AuthModel> followers = [];
                             for (var i = 0;
                                 i < userData.followers.length;
                                 i++) {
@@ -133,7 +132,7 @@ class _PostAndFollow extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () async {
-                            List<Auth> followings = [];
+                            List<AuthModel> followings = [];
                             for (var i = 0;
                                 i < userData.following.length;
                                 i++) {
@@ -168,7 +167,7 @@ class _PostAndFollow extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: posts.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final Post postData = posts[index];
+                      final PostModel postData = posts[index];
                       return PostWidget(postData: postData);
                     },
                   ),
@@ -183,7 +182,7 @@ class _PostAndFollow extends StatelessWidget {
 }
 
 class _UsernameAndDescription extends StatelessWidget {
-  final Auth userData;
+  final AuthModel userData;
   const _UsernameAndDescription({
     Key? key,
     required this.userData,
@@ -216,7 +215,7 @@ class _UsernameAndDescription extends StatelessWidget {
 }
 
 class _CoverAndProfile extends StatefulWidget {
-  final Auth userData;
+  final AuthModel userData;
   const _CoverAndProfile({
     Key? key,
     required this.userData,

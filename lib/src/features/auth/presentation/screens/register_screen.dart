@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/picker/picker.dart';
-import '../../../../core/utils/app_component.dart';
 import '../../../../public/components.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
@@ -147,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              AppComponents.buildbottomsheet(
+                              Components.buildbottomsheet(
                                   icon: Icon(
                                     Icons.camera,
                                     color: colorPrimary,
@@ -159,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ? Colors.white
                                     : Colors.black,
                               ),
-                              AppComponents.buildbottomsheet(
+                              Components.buildbottomsheet(
                                   icon: Icon(
                                     Icons.photo,
                                     color: colorPrimary,

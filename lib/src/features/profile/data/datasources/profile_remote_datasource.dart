@@ -10,12 +10,11 @@ import '../../../../resources/base_repository.dart';
 import '../../../home/data/models/post_model.dart';
 
 import '../../../auth/domain/entities/auth.dart';
-import '../../../home/domain/entities/post.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<Unit> followUser(String userId);
-  Future<List<Post>> getUserPosts();
-  Future<List<Post>> getUserPostsById(String userId);
+  Future<List<PostModel>> getUserPosts();
+  Future<List<PostModel>> getUserPostsById(String userId);
   Future<Unit> updateInfo(Auth myData);
   Future<Unit> privateAccount();
   Future<Unit> changePassword(String currentPassword, String newPassword);
@@ -55,12 +54,12 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
   }
 
   @override
-  Future<List<Post>> getUserPosts() async {
+  Future<List<PostModel>> getUserPosts() async {
     diox.Response response = await baseRepository.getRoute(
       ApiGateway.getUserPosts,
     );
 
-    List<Post> posts = [];
+    List<PostModel> posts = [];
 
     AppConstants().handleApi(
       response: response,
@@ -74,12 +73,12 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
   }
 
   @override
-  Future<List<Post>> getUserPostsById(String userId) async {
+  Future<List<PostModel>> getUserPostsById(String userId) async {
     diox.Response response = await baseRepository.getRoute(
       "${ApiGateway.getUserPostsById}?userId=$userId",
     );
 
-    List<Post> posts = [];
+    List<PostModel> posts = [];
 
     AppConstants().handleApi(
       response: response,

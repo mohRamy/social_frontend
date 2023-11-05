@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:get_storage/get_storage.dart';
 import '../../features/auth/data/models/auth_model.dart';
-import '../../features/auth/domain/entities/auth.dart';
 
 class UserLocal {
   final _getStorage = GetStorage();
@@ -11,16 +8,16 @@ class UserLocal {
   final userIdKey = 'user-id';
   final userKey = 'user-local';
 
-  void saveUser(Auth user) async {
-    _getStorage.write(userKey, json.encode(user));
+  void saveUser(AuthModel user) async {
+    _getStorage.write(userKey, user.toJson());
   }
 
-  Auth? getUser() {
-      var rawData = _getStorage.read(userKey);    
-      if (rawData != null) {
-        return AuthModel.fromJson(json.decode(rawData));
-      }
-      return null;
+    AuthModel? getUser() {
+    var rawData = _getStorage.read(userKey);
+    if (rawData != null) {
+      return AuthModel.fromJson(rawData);
+    }
+    return null;
   }
 
   void clearUserData() async {

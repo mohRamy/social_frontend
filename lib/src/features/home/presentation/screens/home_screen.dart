@@ -6,16 +6,14 @@ import 'package:get/get.dart';
 // import 'package:photo_manager/photo_manager.dart';
 import 'package:social_app/src/controller/app_controller.dart';
 import 'package:social_app/src/core/widgets/post_widget.dart';
-import 'package:social_app/src/resources/local/user_local.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
+import 'package:social_app/src/features/home/data/models/story_model.dart';
 
 import '../../../../core/displaies/display_image_video_card.dart';
-import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/theme_service.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../domain/entities/post.dart';
-import '../../domain/entities/story.dart';
 import '../components/palette.dart';
 import '../components/profile_avatar.dart';
 import '../controller/home_controller.dart';
@@ -66,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: TextCustom(
-          text: AppString.appName,
+          text: "Ramy",
           fontWeight: FontWeight.w600,
           fontSize: Dimensions.size20,
           isTitle: true,
@@ -218,7 +216,7 @@ class _ListViewStories extends GetView<HomeController> {
                       top: 8.0,
                       left: 8.0,
                       child: ProfileAvatar(
-                        imageUrl: UserLocal().getUser()!.photo,
+                        imageUrl: AppGet.authGet.userData!.photo,
                         hasBorder: false,
                       ),
                     ),
@@ -253,7 +251,7 @@ class _ListViewStories extends GetView<HomeController> {
                   ),
                   itemCount: controller.stories.length,
                   itemBuilder: (context, i) {
-                    final Story storyData = controller.stories[i];
+                    final StoryModel storyData = controller.stories[i];
                     return SizedBox(
                       width: 110,
                       child: InkWell(
@@ -323,7 +321,7 @@ class _ListViewPosts extends StatefulWidget {
 }
 
 class _ListViewPostsState extends State<_ListViewPosts> {
-  String userId = UserLocal().getUserId();
+  String userId = AppGet.authGet.userData!.id;
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +335,7 @@ class _ListViewPostsState extends State<_ListViewPosts> {
               shrinkWrap: true,
               itemCount: homeCtrl.posts.length,
               itemBuilder: (BuildContext context, int index) {
-                final Post postData = homeCtrl.posts[index];
+                final PostModel postData = homeCtrl.posts[index];
                 return PostWidget(postData: postData);
               },
             ),

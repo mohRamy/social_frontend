@@ -4,15 +4,29 @@ import '../../../auth/data/models/auth_model.dart';
 import '../../domain/entities/story.dart';
 import 'comment_model.dart';
 
-class StoryModel extends Story {
+class StoryModel {
+  final String id;
+  final AuthModel userData;
+  final DateTime createdAt;
+  final List<Stories> stories;
+  final List<String> likes;
+  final List<CommentModel> comments;
   const StoryModel({
-    required super.id,
-    required super.userData,
-    required super.createdAt,
-    required super.stories,
-    required super.likes,
-    required super.comments,
+    required this.id,
+    required this.userData,
+    required this.createdAt,
+    required this.stories,
+    required this.likes,
+    required this.comments,
   });
+  // const StoryModel({
+  //   required super.id,
+  //   required super.userData,
+  //   required super.createdAt,
+  //   required super.stories,
+  //   required super.likes,
+  //   required super.comments,
+  // });
 
   factory StoryModel.fromMap(Map<String, dynamic> map) {
     return StoryModel(
@@ -27,8 +41,21 @@ class StoryModel extends Story {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userData': userData,
+      'createdAt': createdAt,
+      'stories': stories,
+      'likes': likes,
+      'comments': comments,
+    };
+  }
+
   factory StoryModel.fromJson(String source) =>
       StoryModel.fromMap(json.decode(source));
+
+  String toJson() => json.encode(toMap());
 }
 
 class StoriesModel extends Stories {

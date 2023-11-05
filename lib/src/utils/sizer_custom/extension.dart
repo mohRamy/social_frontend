@@ -16,7 +16,7 @@ extension SizerExt on num {
 
   double get width {
     // DEVICE INCH
-    double deviceSize = math.sqrt(100.h * 100.h + 100.w * 100.w) / AppConstants.INCH_TO_DP;
+    double deviceSize = math.sqrt(100.h * 100.h + 100.w * 100.w) / AppConstants.inchToDP;
     if (deviceSize > 6.5) {
       return 65.w * (6.5 / deviceSize);
     } else if (deviceSize > 5.5) {
@@ -30,7 +30,7 @@ extension SizerExt on num {
 
   bool get isTablet {
     // DEVICE INCH
-    double deviceSize = math.sqrt(100.h * 100.h + 100.w * 100.w) / AppConstants.INCH_TO_DP;
+    double deviceSize = math.sqrt(100.h * 100.h + 100.w * 100.w) / AppConstants.inchToDP;
     if (deviceSize > 6.5) {
       return true;
     }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 
 import '../../../../core/widgets/widgets.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 
 class SearchedProduct extends GetView<SearchController> {
-  final Auth user;
+  final AuthModel user;
   const SearchedProduct({
     Key? key,
     required this.user,

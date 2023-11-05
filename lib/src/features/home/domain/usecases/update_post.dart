@@ -8,6 +8,6 @@ class ModifyPostUsecase {
   ModifyPostUsecase(this.baseHomeRepository);
 
   Future<Either<Failure, Unit>> call(String postId, String description) async {
-    return await baseHomeRepository.modifyPost(postId, description);
+    return await baseHomeRepository.updatePost(postId, description);
   }
 }

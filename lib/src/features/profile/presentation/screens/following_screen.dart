@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../controller/app_controller.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../auth/domain/entities/auth.dart';
 import '../controller/profile_controller.dart';
@@ -43,7 +43,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               itemBuilder: (context, index) {
                 Auth userData = followings[index];
                 bool isFriend =
-                    UserLocal().getUser()!.following.contains(userData.id);
+                    AppGet.authGet.userData!.following.contains(userData.id);
                 return InkWell(
                   borderRadius: BorderRadius.circular(10.0),
                   splashColor: Colors.grey[300],

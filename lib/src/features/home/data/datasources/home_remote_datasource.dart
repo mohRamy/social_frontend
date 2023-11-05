@@ -6,14 +6,15 @@ import '../../../../public/api_gateway.dart';
 import '../../../../public/constants.dart';
 import '../../../../resources/base_repository.dart';
 import '../models/comment_model.dart';
+import '../models/post_model.dart';
 import '../models/story_model.dart';
 
 import '../../domain/entities/comment.dart';
-import '../../domain/entities/story.dart';
 
 abstract class HomeRemoteDataSource {
   // post
-  Future<Unit> getAllPosts();
+  Future<List<PostModel>> getAllPosts();
+  Future<Unit> getAllPostsSocket();
   Future<Unit> updatePost(String postId, String description);
   Future<Unit> deletePost(String postId);
   Future<Unit> addLikePost(String postId);
@@ -21,7 +22,7 @@ abstract class HomeRemoteDataSource {
   Future<List<Comment>> getAllPostComment(String postId);
   Future<Unit> addLikeCommentPost(String postId, String commentId);
   // story
-  Future<List<Story>> getAllStories();
+  Future<List<StoryModel>> getAllStories();
   Future<Unit> addStory(List<String> storiesUrl, List<String> storiesType);
   Future<List<Comment>> getAllStoryComment(String storyId);
   Future<Unit> addLikeStory(String storyId);
@@ -93,31 +94,37 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   }
 
   @override
-  Future<Unit> getAllPosts() {
-    SocketEmit().getAllPosts();
-    return Future.value(unit);
-    // diox.Response response = await baseRepository.getRoute(
-    //   ApiGateway.getPost,
-    // );
+  Future<List<PostModel>> getAllPosts() async {
+    diox.Response response = await baseRepository.getRoute(
+      ApiGateway.getPost,
+    );
 
-    // List<Post> posts = [];
+    List<PostModel> posts = [];
 
-    // AppConstants().handleApi(
-    //   response: response,
-    //   onSuccess: () {
-    //     List rawData = response.data;
-    //     posts = rawData.map((e) => PostModel.fromMap(e)).toList();
-    //   },
-    // );
+    AppConstants().handleApi(
+      response: response,
+      onSuccess: () {
+        List rawData = response.data;
+        posts = rawData.map((e) => PostModel.fromMap(e)).toList();
+      },
+    );
+
+    return posts;
   }
 
   @override
-  Future<List<Story>> getAllStories() async {
+  Future<Unit> getAllPostsSocket() async {
+    SocketEmit().getAllPosts();
+    return Future.value(unit);
+  }
+
+  @override
+  Future<List<StoryModel>> getAllStories() async {
     diox.Response response = await baseRepository.getRoute(
       ApiGateway.getStory,
     );
 
-    List<Story> stories = [];
+    List<StoryModel> stories = [];
 
     AppConstants().handleApi(
       response: response,

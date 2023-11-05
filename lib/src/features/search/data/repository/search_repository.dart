@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../../auth/domain/entities/auth.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../domain/repository/base_search_repository.dart';
@@ -14,7 +14,7 @@ class SearchRepositoryImpl extends SearchRepository {
   SearchRepositoryImpl(this.baseSearchRemoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, List<Auth>>> searchUser(String searchQuery) async {
+  Future<Either<Failure, List<AuthModel>>> searchUser(String searchQuery) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseSearchRemoteDataSource.searchUser(searchQuery);

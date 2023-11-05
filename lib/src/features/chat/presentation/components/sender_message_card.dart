@@ -1,7 +1,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../../../resources/local/user_local.dart';
+import '../../../../controller/app_controller.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -26,7 +26,7 @@ class SenderMessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userName = UserLocal().getUser()!.name;
+    String userName = AppGet.authGet.userData?.name??'';
     String message = msg.message;
     String type = msg.type;
     String repliedMessage = repliedMsg.repliedMessage;

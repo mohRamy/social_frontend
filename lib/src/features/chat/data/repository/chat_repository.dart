@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import '../../../../resources/local/chat_local.dart';
+import 'package:social_app/src/features/chat/data/datasources/chat_local_datasource.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
@@ -13,22 +13,27 @@ typedef GetMessage = Future<Unit> Function();
 
 class ChatRepositoryImpl extends ChatRepository {
   final ChatRemoteDataSource baseChatRemoteDataSource;
+  final ChatLocalDataSource baseChatLocalDataSource;
   final NetworkInfo networkInfo;
-  ChatRepositoryImpl(this.baseChatRemoteDataSource, this.networkInfo);
+  ChatRepositoryImpl(
+    this.baseChatRemoteDataSource,
+    this.baseChatLocalDataSource,
+    this.networkInfo,
+  );
 
   @override
   Future<Either<Failure, ChatModel>> getUserChat() async {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseChatRemoteDataSource.getUserChat();
-        ChatLocal().saveChat(result);
-        return right(result);
+        baseChatLocalDataSource.saveChat(result);
+        return Right(result);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      final result = ChatLocal().getChat();
-      return right(result!);
+      final result = baseChatLocalDataSource.getChat();
+      return Right(result!);
     }
   }
 
@@ -37,19 +42,12 @@ class ChatRepositoryImpl extends ChatRepository {
     String idConversation,
     MessageModel message,
   ) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final result = await baseChatRemoteDataSource.addMessage(
-          idConversation,
-          message,
-        );
-        return right(result);
-      } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
-      }
-    } else {
-      return left(const OfflineFailure(message: "Offline failure"));
-    }
+    return await _getMessage(() {
+      return baseChatRemoteDataSource.addMessage(
+        idConversation,
+        message,
+      );
+    });
   }
 
   @override
@@ -61,22 +59,24 @@ class ChatRepositoryImpl extends ChatRepository {
 
   @override
   Future<Either<Failure, Unit>> messageNotification(
-      String userId, String message) async {
+    String userId,
+    String message,
+  ) async {
     return await _getMessage(() {
       return baseChatRemoteDataSource.messageNotification(userId, message);
     });
   }
 
-  Future<Either<Failure, Unit>> _getMessage(GetMessage getMessage) async {
+    Future<Either<Failure, Unit>> _getMessage(GetMessage getMessage) async {
     if (await networkInfo.isConnected) {
       try {
         await getMessage();
-        return right(unit);
+        return const Right(unit);
       } on ServerException catch (failure) {
-        return left(ServerFailure(message: failure.messageError));
+        return Left(ServerFailure(message: failure.messageError));
       }
     } else {
-      return left(const OfflineFailure(message: "Offline failure"));
+      return const Left(OfflineFailure(message: "Offline failure"));
     }
   }
 }

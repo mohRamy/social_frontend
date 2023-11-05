@@ -8,15 +8,15 @@ import '../core/error/exceptions.dart';
 import '../models/language_model.dart';
 
 class AppConstants {
-  static const INCH_TO_DP = 160;
+  static const inchToDP = 160;
 
-  static String COUNTRY_CODE = 'country_code';
-  static String LANGUAGE_CODE = 'language_code';
+  static String countryCode = 'country_code';
+  static String languageCode = 'language_code';
 
   static const urlImageDefault = 'assets/icons/logo32.png';
 
   // Lottie
-  static const LOTTIE_PATH = 'assets/lotties';
+  static const lottiePath = 'assets/lotties';
   // LottieBuilder splashLottie = Lottie.asset('$LOTTIE_PATH/splash.json');
   // LottieBuilder loadingLottie = Lottie.asset('$LOTTIE_PATH/cat_sleeping.json');
   // LottieBuilder loginLottie = Lottie.asset('$LOTTIE_PATH/login.json');
@@ -29,14 +29,14 @@ class AppConstants {
   static const shareAsset = '$imgPath/share_32.png';
 
   // Icon
-  static const ICON_PATH = 'assets/icons';
-  static const LOGO32_ASSET = '$ICON_PATH/logo32.png';
-  static const LOGO64_ASSET = '$ICON_PATH/logo64.png';
+  static const iconPath = 'assets/icons';
+  static const logo32Asset = '$iconPath/logo32.png';
+  static const logo64Asset = '$iconPath/logo64.png';
 
   // Language
-  static const LANGUAGE_PATH = 'assets/languages';
-  static const IN_LANGUAGE = '$LANGUAGE_PATH/en.json';
-  static const AR_LANGUAGE = '$LANGUAGE_PATH/ar.json';
+  static const languagePath = 'assets/languages';
+  static const inLanguage = '$languagePath/en.json';
+  static const arLanguage = '$languagePath/ar.json';
 
 
   static List<LanguageModel> languages = [

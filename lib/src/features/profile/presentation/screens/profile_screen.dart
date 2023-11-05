@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
 import '../../../../core/widgets/app_text.dart';
 import '../../../../core/widgets/post_widget.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
 import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
-import '../../../auth/domain/entities/auth.dart';
-import '../../../home/domain/entities/post.dart';
-import '../controller/profile_controller.dart';
+import '../../../auth/domain/entities/auth.dart';import '../controller/profile_controller.dart';
 
 import '../../../auth/presentation/controller/auth_controller.dart';
 import '../../../../core/widgets/hero_image.dart';
@@ -25,7 +24,7 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    Auth userInfo = UserLocal().getUser()!;
+    AuthModel userInfo = AppGet.authGet.userData!;
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -260,7 +259,7 @@ class _ListUserPost extends StatelessWidget {
 }
 
 class _PostAndFollow extends StatelessWidget {
-  final Auth userData;
+  final AuthModel userData;
   const _PostAndFollow({
     Key? key,
     required this.userData,
@@ -268,11 +267,11 @@ class _PostAndFollow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Post>>(
+    return FutureBuilder<List<PostModel>>(
         future: AppGet.profileGet.getUserPosts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            List<Post> posts = snapshot.data!;
+            List<PostModel> posts = snapshot.data!;
             return Column(
               children: [
                 Container(
@@ -299,7 +298,7 @@ class _PostAndFollow extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          List<Auth> followers = [];
+                          List<AuthModel> followers = [];
                           for (var i = 0; i < userData.followers.length; i++) {
                             followers.add(await AppGet.authGet
                                 .fetchInfoUserById(userData.followers[i]));
@@ -326,7 +325,7 @@ class _PostAndFollow extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          List<Auth> followings = [];
+                          List<AuthModel> followings = [];
                           for (var i = 0; i < userData.following.length; i++) {
                             followings.add(await Get.find<AuthController>()
                                 .fetchInfoUserById(userData.following[i]));
@@ -360,7 +359,7 @@ class _PostAndFollow extends StatelessWidget {
               shrinkWrap: true,
               itemCount: posts.length,
               itemBuilder: (BuildContext context, int index) {
-                final Post postData = posts[index];
+                final PostModel postData = posts[index];
                 return PostWidget(postData: postData);
               },
             ),
@@ -375,7 +374,7 @@ class _PostAndFollow extends StatelessWidget {
 }
 
 class _UsernameAndDescription extends StatelessWidget {
-  final Auth userData;
+  final AuthModel userData;
   const _UsernameAndDescription({
     Key? key,
     required this.userData,

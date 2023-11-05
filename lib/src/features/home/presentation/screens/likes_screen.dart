@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 import '../../../../core/widgets/app_text.dart';
 import '../components/shimmer_like.dart';
 
 import '../../../../core/widgets/widgets.dart';
 import '../../../../routes/app_pages.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../controller/home_controller.dart';
 
 class LikesScreen extends GetView<HomeController> {
@@ -40,7 +40,7 @@ class LikesScreen extends GetView<HomeController> {
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<Auth>>(
+              child: FutureBuilder<List<AuthModel>>(
                   future: controller.likesUser(usersId),
                   builder: (context, snapshot) {
                     return !snapshot.hasData
@@ -50,7 +50,7 @@ class LikesScreen extends GetView<HomeController> {
                                 const EdgeInsets.symmetric(horizontal: 15.0),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, i) {
-                              Auth userData = snapshot.data![i];
+                              AuthModel userData = snapshot.data![i];
                               String timeAgoCustom(DateTime d) {
                                 Duration diff = DateTime.now().difference(d);
                                 if (diff.inDays > 365) {

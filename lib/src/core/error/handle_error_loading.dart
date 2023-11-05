@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../public/components.dart';
 
-import '../utils/app_component.dart';
 import 'exceptions.dart';
 import 'failures.dart';
 
-class HandleErrorLoading {
-  void handleError(Failure failure) {
+class HandleLoading {
+  void handleLoading(Failure failure) {
     hideLoading();
     switch (failure.runtimeType) {
       case ServerFailure:
         return Components.showSnackBar(failure.message, title: "Server Failure");
-      case EmptyCacheException:
+      case LocalException:
         return Components.showSnackBar(failure.message, title: "Empty Cache Failure");
       case OfflineFailure:
         return Components.showSnackBar("Offline Failure", snackPosition: SnackPosition.BOTTOM, color: Colors.white10.withOpacity(0.6));
@@ -24,10 +23,10 @@ class HandleErrorLoading {
   }
 
   showLoading([String? message]) {
-    AppComponents.showLoading(message);
+    Components.showLoading(message);
   }
 
   hideLoading() {
-    AppComponents.hideLoading();
+    Components.hideLoading();
   }
 }

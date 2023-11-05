@@ -4,7 +4,7 @@ import 'dart:convert' as convert;
 import 'package:dio/dio.dart' as diox;
 
 import '../config/application.dart';
-import 'local/user_local.dart';
+import '../controller/app_controller.dart';
 
 class BaseRepository {
   var dio = diox.Dio(diox.BaseOptions(
@@ -160,7 +160,7 @@ class BaseRepository {
 
   getHeaders({String? token}) {
     return {
-      'Authorization': token ?? UserLocal().getAccessToken(),
+      'Authorization': token ?? AppGet.authGet.userData?.token??"",
       'Content-Type': 'application/json; charset=UTF-8',
       'Connection': 'keep-alive',
       'Accept': '*/*',

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:get/get.dart';
-import '../../../../resources/local/user_local.dart';
+import 'package:social_app/src/core/widgets/app_clouding.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
+import '../../../../controller/app_controller.dart';
 import '../../../../themes/app_colors.dart';
 
 import '../../../../core/error/handle_error_loading.dart';
@@ -17,9 +17,7 @@ import '../../domain/usecases/modify_my_data.dart';
 import '../../domain/usecases/private_account.dart';
 
 import '../../../auth/domain/entities/auth.dart';
-import '../../../home/domain/entities/post.dart';
-
-class ProfileController extends GetxController with HandleErrorLoading {
+class ProfileController extends GetxController with HandleLoading {
   final FollowUserUseCase followUserUseCase;
   final GetUserPostsUseCase getUserPostsUseCase;
   final GetUserPostsByIdUseCase getUserPostsByIdUseCase;
@@ -40,7 +38,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
   FutureOr<void> changeFollowingUser(String userId) async {
     final result = await followUserUseCase(userId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 
@@ -55,22 +53,22 @@ class ProfileController extends GetxController with HandleErrorLoading {
     update();
   }
 
-  Future<List<Post>> getUserPosts() async {
-    List<Post> userPosts = [];
+  Future<List<PostModel>> getUserPosts() async {
+    List<PostModel> userPosts = [];
     final result = await getUserPostsUseCase();
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => userPosts = r,
     );
     update();
     return userPosts;
   }
 
-  Future<List<Post>> getUserPostsById(String userId) async {
-    List<Post> userPostsById = [];
+  Future<List<PostModel>> getUserPostsById(String userId) async {
+    List<PostModel> userPostsById = [];
     final result = await getUserPostsByIdUseCase(userId);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => userPostsById = r,
     );
     update();
@@ -90,35 +88,16 @@ class ProfileController extends GetxController with HandleErrorLoading {
 
     String photoCloud = '';
     if (photo != null) {
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-      int random = Random().nextInt(1000);
-
-      CloudinaryResponse res = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          photo.path,
-          folder: "$name $random",
-        ),
-      );
-      photoCloud = res.secureUrl;
+      photoCloud = await cloudinaryPuplic(photo.path);
     } else {
-      photoCloud = UserLocal().getUser()!.photo;
+      photoCloud = AppGet.authGet.userData!.photo;
     }
 
     String backgroundImageCloud = '';
     if (backgroundImage != null) {
-      final cloudinary = CloudinaryPublic('dvn9z2jmy', 'qle4ipae');
-
-      int random = Random().nextInt(1000);
-
-      CloudinaryResponse res = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          backgroundImage.path,
-          folder: "$name $random",
-        ),
-      );
-      backgroundImageCloud = res.secureUrl;
+      backgroundImageCloud = await cloudinaryPuplic(backgroundImage.path);
     } else {
-      backgroundImageCloud = UserLocal().getUser()!.backgroundImage;
+      backgroundImageCloud = AppGet.authGet.userData!.backgroundImage;
     }
 
     Auth myData = Auth(
@@ -141,7 +120,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
 
     final result = await updataUserInfoUseCase(myData);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) {
         hideLoading();
         update();
@@ -160,7 +139,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
     showLoading();
     final result = await privateAccountUseCase();
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) {
         hideLoading();
         update();
@@ -183,7 +162,7 @@ class ProfileController extends GetxController with HandleErrorLoading {
 
     final result = await changepasswordUseCase(currentPassword, newPassword);
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) => null,
     );
 

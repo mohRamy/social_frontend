@@ -4,10 +4,9 @@ import '../../../../public/api_gateway.dart';
 import '../../../../public/constants.dart';
 import '../../../../resources/base_repository.dart';
 import '../../../auth/data/models/auth_model.dart';
-import '../../../auth/domain/entities/auth.dart';
 
 abstract class SearchRemoteDataSource {
-  Future<List<Auth>> searchUser(String searchQuery);
+  Future<List<AuthModel>> searchUser(String searchQuery);
 }
 
 class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
@@ -15,12 +14,12 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   SearchRemoteDataSourceImpl(this.baseRepository);
 
   @override
-  Future<List<Auth>> searchUser(String searchQuery) async {
+  Future<List<AuthModel>> searchUser(String searchQuery) async {
         diox.Response response = await baseRepository.getRoute(
       "${ApiGateway.searchUser}/$searchQuery",
     );
 
-    List<Auth> users = [];
+    List<AuthModel> users = [];
     
     AppConstants().handleApi(
       response: response,

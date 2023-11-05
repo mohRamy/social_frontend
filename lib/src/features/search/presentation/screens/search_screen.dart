@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../resources/local/user_local.dart';
 
+import '../../../../controller/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
@@ -64,7 +64,7 @@ class SearchScreen extends GetView<SearchControlle> {
                                 return GestureDetector(
                                   onTap: () {
                                     controller.users[index].id !=
-                                            UserLocal().getUserId()
+                                            AppGet.authGet.userData!.id
                                         ? AppNavigator.push(
                                             AppRoutes.profileById,
                                             arguments: {

@@ -1,3 +1,5 @@
+import 'package:social_app/src/services/socket/socket_emit.dart';
+
 import '../../controller/app_controller.dart';
 import '../../public/socket_gateway.dart';
 
@@ -5,7 +7,6 @@ import '../../config/application.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../public/components.dart';
-import '../../resources/local/user_local.dart';
 
 IO.Socket? socket;
 
@@ -17,13 +18,15 @@ void connectAndListen() {
     IO.OptionBuilder()
         .enableForceNew()
         .setTransports(['websocket']).setExtraHeaders({
-      'authorization': UserLocal().getAccessToken(),
+      'authorization': AppGet.authGet.userData!.token,
     }).build(),
   );
 
   socket!.connect();
   socket!.onConnect((_) async {
     print('Connected');
+
+    // SocketEmit().sendDeviceInfo();
 
     // Get All Posts
     socket!.on(SocketGateway.goneAllPosts, (data) {

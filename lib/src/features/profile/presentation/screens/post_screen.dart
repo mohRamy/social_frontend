@@ -11,7 +11,6 @@ import '../../../../core/displaies/display_file_post.dart';
 import '../../../../core/enums/post_enum.dart';
 import '../../../../core/picker/picker.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../home/presentation/components/profile_avatar.dart';
 import '../../../post/presentation/controller/post_controller.dart';
@@ -116,7 +115,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           Container(
                               alignment: Alignment.topLeft,
                               child: ProfileAvatar(
-                                imageUrl: UserLocal().getUser()!.photo,
+                                imageUrl: AppGet.authGet.userData!.photo,
                                 sizeImage: 50,
                               ),
                             ),

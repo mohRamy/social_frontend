@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 
 import '../../../../controller/app_controller.dart';
 import '../../../../core/picker/picker.dart';
-import '../../../../core/utils/app_component.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../public/components.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
@@ -173,7 +173,7 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              AppComponents.buildbottomsheet(
+                              Components.buildbottomsheet(
                                 icon: Icon(
                                   Icons.camera,
                                   color: colorPrimary,
@@ -186,7 +186,7 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                                     ? Colors.white
                                     : Colors.black,
                               ),
-                              AppComponents.buildbottomsheet(
+                              Components.buildbottomsheet(
                                 icon: Icon(
                                   Icons.photo,
                                   color: colorPrimary,
@@ -274,7 +274,7 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        AppComponents.buildbottomsheet(
+                                        Components.buildbottomsheet(
                                           icon: Icon(
                                             Icons.camera,
                                             color: colorPrimary,
@@ -287,7 +287,7 @@ class _AccountProfileScreenState extends State<AccountProfileScreen> {
                                               ? Colors.white
                                               : Colors.black,
                                         ),
-                                        AppComponents.buildbottomsheet(
+                                        Components.buildbottomsheet(
                                           icon: Icon(
                                             Icons.photo,
                                             color: colorPrimary,

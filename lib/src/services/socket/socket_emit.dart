@@ -1,16 +1,25 @@
+import '../../controller/app_controller.dart';
 import '../../features/chat/data/models/chat_model.dart';
-import '../../resources/local/user_local.dart';
 
+import '../../helper/device_helper.dart';
+import '../../models/device_model.dart';
 import 'socket.dart';
 import '../../public/socket_gateway.dart';
 
 class SocketEmit {
+    sendDeviceInfo() async {
+    DeviceModel deviceModel = await getDeviceDetails();
+    socket!.emit(
+      SocketGateway.sendFCMTokenCSS,
+      deviceModel.toMap(),
+    );
+  }
   // Get All Posts
   getAllPosts() {
     socket!.emit(
       SocketGateway.getAllPosts,
       {
-        'userId': UserLocal().getUserId(),
+        'userId': AppGet.authGet.userData!.id,
       },
     );
   }
@@ -21,7 +30,7 @@ class SocketEmit {
       SocketGateway.changeLikePost,
       {
         'postId': postId,
-        'userId': UserLocal().getUserId(),
+        'userId': AppGet.authGet.userData!.id,
       },
     );
   }
@@ -32,7 +41,7 @@ class SocketEmit {
       SocketGateway.addCommentPost,
       {
         'postId': postId,
-        'userId': UserLocal().getUserId(),
+        'userId': AppGet.authGet.userData!.id,
         'comment': comment,
       },
     );
@@ -44,7 +53,7 @@ class SocketEmit {
       SocketGateway.changeLikeCommentPost,
       {
         'postId': postId,
-        'userId': UserLocal().getUserId(),
+        'userId': AppGet.authGet.userData!.id,
         'commentId': commentId,
       },
     );
@@ -55,7 +64,7 @@ class SocketEmit {
     socket!.emit(
       SocketGateway.changeFollowingUser,
       {
-        'myId': UserLocal().getUserId(),
+        'myId': AppGet.authGet.userData!.id,
         'userId': userId,
       },
     );

@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:social_app/src/features/home/data/models/post_model.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../auth/domain/entities/auth.dart';
-import '../../../home/domain/entities/post.dart';
 import '../../domain/repository/base_profile_repository.dart';
 import '../datasources/profile_remote_datasource.dart';
 
@@ -30,7 +30,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, List<Post>>> getUserPosts() async {
+  Future<Either<Failure, List<PostModel>>> getUserPosts() async {
         if (await networkInfo.isConnected) {
       try {
         final result = await baseProfileRemoteDataSource.getUserPosts();
@@ -44,7 +44,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, List<Post>>> getUserPostsById(String userId) async {
+  Future<Either<Failure, List<PostModel>>> getUserPostsById(String userId) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await baseProfileRemoteDataSource.getUserPostsById(userId);

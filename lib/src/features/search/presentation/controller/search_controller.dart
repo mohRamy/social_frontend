@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 
 import '../../../../core/error/handle_error_loading.dart';
 import '../../../../public/components.dart';
-import '../../../auth/domain/entities/auth.dart';
 import '../../domain/usecases/add_post.dart';
 
 
-class SearchControlle extends GetxController with HandleErrorLoading {
+class SearchControlle extends GetxController with HandleLoading {
   final SearchUserUseCase searchUserUseCase;
   SearchControlle({
     required this.searchUserUseCase,
@@ -18,7 +18,7 @@ class SearchControlle extends GetxController with HandleErrorLoading {
     super.onInit();
   }
   
-  RxList<Auth> users = <Auth>[].obs;
+  RxList<AuthModel> users = <AuthModel>[].obs;
   RxString searchQuery = ''.obs;
 
   Future<void> fetchSearchUsers({String? query}) async {
@@ -26,7 +26,7 @@ class SearchControlle extends GetxController with HandleErrorLoading {
     final result = await searchUserUseCase.execute(query!);
 
     result.fold(
-      (l) => handleError(l),
+      (l) => handleLoading(l),
       (r) {
         users.value = r;
       },

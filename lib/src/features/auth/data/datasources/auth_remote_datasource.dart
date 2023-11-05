@@ -10,10 +10,10 @@ import '../models/auth_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<Unit> register(Auth auth);
-  Future<Auth> login(String email, String password);
+  Future<AuthModel> login(String email, String password);
   Future<bool> isTokenValid();
-  Future<Auth> fetchUserInfo();
-  Future<Auth> fetchUserInfoById(String userId);
+  Future<AuthModel> getUserInfo();
+  Future<AuthModel> getUserInfoById(String userId);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -44,7 +44,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
   
   @override
-  Future<Auth> login(String email, String password) async {
+  Future<AuthModel> login(String email, String password) async {
     
     var body = {
       "email": email,
@@ -54,7 +54,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     diox.Response response =
         await baseRepository.postRoute(ApiGateway.login, body);
     
-    late Auth userData;
+    late AuthModel userData;
     
     AppConstants().handleApi(
       response: response,
@@ -86,12 +86,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Auth> fetchUserInfo() async {
+  Future<AuthModel> getUserInfo() async {
     final response = await baseRepository.getRoute(
       ApiGateway.getUserInfo,
     );
 
-    late Auth userData;
+    late AuthModel userData;
 
     AppConstants().handleApi(
       response: response,
@@ -104,12 +104,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Auth> fetchUserInfoById(String userId) async {
+  Future<AuthModel> getUserInfoById(String userId) async {
     final response = await baseRepository.getRoute(
       "${ApiGateway.getUserInfoById}?userId=$userId",
     );
 
-    late Auth userData;
+    late AuthModel userData;
 
     AppConstants().handleApi(
       response: response,

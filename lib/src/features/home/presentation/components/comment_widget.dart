@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../../../resources/local/user_local.dart';
+import 'package:social_app/src/controller/app_controller.dart';
+import 'package:social_app/src/features/auth/data/models/auth_model.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../utils/sizer_custom/sizer.dart';
-import '../../../auth/domain/entities/auth.dart';
 
 import '../../../../core/widgets/expandable_text_widget.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -14,7 +14,7 @@ import '../controller/home_controller.dart';
 class CommentWidget extends GetView<HomeController> {
   final String type;
   final Comment commentData;
-  final Auth userData;
+  final AuthModel userData;
   final String uid;
   const CommentWidget({
     Key? key,
@@ -64,7 +64,7 @@ class CommentWidget extends GetView<HomeController> {
             children: [
               GestureDetector(
                 onTap: (){
-                  if (commentData.userId != UserLocal().getUserId()) {
+                  if (commentData.userId != AppGet.authGet.userData?.id) {
           AppNavigator.push(
             AppRoutes.profileById,
             arguments: {

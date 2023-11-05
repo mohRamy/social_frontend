@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_app/src/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:social_app/src/features/chat/data/datasources/chat_local_datasource.dart';
+import 'package:social_app/src/features/home/data/datasources/home_local_datasource.dart';
+import 'package:social_app/src/features/home/domain/usecases/get_all_posts_socket.dart';
 import '../features/chat/domain/usecases/add_message.dart';
 import '../resources/local/chat_local.dart';
 
@@ -12,8 +16,8 @@ import '../features/auth/domain/repository/base_auth_repository.dart';
 import '../features/auth/domain/usecases/get_user_info.dart';
 import '../features/auth/domain/usecases/get_user_info_by_id.dart';
 import '../features/auth/domain/usecases/is_token_valid.dart';
-import '../features/auth/domain/usecases/sign_in.dart';
-import '../features/auth/domain/usecases/sign_up.dart';
+import '../features/auth/domain/usecases/login.dart';
+import '../features/auth/domain/usecases/register.dart';
 import '../features/auth/presentation/controller/auth_controller.dart';
 import '../features/chat/data/datasources/chat_remote_datasource.dart';
 import '../features/chat/data/repository/chat_repository.dart';
@@ -80,12 +84,9 @@ class AppGet {
 
   static final chatGet = Get.find<ChatController>();
 
-
   static Future<void> init() async {
-
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Get.lazyPut(() => sharedPreferences);    
-
+    Get.lazyPut(() => sharedPreferences);
 
     // base repository
     Get.lazyPut(() => BaseRepository());
@@ -94,114 +95,125 @@ class AppGet {
     Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find()));
     Get.lazyPut(() => InternetConnectionChecker());
 
-    Get.lazyPut(()=>ChatLocal());
+    Get.lazyPut(() => ChatLocal());
 
     // Language
     // Get.lazyPut(() => LocalizationController(sharedPreferences: Get.find()));
 
     // base and impl
-  Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<AuthRepository>(() => AuthRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<AuthRemoteDataSource>(
+        () => AuthRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(Get.find()));
+    Get.lazyPut<AuthRepository>(
+        () => AuthRepositoryImpl(Get.find(), Get.find(), Get.find()));
 
-  Get.lazyPut<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<HomeRepository>(() => HomeRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<HomeRemoteDataSource>(
+        () => HomeRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<HomeLocalDataSource>(() => HomeLocalDataSourceImpl(Get.find()));
+    Get.lazyPut<HomeRepository>(
+        () => HomeRepositoryImpl(Get.find(), Get.find(), Get.find()));
 
-  Get.lazyPut<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<PostRepository>(() => PostRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<PostRemoteDataSource>(
+        () => PostRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<PostRepository>(
+        () => PostRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<SearchRemoteDataSource>(
-      () => SearchRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<SearchRepository>(
-      () => SearchRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<SearchRemoteDataSource>(
+        () => SearchRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<SearchRepository>(
+        () => SearchRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<ProfileRemoteDataSource>(
-      () => ProfileRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<ProfileRepository>(
-      () => ProfileRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<ProfileRemoteDataSource>(
+        () => ProfileRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<ProfileRepository>(
+        () => ProfileRepositoryImpl(Get.find(), Get.find()));
 
-  Get.lazyPut<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl(Get.find()));
-  Get.lazyPut<ChatRepository>(() => ChatRepositoryImpl(Get.find(), Get.find()));
+    Get.lazyPut<ChatRemoteDataSource>(
+        () => ChatRemoteDataSourceImpl(Get.find()));
+    Get.lazyPut<ChatLocalDataSource>(() => ChatLocalDataSourceImpl(Get.find()));
+    Get.lazyPut<ChatRepository>(
+        () => ChatRepositoryImpl(Get.find(), Get.find(), Get.find()));
 
+    //controllers
+    Get.lazyPut(() => LoginAuthUsecase(Get.find()));
+    Get.lazyPut(() => RegisterAuthUsecase(Get.find()));
+    Get.lazyPut(() => IsTokenValidAuthUsecase(Get.find()));
+    Get.lazyPut(() => GetUserInfoAuthUsecase(Get.find()));
+    Get.lazyPut(() => GetUserInfoByIdAuthUsecase(Get.find()));
+    Get.lazyPut(() => AuthController(
+          loginAuthUsecase: Get.find(),
+          regiserAuthUsecase: Get.find(),
+          isTokenValidAuthUsecase: Get.find(),
+          getUserInfoAuthUsecase: Get.find(),
+          getUserInfoByIdAuthUsecase: Get.find(),
+        ));
 
-  //controllers
-  Get.lazyPut(()=>GetAllPostsUsecase(Get.find()));
-  Get.lazyPut(()=>ModifyPostUsecase(Get.find()));
-  Get.lazyPut(()=>DeletePostUsecase(Get.find()));
-  Get.lazyPut(()=>AddLikePostUsecase(Get.find()));
-  Get.lazyPut(()=>AddCommentPostUsecase(Get.find()));
-  Get.lazyPut(()=>GetAllPostCommentUsecase(Get.find()));
-  Get.lazyPut(()=>AddLikeCommentPostUsecase(Get.find()));
-  Get.lazyPut(()=>GetAllStoriesUsecase(Get.find()));
-  Get.lazyPut(()=>AddStoryUsecase(Get.find()));
-  Get.lazyPut(()=>StoryLikeUsecase(Get.find()));
-  Get.lazyPut(()=>AddCommentStoryUsecase(Get.find()));
-  Get.lazyPut(()=>GetAllStoryCommentUsecase(Get.find()));
-  Get.lazyPut(()=>StoryCommentLikeUsecase(Get.find()));
-  Get.lazyPut(() => HomeController(
-        getAllPostsUsecase: Get.find(),
-        modifyPostUsecase: Get.find(),
-        deletePostUsecase: Get.find(),
-        addLikePostUsecase: Get.find(),
-        addCommentPostUsecase: Get.find(),
-        getAllPostCommentUsecase: Get.find(),
-        addLikeCommentPostUsecase: Get.find(),
-        getAllStoriesUsecase: Get.find(),
-        addStoryUsecase: Get.find(),
-        storyLikeUsecase: Get.find(),
-        storyCommentUsecase: Get.find(),
-        getAllStoryCommentUsecase: Get.find(),
-        storyCommentLikeUsecase: Get.find(),
-      ));
+    Get.lazyPut(() => GetAllPostsUsecase(Get.find()));
+    Get.lazyPut(() => GetAllPostsSocketUsecase(Get.find()));
+    Get.lazyPut(() => ModifyPostUsecase(Get.find()));
+    Get.lazyPut(() => DeletePostUsecase(Get.find()));
+    Get.lazyPut(() => AddLikePostUsecase(Get.find()));
+    Get.lazyPut(() => AddCommentPostUsecase(Get.find()));
+    Get.lazyPut(() => GetAllPostCommentUsecase(Get.find()));
+    Get.lazyPut(() => AddLikeCommentPostUsecase(Get.find()));
+    Get.lazyPut(() => GetAllStoriesUsecase(Get.find()));
+    Get.lazyPut(() => AddStoryUsecase(Get.find()));
+    Get.lazyPut(() => StoryLikeUsecase(Get.find()));
+    Get.lazyPut(() => AddCommentStoryUsecase(Get.find()));
+    Get.lazyPut(() => GetAllStoryCommentUsecase(Get.find()));
+    Get.lazyPut(() => StoryCommentLikeUsecase(Get.find()));
+    Get.lazyPut(() => HomeController(
+          getAllPostsUsecase: Get.find(),
+          getAllPostsSocketUsecase: Get.find(),
+          modifyPostUsecase: Get.find(),
+          deletePostUsecase: Get.find(),
+          addLikePostUsecase: Get.find(),
+          addCommentPostUsecase: Get.find(),
+          getAllPostCommentUsecase: Get.find(),
+          addLikeCommentPostUsecase: Get.find(),
+          getAllStoriesUsecase: Get.find(),
+          addStoryUsecase: Get.find(),
+          storyLikeUsecase: Get.find(),
+          storyCommentUsecase: Get.find(),
+          getAllStoryCommentUsecase: Get.find(),
+          storyCommentLikeUsecase: Get.find(),
+        ));
 
-  Get.lazyPut(()=>SignInAuthUsecase(Get.find()));
-  Get.lazyPut(()=>SignUpAuthUsecase(Get.find()));
-  Get.lazyPut(()=>IsTokenValidAuthUsecase(Get.find()));
-  Get.lazyPut(()=>GetUserInfoAuthUsecase(Get.find()));
-  Get.lazyPut(()=>GetUserInfoByIdAuthUsecase(Get.find()));
-  Get.lazyPut(() => AuthController(
-        signInAuthUsecase: Get.find(),
-        signUpAuthUsecase: Get.find(),
-        isTokenValidAuthUsecase: Get.find(),
-        getUserInfoAuthUsecase: Get.find(),
-        getUserInfoByIdAuthUsecase: Get.find(),
-        // box: Get.find(),
-      ));
-      
-  Get.lazyPut(() => NavigationController());
+    Get.lazyPut(() => NavigationController());
 
-  Get.lazyPut(()=>AddPostUseCase(Get.find()));
-  Get.lazyPut(() => PostController(addPostUseCase: Get.find()));
-  
-  Get.lazyPut(()=>SearchUserUseCase(Get.find()));
-  Get.lazyPut(() => SearchControlle(
-        searchUserUseCase: Get.find(),
-      ));
-  
-  Get.lazyPut(()=>FollowUserUseCase(Get.find()));
-  Get.lazyPut(()=>GetUserPostsUseCase(Get.find()));
-  Get.lazyPut(()=>GetUserPostsByIdUseCase(Get.find()));
-  Get.lazyPut(()=>UpdataUserInfoUseCase(Get.find()));
-  Get.lazyPut(()=>PrivateAccountUseCase(Get.find()));
-  Get.lazyPut(()=>ChangepasswordUseCase(Get.find()));
-  Get.lazyPut(() => ProfileController(
-        followUserUseCase: Get.find(),
-        getUserPostsUseCase: Get.find(),
-        getUserPostsByIdUseCase: Get.find(),
-        updataUserInfoUseCase: Get.find(),
-        privateAccountUseCase: Get.find(),
-        changepasswordUseCase: Get.find(),
-      ));
+    Get.lazyPut(() => AddPostUseCase(Get.find()));
+    Get.lazyPut(() => PostController(addPostUseCase: Get.find()));
 
-  Get.lazyPut(()=>GetUserChatUseCase(Get.find()));
-  Get.lazyPut(()=>AddMessageUseCase(Get.find()));
-  Get.lazyPut(()=>ChatMessageSeenUseCase(Get.find()));
-  Get.lazyPut(()=>MessageNotificationUseCase(Get.find()));
-  Get.lazyPut(() => ChatController(
-        getUserChatUseCase: Get.find(),
-        addMessageUseCase: Get.find(),
-        chatMessageSeenUseCase: Get.find(),
-        messageNotificationUseCase: Get.find(),
-      ));
+    Get.lazyPut(() => SearchUserUseCase(Get.find()));
+    Get.lazyPut(() => SearchControlle(
+          searchUserUseCase: Get.find(),
+        ));
+
+    Get.lazyPut(() => FollowUserUseCase(Get.find()));
+    Get.lazyPut(() => GetUserPostsUseCase(Get.find()));
+    Get.lazyPut(() => GetUserPostsByIdUseCase(Get.find()));
+    Get.lazyPut(() => UpdataUserInfoUseCase(Get.find()));
+    Get.lazyPut(() => PrivateAccountUseCase(Get.find()));
+    Get.lazyPut(() => ChangepasswordUseCase(Get.find()));
+    Get.lazyPut(() => ProfileController(
+          followUserUseCase: Get.find(),
+          getUserPostsUseCase: Get.find(),
+          getUserPostsByIdUseCase: Get.find(),
+          updataUserInfoUseCase: Get.find(),
+          privateAccountUseCase: Get.find(),
+          changepasswordUseCase: Get.find(),
+        ));
+
+    Get.lazyPut(() => GetUserChatUseCase(Get.find()));
+    Get.lazyPut(() => AddMessageUseCase(Get.find()));
+    Get.lazyPut(() => ChatMessageSeenUseCase(Get.find()));
+    Get.lazyPut(() => MessageNotificationUseCase(Get.find()));
+    Get.lazyPut(() => ChatController(
+          getUserChatUseCase: Get.find(),
+          addMessageUseCase: Get.find(),
+          chatMessageSeenUseCase: Get.find(),
+          messageNotificationUseCase: Get.find(),
+        ));
   }
 
   static void dispose() {

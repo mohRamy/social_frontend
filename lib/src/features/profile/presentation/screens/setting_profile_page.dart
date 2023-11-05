@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../../controller/app_controller.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../resources/local/user_local.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../themes/app_colors.dart';
 import '../components/item_profile.dart';
@@ -73,7 +72,7 @@ class SettingProfileScreen extends StatelessWidget {
               onPressed: () {
                 AppNavigator.push(
                   AppRoutes.accountProfile,
-                  arguments: UserLocal().getUser()!,
+                  arguments: AppGet.authGet.userData!,
                 );
               },
             ),
