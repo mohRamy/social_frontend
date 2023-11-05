@@ -12,6 +12,7 @@ class PostModel {
   final List<Posts> posts;
   final List<String> likes;
   final List<CommentModel> comments;
+  final List<String> shares;
   final String? description;
   const PostModel({
     required this.id,
@@ -21,6 +22,7 @@ class PostModel {
     required this.posts,
     required this.likes,
     required this.comments,
+    required this.shares,
     this.description,
   });
 
@@ -35,6 +37,7 @@ class PostModel {
       likes: List<String>.from(map['likes'] ?? []),
       comments: List<CommentModel>.from(
           map['comments']?.map((x) => CommentModel.fromMap(x)) ?? []),
+          shares: List<String>.from(map['likes'] ?? []),
       description: map['description'] ?? "",
     );
   }
@@ -47,6 +50,7 @@ class PostModel {
       'posts': posts,
       'likes': likes,
       'comments': comments,
+      'shared': shares,
       'description': description,
     };
   }

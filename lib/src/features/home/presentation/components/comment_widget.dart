@@ -120,13 +120,13 @@ class CommentWidget extends GetView<HomeController> {
                                 if (homeCtrl.likesCommentPost
                                     .contains(commentData.id)) {
                                   homeCtrl
-                                      .removelikeCommentPost(commentData.id);
+                                      .removeCommentlike(commentData.id);
                                   homeCtrl.addLikeCommentPost(
                                     uid,
                                     commentData.id,
                                   );
                                 } else {
-                                  homeCtrl.setLikeCommentPost(commentData.id);
+                                  homeCtrl.setCommentLike(commentData.id);
                                   homeCtrl.addLikeCommentPost(
                                     uid,
                                     commentData.id,

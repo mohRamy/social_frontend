@@ -23,7 +23,7 @@ class HomeLocalDataSourceImpl extends HomeLocalDataSource {
 
   final postsKey = 'posts-key';
   final storiesKey = 'stories-key';
-
+  
   @override
   Future<Unit> saveAllPosts(List<PostModel> posts) async {
     try {

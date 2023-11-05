@@ -39,7 +39,6 @@ class SocialApp extends StatelessWidget {
             return AppNavigator().getRoute(settings);
           },
           initialRoute: initRoute(),
-          // home: const SplashScreen(),
         ),
       );
     });

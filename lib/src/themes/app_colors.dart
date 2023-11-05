@@ -7,7 +7,7 @@ var colorPrimary = HexColor("FF0088CC");
 var colorBranch = HexColor("FF34495E");
 var colorDarkPrimary = HexColor("FF14171A");
 var colorDarkBranch = HexColor("FF282828");
-var colorBlack = HexColor("FF121212");
+var colorBlack = Colors.black;
 
 var colorError = Colors.redAccent;
 var colorAccent = HexColor("FF17c063");

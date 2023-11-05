@@ -68,38 +68,32 @@ class HomeController extends GetxController with HandleLoading {
   late List<Map<StoryEnum, File>> imageFileSelected = [];
 
   List<String> likesPost = [];
+  Map<String, int> countLikePost = {};
 
   addLike(String id) {
     likesPost.add(id);
+    countLikePost[id] = countLikePost[id] !+ 1;
     update();
   }
 
   removelike(String id) {
     likesPost.remove(id);
-    update();
-  }
-
-  Map<String, int> countLikePost = {};
-
-  addCountLike(String id) {
-    countLikePost[id] = countLikePost[id] !+ 1;
-    update();
-  }
-
-  removeCountLike(String id) {
     countLikePost[id] = countLikePost[id] !- 1;
     update();
   }
 
   List<String> likesCommentPost = [];
+  Map<String, int> countLikeCommentPost = {};
 
-  setLikeCommentPost(String id) {
+  setCommentLike(String id) {
     likesCommentPost.add(id);
+    countLikeCommentPost[id] = countLikeCommentPost[id] !+ 1;
     update();
   }
 
-  removelikeCommentPost(String id) {
+  removeCommentlike(String id) {
     likesCommentPost.remove(id);
+    countLikeCommentPost[id] = countLikeCommentPost[id] !- 1;
     update();
   }
 
@@ -111,9 +105,9 @@ class HomeController extends GetxController with HandleLoading {
   @override
   void onInit() {
     getAllPosts();
-    // fetchPostsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
-    //   getAllPostsSocket();
-    // });
+    fetchPostsTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      getAllPostsSocket();
+    });
     super.onInit();
   }
 
@@ -249,12 +243,11 @@ class HomeController extends GetxController with HandleLoading {
     );
     update();
   }
-
-  Map<String, int> countLikeCommentPost = {};
+  
   void addedLikeCommentPost(dynamic data) async {
-    Comment comment = CommentModel.fromMap(data);
-    countLikeCommentPost[comment.id] = comment.likes.length;
-    update();
+    // Comment comment = CommentModel.fromMap(data);
+    // countLikeCommentPost[comment.id] = comment.likes.length;
+    // update();
   }
 
   List<StoryModel> stories = [];

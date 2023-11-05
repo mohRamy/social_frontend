@@ -231,13 +231,11 @@ class PostWidget extends StatelessWidget {
                                   onTap: () {
                                     if (homeCtrl.likesPost.contains(postData.id)) {
                                       homeCtrl.removelike(postData.id);
-                                      homeCtrl.removeCountLike(postData.id);
                                       homeCtrl.addLikePost(
                                         postData.id,
                                       );
                                     } else {
                                       homeCtrl.addLike(postData.id);
-                                      homeCtrl.addCountLike(postData.id);
                                       homeCtrl.addLikePost(
                                         postData.id,
                                       );
