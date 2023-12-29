@@ -68,7 +68,7 @@ class AppDecoration {
     }
   }
 
-  factory AppDecoration.productFavoriteCart(context, radius) {
+  factory AppDecoration.textField(context, radius) {
     if (Theme.of(context).brightness == Brightness.dark) {
       return AppDecoration(
         decoration: BoxDecoration(
@@ -88,7 +88,7 @@ class AppDecoration {
           boxShadow: [
             BoxShadow(
               blurRadius: 10,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
               color: colorPrimary.withOpacity(0.3),
             ),
           ],

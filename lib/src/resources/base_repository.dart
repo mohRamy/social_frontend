@@ -4,13 +4,13 @@ import 'dart:convert' as convert;
 import 'package:dio/dio.dart' as diox;
 
 import '../config/application.dart';
-import '../controller/app_controller.dart';
+import 'local/user_local.dart';
 
 class BaseRepository {
   var dio = diox.Dio(diox.BaseOptions(
     baseUrl: Application.baseUrl,
-    connectTimeout: 20000,
-    receiveTimeout: 20000,
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
   ));
 
   Future<diox.Response<dynamic>> downloadFile(
@@ -160,7 +160,7 @@ class BaseRepository {
 
   getHeaders({String? token}) {
     return {
-      'Authorization': token ?? AppGet.authGet.userData?.token??"",
+      'Authorization': token ?? UserLocal().getAccessToken(),
       'Content-Type': 'application/json; charset=UTF-8',
       'Connection': 'keep-alive',
       'Accept': '*/*',
@@ -169,11 +169,11 @@ class BaseRepository {
   }
 
   printEndpoint(String method, String endpoint) {
-    // print('${method.toUpperCase()}: ${Application.baseUrl}$endpoint');
+    print('${method.toUpperCase()}: ${Application.baseUrl}$endpoint');
   }
 
   printResponse(diox.Response<dynamic> response) {
-    // print('StatusCode: ${response.statusCode}');
+    print('StatusCode: ${response.statusCode}');
     // print('Body: ${response.data.toString()}');
   }
 }

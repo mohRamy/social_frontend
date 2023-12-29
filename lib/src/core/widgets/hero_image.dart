@@ -5,10 +5,10 @@ import '../../routes/app_pages.dart';
 
 
 class HeroImage extends StatelessWidget {
-  final String post;
+  final String image;
   const HeroImage({
     Key? key,
-    required this.post,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -19,10 +19,10 @@ class HeroImage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            AppNavigator.pop;
+            AppNavigator.pop();
           },
           icon: const Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: Colors.white,
           ),
         ),
@@ -33,7 +33,7 @@ class HeroImage extends StatelessWidget {
             tag: 'jj',
             child: CachedNetworkImage(
               placeholder: (context, url) => const Text('loading...'),
-              imageUrl: post,
+              imageUrl: image,
             ),
           ),
         ),

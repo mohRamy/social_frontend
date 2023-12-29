@@ -5,7 +5,6 @@ import '../../routes/app_pages.dart';
 import '../../themes/app_colors.dart';
 import '../widgets/app_text.dart';
 
-
 class DialogConfirm extends StatefulWidget {
   final String title;
   final String subTitle;
@@ -13,7 +12,7 @@ class DialogConfirm extends StatefulWidget {
   final double? height;
 
   const DialogConfirm({
-    super.key, 
+    super.key,
     required this.handleConfirm,
     required this.subTitle,
     required this.title,
@@ -30,25 +29,33 @@ class _DialogConfirmState extends State<DialogConfirm> {
     return Container(
       width: 300.sp,
       height: widget.height ?? 130.sp,
-      padding: EdgeInsets.only(top: 16.sp, bottom: 10.sp),
+      padding: EdgeInsets.only(
+        top: Dimensions.size16,
+        bottom: Dimensions.size10,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // SizedBox(height: 6.sp),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.sp),
+            padding: EdgeInsets.symmetric(horizontal: Dimensions.size15),
             child: AppText(
               widget.title,
             ),
           ),
           SizedBox(height: 6.sp),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 7.5.sp),
+            padding: EdgeInsets.symmetric(
+              horizontal: Dimensions.size15,
+              vertical: 7.5.sp,
+            ),
             child: Text(
               widget.subTitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontWeight: FontWeight.w400, fontSize: 10.5.sp, color: fCL),
+                fontWeight: FontWeight.w400,
+                fontSize: 10.5.sp,
+                color: fCL,
+              ),
             ),
           ),
           SizedBox(height: 4.sp),
@@ -63,7 +70,9 @@ class _DialogConfirmState extends State<DialogConfirm> {
                 child: Container(
                   color: Colors.transparent,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 5.sp),
+                  padding: EdgeInsets.symmetric(
+                    vertical: Dimensions.size5,
+                  ),
                   child: const AppText(
                     'Refuse',
                     type: TextType.small,

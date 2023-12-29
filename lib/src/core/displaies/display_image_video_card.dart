@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../themes/app_decorations.dart';
 
-import '../../features/chat/presentation/components/video_card.dart';
+import '../../features/taps/home/presentation/components/video_out.dart';
+import '../../themes/app_decorations.dart';
+import '../widgets/expandable_text_widget.dart';
 import '../widgets/hero_image.dart';
-import '../../features/home/presentation/components/video_out.dart';
+import '../widgets/video_card_network.dart';
 
 class DisplayImageVideoCard extends StatelessWidget {
   final String file;
@@ -21,28 +22,34 @@ class DisplayImageVideoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return type == "image"
+    return type == 'text'
+        ? ExpandableTextWidget(text: file)
+    : type == "image"
         ? isOut
             ? SizedBox(
-              height: 210,
-              child: CachedNetworkImage(
+                height: 210,
+                width: 110,
+                child: CachedNetworkImage(
                   placeholder: (context, url) => Container(
-                    decoration: AppDecoration.displayImageVideo(context).decoration,
+                    decoration:
+                        AppDecoration.displayImageVideo(context).decoration,
                   ),
                   imageUrl: file,
                   fit: BoxFit.cover,
                 ),
-            )
+              )
             : InkWell(
                 onTap: () {
-                  Get.to(HeroImage(post: file));
+                  Get.to(HeroImage(image: file));
                 },
                 child: Stack(
                   children: [
                     Container(
-                      decoration: AppDecoration.displayImageVideo(context).decoration,
+                      decoration:
+                          AppDecoration.displayImageVideo(context).decoration,
                     ),
                     Container(
+                      height: 300,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.cover,
@@ -57,6 +64,6 @@ class DisplayImageVideoCard extends StatelessWidget {
               )
         : isOut
             ? VideoOut(videoUrl: file)
-            : VideoCard(videoUrl: file);
+            : VideoCardNetwork(videoUrl: file);
   }
 }

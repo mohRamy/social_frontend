@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../public/components.dart';
 
+import '../../public/components.dart';
 import 'exceptions.dart';
 import 'failures.dart';
 

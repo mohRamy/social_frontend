@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/chat/data/models/chat_model.dart';
+
+import '../../features/screens/chat/data/models/chat_model.dart';
 
 class ChatLocal {
   final SharedPreferences sharedPreferences = Get.find();

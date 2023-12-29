@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/config/application.dart';
 import 'src/controller/app_controller.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
+  );
 
   await Application().initialAppLication();
-  await AppGet.init();
+  Map<String, Map<String, String>> languages = await AppGet.init();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -27,8 +27,8 @@ await Firebase.initializeApp(
   );
 
   runApp(
-    const ProviderScope(
-      child: SocialApp(),
+    ProviderScope(
+      child: SocialApp(languages: languages),
     ),
   );
 }

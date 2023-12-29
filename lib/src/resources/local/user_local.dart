@@ -1,5 +1,5 @@
 import 'package:get_storage/get_storage.dart';
-import '../../features/auth/data/models/auth_model.dart';
+import '../../features/screens/auth/data/models/auth_model.dart';
 
 class UserLocal {
   final _getStorage = GetStorage();

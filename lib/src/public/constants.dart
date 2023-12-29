@@ -13,7 +13,7 @@ class AppConstants {
   static String countryCode = 'country_code';
   static String languageCode = 'language_code';
 
-  static const urlImageDefault = 'assets/icons/logo32.png';
+  static const urlImageDefault = "https://thumbs.dreamstime.com/b/person-gray-photo-placeholder-man-silhouette-sign-white-background-139139332.jpg";
 
   // Lottie
   static const lottiePath = 'assets/lotties';
@@ -27,6 +27,7 @@ class AppConstants {
   static const liked32Asset = '$imgPath/liked_32.png';
   static const commentAsset = "$imgPath/comment_32.png";
   static const shareAsset = '$imgPath/share_32.png';
+  static const personAsset = '$imgPath/person.webp';
 
   // Icon
   static const iconPath = 'assets/icons';

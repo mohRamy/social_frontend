@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
 
-import '../../models/user_model.dart';
+import '../../features/screens/auth/data/models/auth_model.dart';
 import '../../public/api_gateway.dart';
 import '../base_repository.dart';
 
 class UserRepository {
-  Future<UserModel?> getInfoUser({String? token}) async {
+  Future<AuthModel?> getInfoUser({String? token}) async {
     Response response = await BaseRepository().getRoute(
       ApiGateway.getUserInfo,
       token: token,
     );
     if (response.statusCode == 200) {
-      return UserModel.fromMap(response.data['data'] as Map<String, dynamic>);
+      return AuthModel.fromMap(response.data['data'] as Map<String, dynamic>);
     }
     return null;
   }
 
-  Future<UserModel?> updateUser({
+  Future<AuthModel?> updateUser({
     required String firstName,
     required String lastName,
     required String phone,
@@ -35,12 +35,12 @@ class UserRepository {
     print(response.data);
 
     if ([200, 201].contains(response.statusCode)) {
-      return UserModel.fromMap(response.data as Map<String, dynamic>);
+      return AuthModel.fromMap(response.data as Map<String, dynamic>);
     }
     return null;
   }
 
-  Future<UserModel?> updateAvatar({
+  Future<AuthModel?> updateAvatar({
     required String avatar,
     required String blurHash,
   }) async {
@@ -53,7 +53,7 @@ class UserRepository {
       body: body,
     );
     if ([200, 201].contains(response.statusCode)) {
-      return UserModel.fromMap(response.data as Map<String, dynamic>);
+      return AuthModel.fromMap(response.data as Map<String, dynamic>);
     }
     return null;
   }

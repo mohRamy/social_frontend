@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../helper/hex_color.dart';
 
-
-var colorPrimary = HexColor("FF0088CC");
+var colorPrimary = Colors.blueAccent;
+// var colorPrimary = HexColor("FF0088CC");
 var colorBranch = HexColor("FF34495E");
 var colorDarkPrimary = HexColor("FF14171A");
 var colorDarkBranch = HexColor("FF282828");

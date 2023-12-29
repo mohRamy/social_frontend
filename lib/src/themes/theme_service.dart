@@ -8,7 +8,7 @@ enum ThemeOptions { light, dark }
 class ThemeService {
   static ThemeOptions themeOptions = ThemeOptions.light;
   static ThemeMode currentTheme = ThemeMode.light;
-  final systemBrightness =  const SystemUiOverlayStyle(
+  static final systemBrightness = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   );
   

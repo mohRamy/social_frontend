@@ -4,10 +4,12 @@ class MessageReply {
   final String message;
   final bool isMe;
   final String type;
+  final String repliedTo;
   MessageReply(
     this.message,
     this.isMe,
     this.type,
+    this.repliedTo,
   );
 }
 

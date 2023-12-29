@@ -1,71 +1,148 @@
-import '../../controller/app_controller.dart';
-import '../../features/chat/data/models/chat_model.dart';
+import 'package:social_app/src/features/screens/auth/data/models/auth_model.dart';
 
-import '../../helper/device_helper.dart';
-import '../../models/device_model.dart';
+import '../../resources/local/user_local.dart';
+
+import '../../features/screens/chat/data/models/chat_model.dart';
 import 'socket.dart';
 import '../../public/socket_gateway.dart';
 
 class SocketEmit {
-    sendDeviceInfo() async {
-    DeviceModel deviceModel = await getDeviceDetails();
+  // SignIn
+  signIn() {
     socket!.emit(
-      SocketGateway.sendFCMTokenCSS,
-      deviceModel.toMap(),
+      SocketGateway.signIn,
+      UserLocal().getUserId(),
     );
   }
+
+  // Is User Online
+  isUserOnline(bool isOnline) {
+    var data = {
+      "user-id": UserLocal().getUserId(),
+      "is-user-online": isOnline,
+    };
+    socket!.emit(
+      SocketGateway.isUserOnline,
+      data,
+    );
+  }
+
   // Get All Posts
   getAllPosts() {
     socket!.emit(
       SocketGateway.getAllPosts,
       {
-        'userId': AppGet.authGet.userData!.id,
+        'user-id': UserLocal().getUserId(),
       },
     );
   }
 
-  // Change Like Post
-  changeLikePostEmit(String postId) {
+  // Change Post Like
+  changePostLikeEmit(String postId) {
     socket!.emit(
-      SocketGateway.changeLikePost,
+      SocketGateway.changePostLike,
       {
-        'postId': postId,
-        'userId': AppGet.authGet.userData!.id,
+        'post-id': postId,
+        'user-id': UserLocal().getUserId(),
       },
     );
   }
 
-  // Add Comment Post
-  addCommentPostEmit(String postId, String comment) {
+  // Change Story Like
+  changeStoryLikeEmit(String storyId) {
     socket!.emit(
-      SocketGateway.addCommentPost,
+      SocketGateway.changeStoryLike,
       {
-        'postId': postId,
-        'userId': AppGet.authGet.userData!.id,
+        'story-id': storyId,
+        'user-id': UserLocal().getUserId(),
+      },
+    );
+  }
+
+  // Add Comment
+  addCommentEmit(
+    String itemId,
+    String itemType,
+    String comment,
+  ) {
+    socket!.emit(
+      SocketGateway.addComment,
+      {
+        'item-id': itemId,
+        'item-type': itemType,
+        'user-id': UserLocal().getUserId(),
         'comment': comment,
       },
     );
   }
 
-  // Change Like Comment Post
-  changeLikeCommentPostEmit(String postId, String commentId) {
+  // Change Comment Like
+  changeCommentLikeEmit(
+    String postId,
+    String itemType,
+    String commentId,
+  ) {
     socket!.emit(
-      SocketGateway.changeLikeCommentPost,
+      SocketGateway.changeCommentLike,
       {
-        'postId': postId,
-        'userId': AppGet.authGet.userData!.id,
-        'commentId': commentId,
+        'item-id': postId,
+        'item-type': itemType,
+        'user-id': UserLocal().getUserId(),
+        'comment-id': commentId,
       },
     );
   }
 
-  // Change Following User
-  changeFollowingUser(String userId) {
+  // Add Post Share
+  addPostShare(String postId) {
     socket!.emit(
-      SocketGateway.changeFollowingUser,
+      SocketGateway.addPostShare,
       {
-        'myId': AppGet.authGet.userData!.id,
-        'userId': userId,
+        'post-id': postId,
+        'user-id': UserLocal().getUserId(),
+      },
+    );
+  }
+
+  // Add Story Share
+  addStoryShare(String storyId) {
+    socket!.emit(
+      SocketGateway.addStoryShare,
+      {
+        'story-id': storyId,
+        'user-id': UserLocal().getUserId(),
+      },
+    );
+  }
+
+  // Update Avatar
+  updateAvatar(String photo, bool isPhoto) {
+    socket!.emit(
+      SocketGateway.updateAvatar,
+      {
+        'user-id': UserLocal().getUserId(),
+        'photo': photo,
+        'is-photo': isPhoto,
+      },
+    );
+  }
+
+  // Update User Info
+  updateUserInfo(AuthModel userInfo) {
+    socket!.emit(
+      SocketGateway.updateUserInfo,
+      userInfo.toMap(),
+    );
+  }
+
+  // Change User Case
+  changeUserCase(String userId, bool isDelete) {
+    socket!.emit(
+      SocketGateway.changeUserCase,
+      {
+        'my-id': UserLocal().getUserId(),
+        'user-id': userId,
+        'is-delete': isDelete,
       },
     );
   }
@@ -73,14 +150,14 @@ class SocketEmit {
   // Join Room Chat
   joinRoomChat({required String idConversation}) {
     socket!.emit(SocketGateway.joinRoomChat, {
-      'idConversation': idConversation,
+      'id-conversation': idConversation,
     });
   }
 
   // Leave Room Chat
   leaveRoomChat({required String idConversation}) {
     socket!.emit(SocketGateway.leaveRoomChat, {
-      'idConversation': idConversation,
+      'id-conversation': idConversation,
     });
   }
 
@@ -90,13 +167,27 @@ class SocketEmit {
     MessageModel message,
   ) {
     var body = {
-      "idConversation": idConversation,
+      "id-conversation": idConversation,
       "message": message.toJson(),
     };
-    
+
     socket!.emit(
       SocketGateway.addMessage,
       body,
+    );
+  }
+
+  // Is Message Seen
+  isMessageSeen(
+    String recieverId,
+  ) {
+    var data = {
+      "sender-id": recieverId,
+      "reciever-id": UserLocal().getUserId(),
+    };
+    socket!.emit(
+      SocketGateway.isMessageSeen,
+      data,
     );
   }
 }

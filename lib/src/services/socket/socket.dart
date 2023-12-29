@@ -1,3 +1,5 @@
+import 'socket_emit.dart';
+
 import '../../controller/app_controller.dart';
 import '../../public/socket_gateway.dart';
 
@@ -21,10 +23,19 @@ void connectAndListen() {
   );
 
   socket!.connect();
+
   socket!.onConnect((_) async {
     print('Connected');
 
-    // SocketEmit().sendDeviceInfo();
+    SocketEmit().signIn();
+
+    // Is User Online
+    socket!.on(SocketGateway.isedUserOnline, (data) {
+      AppGet.authGet.isedUserOnline(data);
+    });
+    socket!.on(SocketGateway.isUserOnlineError, (data) {
+      Components.showSnackBar(data['error'], title: "User Online");
+    });
 
     // Get All Posts
     socket!.on(SocketGateway.goneAllPosts, (data) {
@@ -34,40 +45,69 @@ void connectAndListen() {
       Components.showSnackBar(data['error'], title: "Get All Posts");
     });
 
-    // Change Like Status
-    socket!.on(SocketGateway.changedlikePost, (data) {
-      AppGet.homeGet.addedLikePost(data);
+    // Change Post Like
+    socket!.on(SocketGateway.changedPostLike, (data) {
+      AppGet.homeGet.changedPostLike(data);
     });
-    socket!.on(SocketGateway.changeLikePostError, (data) {
-      Components.showSnackBar(data['error'], title: "Change Like Status");
-    });
-
-    // Add Comment Post
-    socket!.on(SocketGateway.addedCommentPost, (data) {
-      AppGet.homeGet.addedCommentPost(data);
+    socket!.on(SocketGateway.changePostLikeError, (data) {
+      Components.showSnackBar(data['error'], title: "Change Post Like");
     });
 
-    socket!.on(SocketGateway.addCommentPostError, (data) {
+    // Change Story Like
+    socket!.on(SocketGateway.changedStoryLike, (data) {
+      AppGet.viewStoryGet.changedStoryLike(data);
+    });
+    socket!.on(SocketGateway.changeStoryLikeError, (data) {
+      Components.showSnackBar(data['error'], title: "Change Story Like");
+    });
+
+    // Add Comment
+    socket!.on(SocketGateway.addedComment, (data) {
+      AppGet.commentGet.addedComment(data);
+    });
+    socket!.on(SocketGateway.addCommentError, (data) {
       Components.showSnackBar(data['error'], title: "Add Comment Post");
     });
 
 
-    // Change Like Comment Post
-    socket!.on(SocketGateway.changedLikeCommentPost, (data) {
-      AppGet.homeGet.addedLikeCommentPost(data);
+    // Change Comment Like
+    socket!.on(SocketGateway.changedCommentLike, (data) {
+      AppGet.commentGet.changedCommentLike(data);
     });
-
-    socket!.on(SocketGateway.changeLikeCommentPostError, (data) {
+    socket!.on(SocketGateway.changeCommentLikeError, (data) {
       Components.showSnackBar(data['error'], title: "Add Like Comment Post");
     });
 
-    // Change Following User
-    socket!.on(SocketGateway.changedFollowingUser, (data) {
-      AppGet.profileGet.changedFollowingUser(data);
+    // Add Share Post
+    socket!.on(SocketGateway.addPostShare, (data) {
+      AppGet.homeGet.addedPostShare(data);
+    });
+    socket!.on(SocketGateway.addPostShareError, (data) {
+      Components.showSnackBar(data['error'], title: "Add Share Post");
     });
 
-    socket!.on(SocketGateway.changeFollowingUserError, (data) {
-      Components.showSnackBar(data['error'], title: "Add Like Comment Post");
+    // Update Avatar
+    socket!.on(SocketGateway.updatedAvatar, (data) {
+      AppGet.profileGet.updatedAvatar(data);
+    });
+    socket!.on(SocketGateway.updateAvatarError, (data) {
+      Components.showSnackBar(data['error'], title: "Update Avatar Error");
+    });
+
+    // Update User Info
+    socket!.on(SocketGateway.updatedUserInfo, (data) {
+      AppGet.updateInfoGet.updatedUserInfo(data);
+    });
+    socket!.on(SocketGateway.updateUserInfoError, (data) {
+      Components.showSnackBar(data['error'], title: "Update User Info Error");
+    });
+
+    // Change User Case User
+    socket!.on(SocketGateway.changedUserCase, (data) {
+      // AppGet.requist.changeedUserCase(data);
+    });
+    socket!.on(SocketGateway.changeUserCaseError, (data) {
+      Components.showSnackBar(data['error'], title: "Change User Case Error");
     });
 
     // Add Message
@@ -78,11 +118,17 @@ void connectAndListen() {
       Components.showSnackBar(data['error'], title: "Add Message");
     });
 
+    // Is Message Seen
+    socket!.on(SocketGateway.isedMessageSeen, (data) {
+      AppGet.chatGet.isedMessageSeen(data);
+    });
+    socket!.on(SocketGateway.isMessageSeenError, (data) {
+      Components.showSnackBar(data['error'], title: "Add Message");
+    });
+
 
     socket!.onDisconnect((_) => print('Disconnected'));
   });
-
-  socket!.connect();
 }
 
 void disconnectBeforeConnect() {

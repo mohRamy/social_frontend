@@ -18,13 +18,13 @@ class ApiGateway {
   static const getUserInfo = "$userPath/";
   static const getUserInfoById = "$userPath/user-by-id";
   static const getUserPosts = "$userPath/get-user-posts";
-  static const getUserPostsById = "$userPath/get-user-posts-by-id";
-  static const updateUserInfo = "$userPath/update-user-info";
+  static const getAnotherUserPosts = "$userPath/get-another-user-posts";
+  // static const updateUserInfo = "$userPath/update-user-info";
   static const updateAvatar = "$userPath/avatar";
   static const followUser = "$userPath/follow-user";
   static const private = "$userPath/private";
   static const changePassword = "$userPath/change-password";
-  static const saveUserTokenFcm = "$userPath/save-user-token-fcm";
+  static const saveUserTokenFcm = "$userPath/save-user-fcm-token";
 
   // Post
   static const postPath = "api/post";
@@ -35,7 +35,7 @@ class ApiGateway {
 
   static const addLikePost = "$postPath/add-like";
 
-  static const getCommentPost = "$postPath/get-comment";
+  static const getComments = "$postPath/get-comment";
   static const addCommentPost = "$postPath/add-comment";
 
   static const addLikeCommentPost = "$postPath/like-comment";
@@ -64,5 +64,8 @@ class ApiGateway {
   static const seenMessage = "$chatPath/seen-message";
 
   // Notification
-  static const messageToken = "$chatPath/send-notification";
+  static const notificationPath = "api/notification";
+  static const getNotifications = "$notificationPath/";
+  static const pushNotification = "$notificationPath/send-notification";
+  static const notificationSeen = "$notificationPath/seen-notification";
 }

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../core/widgets/app_text.dart';
-import '../core/widgets/widgets.dart';
 import '../themes/app_colors.dart';
 import '../utils/sizer_custom/sizer.dart';
 
-
 class Components {
-    static void showLoading([String? message]) {
+  static void showLoading([String? message]) {
     Get.dialog(
       const Dialog(
         backgroundColor: Colors.transparent,
@@ -40,12 +38,15 @@ class Components {
       child: Container(
         padding: EdgeInsets.all(Dimensions.size10),
         height: Dimensions.size45,
-        color: Get.isDarkMode ? colorBlack : mC,
         child: Row(
           children: [
-            icon,
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: mCM,
+              child: icon,
+            ),
             SizedBox(width: Dimensions.size10),
-            TextCustom(text: label),
+            AppText(label),
           ],
         ),
       ),
