@@ -10,7 +10,7 @@ import '../../../../../core/widgets/app_text_field.dart';
 import '../../../../../themes/app_colors.dart';
 import '../../../../../utils/sizer_custom/sizer.dart';
 
-import '../../../../../core/displaies/display_file_post.dart';
+import '../../../../../core/displaies/display_file.dart';
 
 import '../../../../../core/widgets/widgets.dart';
 import '../../../../taps/home/presentation/components/profile_avatar.dart';
@@ -75,7 +75,7 @@ class AddPostScreen extends GetView<AddPostController> {
                           itemBuilder: (_, index) {
                             return Stack(
                               children: [
-                                DisplayFilePost(
+                                DisplayFile(
                                   file: controller.itemsVal()[index],
                                   type: controller.itemsKey()[index],
                                 ),

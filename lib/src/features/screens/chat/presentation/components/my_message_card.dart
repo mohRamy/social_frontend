@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:social_app/src/themes/font_family.dart';
 import '../../../../../core/widgets/app_text.dart';
 import '../../../../../core/displaies/display_image_video_card.dart';
+import '../../../../../core/widgets/expandable_text_widget.dart';
 import '../../../../../themes/app_colors.dart';
 import '../../../../../utils/sizer_custom/sizer.dart';
 import '../../data/models/chat_model.dart';
@@ -27,6 +28,7 @@ class MyMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String message = msg.message;
+    String messageImage = msg.messageImage;
     String type = msg.type;
     String repliedMessage = repliedMsg.repliedMessage;
     String repliedType = repliedMsg.type;
@@ -235,45 +237,56 @@ class MyMessageCard extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: DisplayImageVideoCard(
-                              file: message,
-                              type: type,
-                              isOut: false,
+                  : Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
+                              children: [
+                                DisplayImageVideoCard(
+                                  file: messageImage,
+                                  type: type,
+                                  isOut: false,
+                                ),
+                                Positioned(
+                                  bottom: Dimensions.size5,
+                                  right: Dimensions.size5,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        date,
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: Colors.white60,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      CircleAvatar(
+                                        radius: 9,
+                                        backgroundColor:
+                                            isSeen ? colorPrimary : mCL,
+                                        child: Icon(
+                                          Icons.done,
+                                          size: Dimensions.size10,
+                                          color: isSeen ? mCL : colorPrimary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                            message != ""
+                                ? Padding(
+                                    padding: EdgeInsets.all(Dimensions.size5),
+                                    child: ExpandableTextWidget(text: message))
+                                : const SizedBox(),
+                          ],
                         ),
-                        Positioned(
-                          bottom: 5,
-                          right: 5,
-                          child: Row(
-                            children: [
-                              Text(
-                                date,
-                                style: TextStyle(
-                                  fontSize: 10.sp,
-                                  color: Colors.white60,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              CircleAvatar(
-                                radius: 9,
-                                backgroundColor: isSeen ? colorPrimary : mCL,
-                                child: Icon(
-                                  Icons.done,
-                                  size: Dimensions.size10,
-                                  color: isSeen ? mCL : colorPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
             ),
           )),

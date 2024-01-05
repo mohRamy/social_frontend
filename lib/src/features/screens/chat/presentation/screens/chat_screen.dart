@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../controller/app_controller.dart';
 import '../../../../../routes/app_pages.dart';
 import '../../../../../services/socket/socket_emit.dart';
 import '../../../../../themes/app_colors.dart';
 import '../../../../../utils/sizer_custom/sizer.dart';
 import '../../../../taps/home/presentation/components/profile_avatar.dart';
 import '../../../auth/data/models/auth_model.dart';
-import '../../data/models/chat_model.dart';
 import '../components/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -39,16 +37,16 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AuthModel userData = widget.userData;
-    final List<MessageModel> messages = [];
-    for (var i = 0; i < AppGet.chatGet.contacts.length; i++) {
-      if (AppGet.chatGet.contacts[i].recieverId == userData.id) {
-        for (var j = 0; j < AppGet.chatGet.contacts[i].messages.length; j++) {
-          messages.add(
-            AppGet.chatGet.contacts[i].messages[j],
-          );
-        }
-      }
-    }
+    // final List<MessageModel> messages = [];
+    // for (var i = 0; i < AppGet.chatGet.contacts.length; i++) {
+    //   if (AppGet.chatGet.contacts[i].recieverId == userData.id) {
+    //     for (var j = 0; j < AppGet.chatGet.contacts[i].messages.length; j++) {
+    //       messages.add( 
+    //         AppGet.chatGet.contacts[i].messages[j],
+    //       );
+    //     }
+    //   }
+    // }
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 5.0,
@@ -132,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ChatList(
             userData: userData,
             isGroupChat: widget.isGroupChat,
-            messages: messages,
+            // messagess: messages,
           ),
           // ),
           // BottomChatField(

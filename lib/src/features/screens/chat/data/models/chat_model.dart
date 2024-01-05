@@ -136,17 +136,20 @@ class MessageModel {
 }
 
 class MsgModel {
-  String message;
+  final String message;
+  String messageImage;
   final String type;
 
   MsgModel({
     required this.message,
+    this.messageImage = '',
     required this.type,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'message': message,
+      'messageImage': messageImage,
       'type': type,
     };
   }
@@ -154,6 +157,7 @@ class MsgModel {
   factory MsgModel.fromMap(Map<String, dynamic> map) {
     return MsgModel(
       message: map['message'] ?? '',
+      messageImage: map['messageImage'] ?? '',
       type: map['type'] ?? '',
     );
   }

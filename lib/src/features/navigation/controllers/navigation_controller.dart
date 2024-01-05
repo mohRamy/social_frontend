@@ -5,8 +5,6 @@ import '../../screens/search/presentation/screens/search_screen.dart';
 
 class NavigationController extends GetxController {
 
-
-
   final List<Widget> _pages = [
     // const HomeScreen(),
     const SearchScreen(),

@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../helper/date_time_helper.dart';
 import '../../../../../resources/local/user_local.dart';
 import '../../../../../controller/app_controller.dart';
-import '../../../../../core/picker/picker.dart';
 import '../../../../../core/provider/message_reply_provider.dart';
 import '../../../../../themes/app_colors.dart';
 import '../../../../../themes/font_family.dart';
@@ -23,145 +19,39 @@ import 'message_reply_preview.dart';
 import 'my_message_card.dart';
 import 'sender_message_card.dart';
 
-class ChatList extends ConsumerStatefulWidget {
+class ChatList extends ConsumerWidget {
   final AuthModel userData;
   final bool isGroupChat;
-  final List<MessageModel> messages;
+  // final List<MessageModel> messagess;
   const ChatList({
     Key? key,
     required this.userData,
     required this.isGroupChat,
-    required this.messages,
+    // required this.messagess,
   }) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ChatListState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _ChatListState extends ConsumerState<ChatList> {
-  bool isFieldEmpty = true;
-  final TextEditingController _messageC = TextEditingController();
-  FlutterSoundRecorder? _soundRecorder;
-  bool isRecorderInit = false;
-  bool isRecording = false;
-  bool isShowEmojiContainer = false;
-  FocusNode focusNode = FocusNode();
-  @override
-  void initState() {
-    AppGet.chatGet.messages = [];
-    for (var i = 0; i < widget.messages.length; i++) {
-      AppGet.chatGet.messages.add(widget.messages[i]);
-    }
-    _soundRecorder = FlutterSoundRecorder();
-    super.initState();
-  }
+    String userId = userData.id;
+    String localUserId = UserLocal().getUserId();
+    List<MessageModel> messages = [];
 
-  @override
-  void dispose() {
-    super.dispose();
-    _messageC.dispose();
-    _soundRecorder!.closeRecorder();
-    isRecorderInit = false;
-  }
-
-  void sendMsg({
-    required MsgModel msg,
-    RepliedMsgModel? repliedMsg,
-  }) {
-    AppGet.chatGet.messages.add(
-      MessageModel(
-        senderId: UserLocal().getUserId(),
-        recieverId: widget.userData.id,
-        msg: msg,
-        repliedMsg: repliedMsg??RepliedMsgModel(repliedMessage: "", type: "", repliedTo: "", isMe: false,),
-        createdAt: DateTime.now(),
-      ),
-    );
-    AppGet.chatGet.addMessage(
-      UserLocal().getUserId(),
-      widget.userData.id,
-      msg,
-      repliedMsg,
-    );
-    AppGet.chatGet.messageController.animateTo(
-        AppGet.chatGet.messageController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut);
-    setState(() {
-      isFieldEmpty = true;
-    });
-    ref.read(messageReplyProvider.notifier).update((state) => null);
-  }
-
-  void selectImage() async {
-    File? image = await pickImageFromGallery();
-    if (image != null) {
-      print(image.path);
-      sendMsg(
-        msg: MsgModel(
-          message: image.path,
-          type: 'image',
-        ),
-      );
-    }
-  }
-
-  void selectVideo() async {
-    File? video = await pickVideoFromGallery();
-    if (video != null) {
-      sendMsg(
-        msg: MsgModel(
-          message: video.path,
-          type: 'video',
-        ),
-      );
-    }
-  }
-
-  void hideEmojiContainer() {
-    setState(() {
-      isShowEmojiContainer = false;
-    });
-  }
-
-  void showEmojiContainer() {
-    setState(() {
-      isShowEmojiContainer = true;
-    });
-  }
-
-  void showKeyboard() => focusNode.requestFocus();
-  void hideKeyboard() => focusNode.unfocus();
-
-  void toggleEmojiKeyboardContainer() {
-    if (isShowEmojiContainer) {
-      showKeyboard();
-      hideEmojiContainer();
-    } else {
-      hideKeyboard();
-      showEmojiContainer();
-    }
-  }
-
-  void onMessageSwipe(
+      void onMessageSwipe(
     String message,
     bool isMe,
     String type,
-  ) {
+  ) { 
     ref.read(messageReplyProvider.notifier).update(
           (state) => MessageReply(
             message,
             isMe,
             type,
-            widget.userData.name,
+            userData.name,
           ),
         );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String userId = UserLocal().getUserId();
-    List<MessageModel> messages = [];
 
     final messageReply = ref.watch(messageReplyProvider);
     final showMessageReply = messageReply != null;
@@ -170,16 +60,18 @@ class _ChatListState extends ConsumerState<ChatList> {
           .jumpTo(AppGet.chatGet.messageController.position.maxScrollExtent);
     });
 
+    // for (var i = 0; i < messages.length; i++) {
+    //   AppGet.chatGet.messages.add(messages[i]);
+    // }
+
     return Column(
       children: [
         Expanded(
           child: GetBuilder<ChatController>(builder: (chatCtrl) {
             for (var i = 0; i < chatCtrl.contacts.length; i++) {
-              if (chatCtrl.contacts[i].recieverId == widget.userData.id) {
+              if (chatCtrl.contacts[i].recieverId == userId) {
                 messages.clear();
-                for (var j = 0;
-                    j < chatCtrl.contacts[i].messages.length;
-                    j++) {
+                for (var j = 0; j < chatCtrl.contacts[i].messages.length; j++) {
                   messages.add(chatCtrl.contacts[i].messages[j]);
                 }
               }
@@ -187,22 +79,22 @@ class _ChatListState extends ConsumerState<ChatList> {
 
             if (messages.isNotEmpty) {
               if (messages.last.senderId != UserLocal().getUserId() &&
-                !messages.last.isSeen) {
-              chatCtrl.isMessageSeen(widget.userData.id);
-              for (var i = 0; i < chatCtrl.contacts.length; i++) {
-                if (chatCtrl.contacts[i].recieverId == widget.userData.id) {
-                  for (var j = 0;
-                      j < chatCtrl.contacts[i].messages.length;
-                      j++) {
-                    if (chatCtrl.contacts[i].messages[j].senderId !=
-                            UserLocal().getUserId() &&
-                        !chatCtrl.contacts[i].messages[j].isSeen) {
-                      chatCtrl.contacts[i].messages[j].isSeen = true;
+                  !messages.last.isSeen) {
+                chatCtrl.isMessageSeen(userId);
+                for (var i = 0; i < chatCtrl.contacts.length; i++) {
+                  if (chatCtrl.contacts[i].recieverId == userId) {
+                    for (var j = 0;
+                        j < chatCtrl.contacts[i].messages.length;
+                        j++) {
+                      if (chatCtrl.contacts[i].messages[j].senderId !=
+                              UserLocal().getUserId() &&
+                          !chatCtrl.contacts[i].messages[j].isSeen) {
+                        chatCtrl.contacts[i].messages[j].isSeen = true;
+                      }
                     }
                   }
                 }
               }
-            }
             }
 
             Map<DateTime, List<MessageModel>> groupedMessages = {};
@@ -254,7 +146,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                     Column(
                       children: messages.map((message) {
                         var timeSent = timeAgoCustom(message.createdAt);
-                        return message.senderId == userId
+                        return message.senderId == localUserId
                             ? MyMessageCard(
                                 date: timeSent,
                                 msg: message.msg,
@@ -296,149 +188,147 @@ class _ChatListState extends ConsumerState<ChatList> {
         ),
         Padding(
           padding: EdgeInsets.all(Dimensions.size5),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        showMessageReply
-                            ? MessageReplyPreview(
-                                receiverId: widget.userData.id,
-                              )
-                            : const SizedBox(),
-                        TextFormField(
-                          focusNode: focusNode,
-                          controller: _messageC,
-                          onChanged: (val) {
-                            if (val.isEmpty) {
-                              setState(() {
-                                isFieldEmpty = true;
-                              });
-                            } else {
-                              setState(() {
-                                isFieldEmpty = false;
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: chatBoxOther,
-                            prefixIcon: IconButton(
-                              onPressed: toggleEmojiKeyboardContainer,
-                              icon: Icon(
-                                isShowEmojiContainer
-                                    ? Icons.keyboard
-                                    : Icons.emoji_emotions,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            suffixIcon: SizedBox(
-                              width: isFieldEmpty ? 100 : 5,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: selectVideo,
-                                    icon: const Icon(
-                                      Icons.attach_file,
-                                      color: Colors.grey,
-                                    ),
+          child: GetBuilder<ChatController>(builder: (chatCtrl) {
+            return Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          showMessageReply
+                              ? MessageReplyPreview(
+                                  receiverId: userId,
+                                )
+                              : const SizedBox(),
+                          TextFormField(
+                            focusNode: chatCtrl.focusNode,
+                            controller: chatCtrl.messageC,
+                            onChanged: (val) {
+                              chatCtrl.changeField(val);
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: chatBoxOther,
+                              prefixIcon: Obx(
+                                () => IconButton(
+                                  onPressed:
+                                      chatCtrl.toggleEmojiKeyboardContainer,
+                                  icon: Icon(
+                                    chatCtrl.isShowEmojiContainer.value
+                                        ? Icons.keyboard
+                                        : Icons.emoji_emotions,
+                                    color: Colors.grey,
                                   ),
-                                  isFieldEmpty
-                                      ? IconButton(
-                                          onPressed: selectImage,
-                                          icon: const Icon(
-                                            Icons.camera_alt,
-                                            color: Colors.grey,
-                                          ),
-                                        )
-                                      : Container()
-                                ],
+                                ),
                               ),
-                            ),
-                            hintText: 'send_message'.tr,
-                            border: OutlineInputBorder(
-                              borderRadius: showMessageReply
-                                  ? BorderRadius.only(
-                                      bottomLeft:
-                                          Radius.circular(Dimensions.size20),
-                                      bottomRight:
-                                          Radius.circular(Dimensions.size20),
-                                    )
-                                  : BorderRadius.circular(Dimensions.size20),
-                              borderSide: const BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
+                              suffixIcon: Obx(
+                                () => SizedBox(
+                                  width: chatCtrl.isFieldEmpty.value ? 100 : 5,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () => chatCtrl
+                                            .selectVideo(userId),
+                                        icon: const Icon(
+                                          Icons.attach_file,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      chatCtrl.isFieldEmpty.value
+                                          ? IconButton(
+                                              onPressed: () =>
+                                                  chatCtrl.selectImage(
+                                                      userId),
+                                              icon: const Icon(
+                                                Icons.camera_alt,
+                                                color: Colors.grey,
+                                              ),
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+                                ),
                               ),
+                              hintText: 'send_message'.tr,
+                              border: OutlineInputBorder(
+                                borderRadius: showMessageReply
+                                    ? BorderRadius.only(
+                                        bottomLeft:
+                                            Radius.circular(Dimensions.size20),
+                                        bottomRight:
+                                            Radius.circular(Dimensions.size20),
+                                      )
+                                    : BorderRadius.circular(Dimensions.size20),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.all(Dimensions.size5),
                             ),
-                            contentPadding: EdgeInsets.all(Dimensions.size5),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5.0,
+                    ),
+                    CircleAvatar(
+                      backgroundColor: const Color(0xFF128C7E),
+                      child: GestureDetector(
+                        onTap: () {
+                          chatCtrl.addMessage(
+                            UserLocal().getUserId(),
+                            userId,
+                            MsgModel(
+                              message: chatCtrl.messageC.text.trim(),
+                              type: "text",
+                            ),
+                            RepliedMsgModel(
+                              repliedMessage: messageReply?.message ?? "",
+                              type: messageReply?.type ?? "",
+                              isMe: messageReply?.isMe ?? false,
+                              repliedTo: messageReply?.repliedTo ?? "",
+                            ),
+                          );
+                          ref.read(messageReplyProvider.notifier).update((state) => null);
+                        },
+                        child: Obx(
+                          () => Icon(
+                            chatCtrl.isFieldEmpty.value
+                                ? chatCtrl.isRecording
+                                    ? Icons.close
+                                    : Icons.mic
+                                : Icons.send,
+                            color: Colors.white,
+                            size: 20,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5.0,
-                  ),
-                  CircleAvatar(
-                    backgroundColor: const Color(0xFF128C7E),
-                    child: GestureDetector(
-                      onTap: () {
-                        sendMsg(
-                          msg: MsgModel(
-                            message: _messageC.text.trim(),
-                            type: "text",
-                          ),
-                          repliedMsg: RepliedMsgModel(
-                            repliedMessage: messageReply?.message ?? "",
-                            type: messageReply?.type ?? "",
-                            isMe: messageReply?.isMe ?? false,
-                            repliedTo: messageReply?.repliedTo ?? "",
-                          ),
-                        );
-                        // chatController.messageNotification(
-                        //   widget.userData.id,
-                        //   _messageC.text.trim(),
-                        // );
-                        setState(() {
-                          _messageC.text = "";
-                        });
-                      },
-                      child: Icon(
-                        isFieldEmpty
-                            ? isRecording
-                                ? Icons.close
-                                : Icons.mic
-                            : Icons.send,
-                        color: Colors.white,
-                        size: 20,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              isShowEmojiContainer
-                  ? SizedBox(
-                      height: 310,
-                      child: EmojiPicker(
-                        onEmojiSelected: (category, emoji) {
-                          setState(() {
-                            _messageC.text = _messageC.text + emoji.emoji;
-                          });
-                          if (isFieldEmpty) {
-                            setState(() {
-                              isFieldEmpty = true;
-                            });
-                          }
-                        },
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+                  ],
+                ),
+                Obx(
+                  () => chatCtrl.isShowEmojiContainer.value
+                      ? SizedBox(
+                          height: 310,
+                          child: EmojiPicker(
+                            onEmojiSelected: (category, emoji) {
+                              chatCtrl.messageTextEmojy(emoji);
+                              if (chatCtrl.isFieldEmpty.value) {
+                                chatCtrl.changeFieldToTrue();
+                              }
+                            },
+                          ),
+                        )
+                      : const SizedBox(),
+                ),
+              ],
+            );
+          }),
         ),
       ],
     );

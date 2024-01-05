@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:social_app/src/core/enums/type_enum.dart';
 
 import '../../features/screens/add_post/presentation/components/video_card.dart';
 import '../../themes/app_decorations.dart';
 import '../../utils/sizer_custom/sizer.dart';
-import '../enums/post_enum.dart';
 
-class DisplayFilePost extends StatelessWidget {
+class DisplayFile extends StatelessWidget {
   final File file;
-  final PostEnum type;
+  final TypeEnum type;
 
-  const DisplayFilePost({
+  const DisplayFile({
     Key? key,
     required this.file,
     required this.type,
@@ -19,22 +19,21 @@ class DisplayFilePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return type == PostEnum.text
+    return type == TypeEnum.text
         ? Text(
             file.path,
             style: TextStyle(
               fontSize: Dimensions.size16,
             ),
           )
-        : type == PostEnum.image
+        : type == TypeEnum.image
             ? Container(
                 height: 150.sp,
                 width: Dimensions.screenWidth * .95,
                 margin: const EdgeInsets.only(bottom: 10.0),
-                decoration:
-                    AppDecoration.displayFile(context, file).decoration,
+                decoration: AppDecoration.displayFile(context, file).decoration,
               )
-            : type == PostEnum.video
+            : type == TypeEnum.video
                 ? VideoCardCreatePost(
                     videoUrl: file,
                   )

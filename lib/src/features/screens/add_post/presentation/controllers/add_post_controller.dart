@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:social_app/src/core/enums/type_enum.dart';
 import '../../../../../controller/app_controller.dart';
-import '../../../../../core/enums/post_enum.dart';
 import '../../../../../core/error/handle_error_loading.dart';
 import '../../../../../core/picker/picker.dart';
 import '../../../../../core/widgets/app_clouding.dart';
@@ -37,7 +37,7 @@ class AddPostController extends GetxController with HandleLoading {
   }
 
   List<AssetEntity> mediaList = [];
-  RxList<Map<PostEnum, File>> imageFileSelected = <Map<PostEnum, File>>[].obs;
+  RxList<Map<TypeEnum, File>> imageFileSelected = <Map<TypeEnum, File>>[].obs;
 
   _assetImagesDevice() async {
     var result = await PhotoManager.requestPermissionExtend();
@@ -60,7 +60,7 @@ class AddPostController extends GetxController with HandleLoading {
     File? image = await pickImageFromCamera();
     if (image != null) {
       imageFileSelected.add({
-        PostEnum.image: image,
+        TypeEnum.image: image,
       });
     }
     update();
@@ -70,14 +70,14 @@ class AddPostController extends GetxController with HandleLoading {
     File? video = await pickVideoFromGallery();
     if (video != null) {
       imageFileSelected.add({
-        PostEnum.video: video,
+        TypeEnum.video: video,
       });
     }
   }
 
   void addFile(File file) {
     imageFileSelected.add({
-      PostEnum.image: file,
+      TypeEnum.image: file,
     });
   }
 
@@ -85,8 +85,8 @@ class AddPostController extends GetxController with HandleLoading {
     imageFileSelected.removeAt(index);
   }
 
-  List<PostEnum> itemsKey() {
-    List<PostEnum> items = [];
+  List<TypeEnum> itemsKey() {
+    List<TypeEnum> items = [];
     imageFileSelected
         .map(
           (e) => e.forEach(
@@ -115,7 +115,7 @@ class AddPostController extends GetxController with HandleLoading {
 
   FutureOr<void> addPost(
     String description,
-    List<Map<PostEnum, File>>? posts,
+    List<Map<TypeEnum, File>>? posts,
   ) async {
     showLoading();
 
@@ -125,16 +125,16 @@ class AddPostController extends GetxController with HandleLoading {
     if (posts!.isNotEmpty) {
       for (var i = 0; i < itemsKey().length; i++) {
         switch (itemsKey()[i]) {
-          case PostEnum.image:
+          case TypeEnum.image:
             postsType.add("image");
             break;
-          case PostEnum.video:
+          case TypeEnum.video:
             postsType.add("video");
             break;
-          case PostEnum.audio:
+          case TypeEnum.audio:
             postsType.add("audio");
             break;
-          case PostEnum.gif:
+          case TypeEnum.gif:
             postsType.add("GIF");
             break;
           default:

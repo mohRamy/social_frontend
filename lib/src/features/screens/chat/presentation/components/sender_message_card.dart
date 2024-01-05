@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/src/themes/font_family.dart';
+import '../../../../../core/widgets/expandable_text_widget.dart';
 import '../../../../../resources/local/user_local.dart';
 import 'package:swipe_to/swipe_to.dart';
 
@@ -28,6 +29,7 @@ class SenderMessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String userName = UserLocal().getUser()?.name ?? '';
     String message = msg.message;
+    String messageImage = msg.messageImage;
     String type = msg.type;
     String repliedMessage = repliedMsg.repliedMessage;
     String repliedType = repliedMsg.type;
@@ -234,35 +236,46 @@ class SenderMessageCard extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: DisplayImageVideoCard(
-                              file: message,
-                              type: type,
-                              isOut: false,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: Dimensions.size5,
-                          right: Dimensions.size5,
-                          child: Row(
-                            children: [
-                              Text(
-                                date,
-                                style: TextStyle(
-                                  fontSize: 13.sp,
-                                  color: Colors.white,
+                  : Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
+                              children: [
+                                DisplayImageVideoCard(
+                                  file: messageImage,
+                                  type: type,
+                                  isOut: false,
                                 ),
-                              ),
-                            ],
-                          ),
+                                Positioned(
+                                  bottom: Dimensions.size5,
+                                  right: Dimensions.size5,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        date,
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: Colors.white60,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            message != ""
+                                ? Padding(
+                                    padding: EdgeInsets.all(Dimensions.size5),
+                                    child: ExpandableTextWidget(text: message))
+                                : const SizedBox(),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
             ),
           )),
