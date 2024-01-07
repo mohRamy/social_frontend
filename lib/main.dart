@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'src/app.dart';
+import 'src/ramy_app.dart';
 import 'src/config/application.dart';
 import 'src/controller/app_controller.dart';
 
@@ -28,7 +28,7 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      child: SocialApp(languages: languages),
+      child: RamyApp(languages: languages),
     ),
   );
 }

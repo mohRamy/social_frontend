@@ -10,9 +10,9 @@ import 'routes/app_pages.dart';
 import 'themes/theme_service.dart';
 import 'themes/themes.dart';
 
-class SocialApp extends StatelessWidget {
+class RamyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
-  const SocialApp({
+  const RamyApp({
     Key? key,
     required this.languages,
   }) : super(key: key);

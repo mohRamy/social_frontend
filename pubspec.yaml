@@ -70,6 +70,7 @@ dependencies:
   flutter_webrtc_wrapper: ^1.0.2
   snippet_coder_utils: ^1.0.15
   flutter_blurhash: ^0.8.2
+  flutter_screenutil: ^5.9.0
 
 dev_dependencies:
 
